@@ -115,7 +115,6 @@ function Contest() {
         }).content.find((content) => content.id === contestID)
     }, [contestID])
 
-    console.log('detailContest', detailContest, contestID)
     const scrollY = new Animated.Value(0)
     const stickyOpacity = scrollY.interpolate({
         outputRange: [0, 1],
@@ -123,7 +122,7 @@ function Contest() {
         extrapolate: 'clamp'
     })
     const stickyTop = scrollY.interpolate({
-        outputRange: [-20, 30],
+        outputRange: [-60, 0],
         inputRange: [0, 160],
         extrapolate: 'clamp'
     })
@@ -202,7 +201,7 @@ function Contest() {
                                     </TouchableOpacity>
                                 </View>
                             </View>)}
-                        contentContainerStyle={{ gap: 32, paddingVertical: 16, overflow: "hidden" }}
+                        contentContainerStyle={{ gap: 20, paddingVertical: 16, overflow: "hidden" }}
                     />
                 </Animated.View>
             </ScrollView>
