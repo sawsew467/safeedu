@@ -27,7 +27,7 @@ const Welcome = () => {
               className="w-[240px] h-[240px]"
               resizeMode="contain"
             />
-            <Text className="text-6xl  text-black font-semibold drop-shadow-xl">
+            <Text className="text-6xl w-full text-black font-semibold drop-shadow-xl">
               SafeEdu
             </Text>
           </View>
