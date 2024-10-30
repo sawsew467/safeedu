@@ -103,7 +103,9 @@ function Contest() {
           style={[{
             top: stickyTopViewContent
           }]}>
-          <FlatList className="pt-4 px-4 bg-white rounded-[24px_24px_0_0]"
+          <FlatList
+            scrollEnabled={false}
+            className="pt-4 px-4 bg-white rounded-[24px_24px_0_0]"
             data={DATA}
             renderItem={({ item }: { item: DataType }) => <ContestComponent data={item} />}
             keyExtractor={(item: DataType) => item.id}
@@ -128,3 +130,4 @@ function Contest() {
 
 
 export default Contest;
+
