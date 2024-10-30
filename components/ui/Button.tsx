@@ -32,8 +32,8 @@ const buttonVariants = cva(
 const textVariants = cva("text-center", {
   variants: {
     variant: {
-      default: "text-[#646464]",
-      primary: "text-white",
+      default: "text-[#646464] ",
+      primary: "text-white font-psemibold",
       outline: "text-secondary-foreground",
     },
     size: {
@@ -50,7 +50,7 @@ const textVariants = cva("text-center", {
 
 export interface ButtonProps
   extends TouchableOpacityProps,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   textClassName?: string;
 }
