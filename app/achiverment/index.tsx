@@ -51,7 +51,7 @@ const AchievementPage = () => {
         <TouchableWithoutFeedback onPress={handleClickBtn}>
           <View style={styles.headerContent}>
             <View style={styles.backButtonContainer}>
-              <Image source={require('../../assets/icons/Chevron_Left.png')} style={{ width: 28, height: 28 }} />
+              <Image source={require('../../assets/icons/chevron_left.png')} style={{ width: 28, height: 28 }} />
               <Text style={styles.textAchiTitle}>Thành tựu của bạn</Text>
             </View>
           </View>
