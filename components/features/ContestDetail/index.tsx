@@ -15,7 +15,10 @@ import chrven_right from "@/assets/icons/chevron_right.png"
 import contestID from "@/app/contest/[contestID]";
 
 type ItemProps = {
-    title: string;
+    title: {
+        title: string,
+        slug: string
+    };
     index: number;
     id: string;
 };
@@ -65,7 +68,7 @@ const styles = StyleSheet.create({
     itemText: {
         fontSize: 16,
         color: '#333',
-        justifyContent: 'center'
+        fontFamily: "pbold"
     },
     animatedHeader: {
         height: 80,
@@ -99,28 +102,32 @@ const styles = StyleSheet.create({
     safeAreaView: {
         ...GlobalStyles.AndroidSafeArea,
         paddingTop: 0,
+        backgroundColor: "#fff"
     },
     headerContainer: {
         overflow: 'hidden',
         borderBottomLeftRadius: 24,
         height: 64,
         position: 'absolute',
-        top: 0,
+        top: 35,
         left: 0,
         right: 0,
         zIndex: 10,
+        backgroundColor: 'white',
+
     },
     headerContent: {
-        backgroundColor: 'white',
+        display: "flex",
+        marginLeft: 10,
         height: 64,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
+        alignContent: "center"
     },
     backButtonContainer: {
         width: 28,
         height: 28,
-        padding: 8,
         flexDirection: 'row',
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
@@ -225,12 +232,12 @@ const styles = StyleSheet.create({
 
 const ListItem = ({ title, index, id }: ItemProps) => {
     const handleClickBtn = () => {
-        router.push(`contest/${id}/${title}`)
+        router.push(`contest/${id}/drawPicture`)
     }
     return (
         <TouchableOpacity style={{ paddingHorizontal: 16 }} onPress={handleClickBtn}>
             <View style={styles.item}>
-                <Text style={styles.itemText}>{`${index + 1}. ${title}`}</Text>
+                <Text style={styles.itemText}>{`${index + 1}. ${title?.title}`}</Text>
                 <Image source={chrven_right} style={{ width: 24, height: 24 }} />
             </View>
         </TouchableOpacity>
@@ -254,7 +261,7 @@ function Contest() {
         extrapolate: 'clamp'
     })
     const stickyTop = scrollY.interpolate({
-        outputRange: [-60, 0],
+        outputRange: [-60, 20],
         inputRange: [0, 160],
         extrapolate: 'clamp'
     })
@@ -319,8 +326,8 @@ function Contest() {
                         scrollEnabled={false}
                         style={styles.flatListContainer}
                         data={detailContest.parts}
-                        renderItem={({ item, index }: { item: string, index: number }) => <ListItem title={item} index={index} id={contestID} />}
-                        keyExtractor={(item: string) => item}
+                        renderItem={({ item, index }: { item: { title: string, slug: string }, index: number }) => <ListItem title={item} index={index} id={contestID} />}
+                        keyExtractor={(item: { title: string, slug: string }) => item.slug}
                         ListHeaderComponent={() => (
                             <View style={styles.flatListHeaderContainer}>
                                 <View style={styles.flatListHeaderContent}>

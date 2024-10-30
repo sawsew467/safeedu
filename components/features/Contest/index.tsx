@@ -56,7 +56,7 @@ export type ContentType = {
   address: string,
   desc: string,
   joiner: number
-  parts: string[]
+  parts: { title: string, slug: string }[]
 }
 
 function Contest() {
