@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, Image, StyleSheet, ScrollView, ImageBackground, TextInput, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { router } from 'expo-router';
 
@@ -14,9 +14,8 @@ function Account() {
     <ImageBackground 
       source={require('../../../assets/images/background.png')} 
       style={styles.backgroundImage}
-    >
+      >
       <ScrollView style={styles.container}>
-        {/* Avatar và thông tin người dùng */}
         <View style={styles.profileContainer}>
           <Image
             source={{ uri: 'https://ispacedanang.edu.vn/wp-content/uploads/2024/05/hinh-anh-dep-ve-hoc-sinh-cap-3-1.jpg' }}
@@ -100,7 +99,6 @@ function Account() {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -124,20 +122,16 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   name: {
-   
     fontWeight: '700',
     fontSize: 18,
-   
     letterSpacing: 0.04,
     textAlign: 'center',
     marginBottom: 4,
     color: "white",
   },
   info: {
-    
     fontWeight: '400',
     fontSize: 12,
-   
     letterSpacing: 0.04,
     textAlign: 'center',
     color: '#FFFFFF',
@@ -149,9 +143,7 @@ const styles = StyleSheet.create({
   },
   address: {
     color: '#FFFFFF',
-  
     fontSize: 12,
-   
     fontWeight: '400',
     letterSpacing: 0.04,
     marginLeft: 4,
@@ -192,25 +184,20 @@ const styles = StyleSheet.create({
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-   
   },
   cardIcon: {
     marginRight: 8, 
   },
   cardTitle: {
-           
     fontWeight: '700',          
-    fontSize: 20,                
-                
+    fontSize: 20,     
     letterSpacing: 0.04,         
     textAlign: 'center',        
     color: '#FFFFFF',
   },
   cardText: {
-       
     fontWeight: '400',        
-    fontSize: 12,            
-              
+    fontSize: 12,    
     letterSpacing: 0.04,      
     color: '#FFFFFF',
     marginLeft: 20,
@@ -245,7 +232,6 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     height: 36,
     marginBottom: 15,
-
   },
   contentImage: {
     width: 50,
@@ -256,11 +242,9 @@ const styles = StyleSheet.create({
   contentInfo: {
     flex: 1,
   },
-  contentTitle: {
-    
+  contentTitle: {    
     fontWeight: '700',
     fontSize: 16,
-    
     marginBottom: 4,
   },
   progressContent: {
@@ -269,8 +253,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     width: '100%',
   },
-  
-  progressContainer: {
+    progressContainer: {
     width: '72%',
     flexDirection: 'row', 
     alignItems: 'center', 
