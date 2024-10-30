@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
     safeAreaView: {
         ...GlobalStyles.AndroidSafeArea,
         paddingTop: 0,
-        backgroundColor: "#fff"
     },
     headerContainer: {
         overflow: 'hidden',
@@ -152,13 +151,13 @@ const styles = StyleSheet.create({
         zIndex: 2,
     },
     backgroundImage: {
-        flex: 1,
+        width: "100%",
+        height: "100%",
         justifyContent: 'center',
         backgroundColor: 'black',
         position: 'absolute',
         right: 0,
         left: 0,
-        width: '100%',
     },
     contentContainer: {
         marginTop: 96,
