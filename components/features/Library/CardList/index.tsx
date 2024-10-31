@@ -1,11 +1,11 @@
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native'
+
 import arrow_icon from "@/assets/icons/arrow_icon.png";
 import card_image_1 from "@/assets/images/library_images/card_image_1.png";
 import card_image_2 from "@/assets/images/library_images/card_image_2.png";
 import card_image_3 from "@/assets/images/library_images/card_image_3.png";
 import card_image_4 from "@/assets/images/library_images/card_image_4.png";
 
-type Props = {}
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -20,76 +20,76 @@ const imageHeight = imageWidth * 1.2;
 
 const textContainerWidth = windowWidth > 400 ? (windowWidth * 0.25) : (windowWidth * 0.3);
 
-const CardList = (props: Props) => {
+const CardList = () => {
 
 
     return (
         <View style={styles.cardListContainer}>
 
             <View style={[styles.cardContainer, styles.cardGreen]}>
-                <View style={{ width: windowWidth * 0.45 }}>
-                    <Text style={[styles.title, { fontSize: scaleFont(24), color: '#FFFFFF' }]}>
+                <View style={styles.textContainer_1}>
+                    <Text style={[styles.title, styles.whiteTitle]}>
                         Tổng Quan Về Ma Tuý
                     </Text>
                     <View style={styles.infoRow}>
-                        <Text style={[styles.subTitle, { fontSize: scaleFont(16), color: '#FFFFFF' }]}>
+                        <Text style={[styles.readMoreText, styles.whiteReadMoreText]}>
                             Xem thông tin
                         </Text>
-                        <Image source={arrow_icon} style={[styles.arrow, { tintColor: "#FFFFFF" }]} resizeMode='cover' />
+                        <Image source={arrow_icon} style={[styles.arrow, styles.whiteArrow]} resizeMode='cover' />
                     </View>
                 </View>
-                <View style={[styles.imageContainer, { top: imageTop, right: imageRight, width: imageWidth, height: imageHeight }]}>
+                <View style={styles.imageContainerRight}>
                     <Image source={card_image_1} style={styles.image} resizeMode='contain' />
                 </View>
             </View>
 
-            <View style={[styles.cardContainer, styles.cardYellow, { flexDirection: 'row-reverse' }]}>
-                <View style={{ width: windowWidth * 0.4, alignItems: 'flex-end' }}>
-                    <Text style={[styles.title, { fontSize: scaleFont(24), color: '#000000', textAlign: 'right' }]}>
+            <View style={[styles.cardContainer, styles.cardYellow]}>
+                <View style={styles.textContainer_2}>
+                    <Text style={[styles.title, styles.blackTitle]}>
                         Tác Hại Của Ma Tuý
                     </Text>
-                    <View style={[styles.infoRow, { justifyContent: 'flex-end' }]}>
-                        <Text style={[styles.subTitle, { fontSize: scaleFont(16), color: '#000000', textAlign: 'right' }]}>
+                    <View style={[styles.infoRow]}>
+                        <Text style={[styles.readMoreText, styles.blackReadMoreText]}>
                             Xem thông tin
                         </Text>
-                        <Image source={arrow_icon} style={[styles.arrow, { tintColor: '#000000', }]} resizeMode='cover' />
+                        <Image source={arrow_icon} style={[styles.arrow, styles.blackArrow]} resizeMode='cover' />
                     </View>
                 </View>
-                <View style={[styles.imageContainer, { top: imageTop, left: imageLeft, width: imageWidth, height: imageHeight }]}>
+                <View style={styles.imageContainerLeft}>
                     <Image source={card_image_2} style={styles.image} resizeMode='contain' />
                 </View>
             </View>
 
             <View style={[styles.cardContainer, styles.cardGreen]}>
-                <View style={{ width: windowWidth * 0.45 }}>
-                    <Text style={[styles.title, { fontSize: scaleFont(24), color: '#FFFFFF' }]}>
+                <View style={styles.textContainer_3}>
+                    <Text style={[styles.title, styles.whiteTitle]}>
                         Cai Nghiện Và Hỗ Trợ
                     </Text>
                     <View style={styles.infoRow}>
-                        <Text style={[styles.subTitle, { fontSize: scaleFont(16), color: '#FFFFFF' }]}>
+                        <Text style={[styles.readMoreText, styles.whiteReadMoreText]}>
                             Xem thông tin
                         </Text>
-                        <Image source={arrow_icon} style={[styles.arrow, { tintColor: "#FFFFFF" }]} resizeMode='cover' />
+                        <Image source={arrow_icon} style={[styles.arrow, styles.whiteArrow]} resizeMode='cover' />
                     </View>
                 </View>
-                <View style={[styles.imageContainer, { top: imageTop, right: imageRight, width: imageWidth, height: imageHeight }]}>
+                <View style={styles.imageContainerRight}>
                     <Image source={card_image_3} style={styles.image} resizeMode='contain' />
                 </View>
             </View>
 
-            <View style={[styles.cardContainer, styles.cardYellow, { flexDirection: 'row-reverse' }]}>
-                <View style={{ width: textContainerWidth, alignItems: 'flex-end' }}>
-                    <Text style={[styles.title, { fontSize: scaleFont(24), color: '#000000', textAlign: 'right' }]}>
+            <View style={[styles.cardContainer, styles.cardYellow]}>
+                <View style={styles.textContainer_4}>
+                    <Text style={[styles.title, styles.blackTitle]}>
                         Hotline Hỗ Trợ
                     </Text>
-                    <View style={[styles.infoRow, { justifyContent: 'flex-end' }]}>
-                        <Text style={[styles.subTitle, { fontSize: scaleFont(16), color: '#000000', textAlign: 'right' }]}>
+                    <View style={[styles.infoRow]}>
+                        <Text style={[styles.readMoreText, styles.blackReadMoreText]}>
                             Xem thông tin
                         </Text>
-                        <Image source={arrow_icon} style={[styles.arrow, { tintColor: '#000000', }]} resizeMode='cover' />
+                        <Image source={arrow_icon} style={[styles.arrow, styles.blackArrow]} resizeMode='cover' />
                     </View>
                 </View>
-                <View style={[styles.imageContainer, { top: imageTop, left: imageLeft, width: imageWidth, height: imageHeight }]}>
+                <View style={styles.imageContainerLeft}>
                     <Image source={card_image_4} style={styles.image} resizeMode='contain' />
                 </View>
             </View>
@@ -113,37 +113,58 @@ const styles = StyleSheet.create({
         paddingVertical: 24,
         paddingHorizontal: 20,
         display: 'flex',
-        // flexDirection: 'row',
-        // justifyContent: 'center',
-        // alignItems: 'center',
     },
     cardGreen: {
         backgroundColor: '#75A815',
     },
     cardYellow: {
         backgroundColor: "#F6CB1E",
+        flexDirection: 'row-reverse',
     },
-    textContainer: {
+    textContainer_1: {
         width: windowWidth * 0.45,
-        // flexWrap: 'wrap',
+    },
+    textContainer_2: {
+        width: windowWidth * 0.4,
+        alignItems: 'flex-end',
+    },
+    textContainer_3: {
+        width: windowWidth * 0.45,
+    },
+    textContainer_4: {
+        width: textContainerWidth,
+        alignItems: 'flex-end'
     },
     title: {
         width: '100%',
         fontWeight: '900',
-        // fontSize: 24,
+        fontSize: scaleFont(24),
         lineHeight: 34,
+    },
+    whiteTitle: {
+        color: '#FFFFFF',
+    },
+    blackTitle: {
+        color: '#000000',
+        textAlign: 'right',
     },
     infoRow: {
         display: 'flex',
         flexDirection: 'row',
-        // justifyContent: 'center',
         alignItems: 'center'
     },
-    subTitle: {
+    readMoreText: {
         fontWeight: '400',
-        // fontSize: 16,
+        fontSize: scaleFont(16),
         lineHeight: 38.6,
         opacity: 0.6,
+    },
+    whiteReadMoreText: {
+        color: '#FFFFFF',
+    },
+    blackReadMoreText: {
+        color: '#000000',
+        textAlign: 'right',
     },
     arrow: {
         width: 6,
@@ -152,10 +173,25 @@ const styles = StyleSheet.create({
         marginTop: 2,
         marginLeft: 8,
     },
-    imageContainer: {
+    whiteArrow: {
+        tintColor: "#FFFFFF",
+    },
+    blackArrow: {
+        tintColor: "#000000"
+    },
+    imageContainerRight: {
+        width: imageWidth,
+        height: imageHeight,
         position: 'absolute',
-        // top: -40,
-        // right: 50,
+        top: imageTop,
+        right: imageRight,
+    },
+    imageContainerLeft: {
+        width: imageWidth,
+        height: imageHeight,
+        position: 'absolute',
+        top: imageTop,
+        left: imageLeft,
     },
     image: {
         width: '100%',

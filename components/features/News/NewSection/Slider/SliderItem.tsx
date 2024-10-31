@@ -1,12 +1,11 @@
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient';
-import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import React from 'react'
+import { Dimensions, Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
+import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 
 type Props = {
     item: {
-        image: any,
-        description: string,
+        image: ImageSourcePropType,
+        title: string,
     };
     index: number;
     scrollX: Animated.SharedValue<number>
@@ -17,35 +16,35 @@ const { width } = Dimensions.get('screen');
 
 const SliderItem = ({ item, index, scrollX }: Props) => {
     const rnAnimatedStyle = useAnimatedStyle(() => {
+        const translateX = interpolate(
+            scrollX.value,
+            [(index - 1) * width, index * width, (index + 1) * width],
+            [-width * 0.125, 0, width * 0.125],
+            Extrapolation.CLAMP
+        );
+
+        const scale = interpolate(
+            scrollX.value,
+            [(index - 1) * width, index * width, (index + 1) * width],
+            [0.85, 1, 0.85],
+            Extrapolation.CLAMP
+        );
+
         return {
             transform: [
-                {
-                    translateX: interpolate(
-                        scrollX.value,
-                        [(index - 1) * width, index * width, (index + 1) * width],
-                        [-width * 0.125, 0, width * 0.125],
-                        Extrapolation.CLAMP
-                    ),
-                },
-                {
-                    scale: interpolate(
-                        scrollX.value,
-                        [(index - 1) * width, index * width, (index + 1) * width],
-                        [0.85, 1, 0.85],
-                        Extrapolation.CLAMP
-                    ),
-                }
+                { translateX },
+                { scale },
             ],
-        };
+        } as ViewStyle;
     });
 
     return (
         <TouchableOpacity>
             <Animated.View style={[styles.itemContainer, rnAnimatedStyle]}>
-                <Image source={item.image} className="w-full h-full rounded-[30px]" resizeMode="cover" />
-                {/* <LinearGradient colors={['transparent', 'rgba(0,0,0,0.8)']} style={styles.backgroundOverlay} /> */}
-                <View className="absolute w-[100%] bottom-5 left-2 px-10">
-                    <Text className="text-[#FFFFFF] text-lg font-bold">{item.description}</Text>
+                <Image source={item.image} style={styles.itemImage} resizeMode="cover" />
+                <View style={styles.overlay} />
+                <View style={styles.titleContainerOverlay}>
+                    <Text style={styles.titleOverlay}>{item.title}</Text>
                 </View>
             </Animated.View>
         </TouchableOpacity>
@@ -70,11 +69,32 @@ const styles = StyleSheet.create({
         height: '100%',
         borderRadius: 30,
     },
-    backgroundOverlay: {
+    overlay: {
         position: 'absolute',
         width: '100%',
         height: '100%',
         bottom: 0,
         borderRadius: 30,
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    },
+    backgroundOverlay: {
+        position: 'absolute',
+        width: '100%',
+        height: '40%',
+        bottom: 0,
+        borderRadius: 30,
+    },
+    titleContainerOverlay: {
+        position: "absolute",
+        width: "100%",
+        bottom: 20,
+        left: 8,
+        paddingHorizontal: 40,
+    },
+    titleOverlay: {
+        color: "#FFFFFF",
+        fontWeight: "700",
+        fontSize: 18,
+        lineHeight: 28,
     }
 })

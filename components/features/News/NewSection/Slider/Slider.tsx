@@ -1,10 +1,13 @@
-import SliderItem from "@/components/features/News/NewSection/Slider/SliderItem";
 import React from "react";
-import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 
+import SliderItem from "@/components/features/News/NewSection/Slider/SliderItem";
 
-export function Slider({ data }) {
+import { DataType } from "@/components/features/News";
+
+export function Slider({ data }: { data: DataType[] }) {
     const scrollX = useSharedValue(0);
 
     const onScrollHandler = useAnimatedScrollHandler({
@@ -14,19 +17,25 @@ export function Slider({ data }) {
     });
 
     return (
-        <View className="h-[240px] mt-[76px]">
+        <View style={styles.sliderContainer}>
             <Animated.FlatList
                 overScrollMode="never"
-                data={data}
                 contentContainerStyle={{ gap: 8 }}
-                keyExtractor={item => item.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 pagingEnabled
+                data={data}
                 onScroll={onScrollHandler}
+                keyExtractor={item => item.id}
                 renderItem={({ item, index }) => <SliderItem item={item} index={index} scrollX={scrollX} />}
             />
         </View>
     )
 }
+const styles = StyleSheet.create({
+    sliderContainer: {
+        height: 240,
+        marginTop: 76,
+    }
+})
 

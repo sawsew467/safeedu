@@ -1,46 +1,63 @@
-import { Button } from "@/components/ui/Button";
-import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
-import { Alert, Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ImageSourcePropType, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 
-import searchIcon from "@/assets/icons/menuIcon/searchIcon.png";
-import notificationIcon from "@/assets/icons/menuIcon/notificationIcon.png";
+import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
 import { NavMenu } from "@/components/features/News/NavMenu";
 import { NewSection } from "@/components/features/News/NewSection";
+
+import { DATA } from "@/healper/data/news";
+
 import news_background1 from "@/assets/images/news_image/news_background(1).png";
 import news_background_2 from "@/assets/images/news_image/news_background_2.png";
 
 const styles = StyleSheet.create({
+  newsBackground1: {
+    width: 330,
+    height: 270,
+    position: 'absolute',
+    zIndex: -10,
+    top: 320,
+    left: -120,
+    opacity: 0.1,
+    transform: [{ rotate: '15deg' }],
+  },
   backgroundContainer: {
-    // width: 200,
-    // height: 381,
     position: 'absolute',
     zIndex: -1,
     top: 500,
     left: 180,
   },
-  background: {
+  newsBackground2: {
     width: 200,
     height: 381,
-    // objectFit: 'cover'
+    resizeMode: 'contain',
   }
 })
 
+export type DataType = {
+  id: string,
+  title: string,
+  date: string,
+  image: ImageSourcePropType,
+  content: ContentType[]
+};
+export type ContentType = {
+  id: string
+  content: string
+  caption: string
+};
+
 function News() {
   return (
-    <SafeAreaView style={SafeViewAndroid.AndroidSafeArea} className="bg-white">
-      <ScrollView
-        // overScrollMode="never"
-        bounces={false}
-      >
+    <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
+      <ScrollView bounces={false}>
         <NavMenu />
-        <NewSection />
+        <NewSection data={DATA} />
       </ScrollView>
-      <Image source={news_background1} className="w-[330px] h-[270px] absolute -z-10 top-[320px] -left-[120px] opacity-10 rotate-[15deg]" />
+      <Image source={news_background1} style={styles.newsBackground1} />
       <View style={styles.backgroundContainer}>
-        <Image style={[styles.background, { resizeMode: 'contain' }]} source={news_background_2} />
+        <Image source={news_background_2} style={styles.newsBackground2} />
       </View>
     </SafeAreaView>
   );
 }
-
 export default News;

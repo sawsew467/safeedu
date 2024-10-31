@@ -7,6 +7,11 @@ import notificationIcon from "@/assets/icons/menuIcon/notificationIcon.png";
 
 export function NavMenu() {
     const styles = StyleSheet.create({
+        navContainer: {
+            padding: 12,
+            display: "flex",
+            flexDirection: "row"
+        },
         menuButton: {
             width: 54,
             height: 54,
@@ -23,27 +28,33 @@ export function NavMenu() {
             position: 'relative',
             marginLeft: 0,
         },
+        burgerContainer: {
+            gap: 2,
+            marginLeft: 2,
+        },
         burger: {
-            // marginTop: 2,
             marginLeft: 0,
             width: 20,
             height: 2,
             borderRadius: 2,
             backgroundColor: '#8C8C8A',
         },
-        burgerMargin: {
-            // marginTop: 10,
+        buttonContainerRight: {
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "flex-end",
+        },
+        marginRightSearchButton: {
+            marginRight: 8,
         },
         searchIconContainer: {
             width: 18,
             height: 18,
             top: 100,
-            // position: 'absolute'
         },
         searchIcon: {
             width: '100%',
             height: '100%',
-            // marginTop: 10,
         },
         notificationIconContainer: {
             width: 19,
@@ -56,21 +67,17 @@ export function NavMenu() {
         }
     })
     return (
-        <View className="p-3 flex flex-row">
-            <Button
-                style={styles.menuButton}
-            >
-                <View className="gap-[2px] ml-[2px]" >
+        <View style={styles.navContainer}>
+            <Button style={styles.menuButton}>
+                <View style={styles.burgerContainer} >
                     <View style={styles.burger} ></View>
                     <View style={styles.burger} ></View>
                     <View style={styles.burger} ></View>
                     <View style={styles.burger} ></View>
                 </View>
             </Button>
-            <View className="flex-1 flex-row justify-end">
-                <Button
-                    style={[styles.menuButton, { marginRight: 8 }]}
-                >
+            <View style={styles.buttonContainerRight}>
+                <Button style={[styles.menuButton, styles.marginRightSearchButton]}>
                     <View style={styles.searchIconContainer}>
                         <Image
                             source={searchIcon}
