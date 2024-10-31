@@ -139,3 +139,7 @@ export const DRAW_DATA = [{
 
     ]
 }]
+
+export const DETAIL_DRAW_DATA = {
+    title: "Cái chết về ma túy"
+}

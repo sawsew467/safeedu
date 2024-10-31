@@ -27,12 +27,12 @@ const Welcome = () => {
               className="w-[240px] h-[240px]"
               resizeMode="contain"
             />
-            <Text className="text-6xl  text-black font-psemibold drop-shadow-xl">
+            <Text style={{ fontSize: 60 }} className="leading-[70px] text-black font-psemibold">
               SafeEdu
             </Text>
           </View>
 
-          <Text className="text-sm font-pregular text-gray-700 mt-7 text-center">
+          <Text className="text-sm font-pregular text-gray-700 mt-1 text-center">
             Chào mừng bạn đã đến với SafeEdu. Ứng dụng giáo dục về phòng chống
             ma tuý cho học sinh, sinh viên
           </Text>

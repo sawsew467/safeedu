@@ -1,18 +1,13 @@
-import { Image, FlatList, SafeAreaView, ScrollView, View, StyleSheet, Animated, Platform, TouchableWithoutFeedback, TouchableOpacity, Text, TouchableHighlight } from "react-native";
+import { Image, FlatList, SafeAreaView, ScrollView, View, StyleSheet, Animated, Platform, TouchableWithoutFeedback, TouchableOpacity, Text } from "react-native";
 import GlobalStyles from '@/components/ui/SafeViewAndroid';
-import bg_1 from "@/assets/images/contest/bg_1.png"
+import frog_draw from "@/assets/icons/frog_draw.png"
 import React from "react";
-import ContestComponent from "@/components/features/Contest/ContestComponent";
-import location from "@/assets/icons/location.png"
-import { ContentType, DataType } from "@/components/features/Contest";
-import { DATA, DRAW_DATA } from "@/healper/data/contest";
+
+import { DRAW_DATA } from "@/healper/data/contest";
 import chevron_left from "@/assets/icons/chevron_left.png"
 import { router, useLocalSearchParams, usePathname } from "expo-router";
-import book from "@/assets/icons/book.png";
-import chrven_bottom from "@/assets/icons/chevron_bottom.png"
-import chrven_top from "@/assets/icons/chevron_top.png"
-import chrven_right from "@/assets/icons/chevron_right.png"
-import contestID from "@/app/contest/[contestID]";
+import HeaderShown from "@/components/ui/HeaderShown";
+
 
 type ItemProps = {
     image: any,
@@ -36,6 +31,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#333',
         justifyContent: 'center'
+    },
+    frog_draw: {
+        position: "absolute",
+        right: 4,
+        top: 36.5,
     },
     animatedHeader: {
         height: 80,
@@ -150,56 +150,21 @@ function DrawPictureContest() {
     };
 
     return (
-        <SafeAreaView style={styles.safeAreaView}>
-            <ScrollView
-                overScrollMode="never"
-                bounces={false}
-                onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-                    useNativeDriver: false
-                })}
-                style={{ position: 'relative' }}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                scrollEventThrottle={16}
-            >
-                <View style={styles.headerContainer}>
-                    <TouchableWithoutFeedback onPress={handleClickBtn}>
-                        <View style={styles.headerContent}>
-                            <View style={styles.backButtonContainer}>
-                                <Image source={chevron_left} style={{ width: 28, height: 28 }} />
-                            </View>
-                            <Text style={styles.headerTitle}>Vẽ tranh cổ động</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
-                <FlatList
-                    scrollEnabled={false}
-                    data={content?.content}
-                    numColumns={2}
-                    columnWrapperStyle={{ gap: 20 }}
-                    key={"key"}
-                    renderItem={({ item }: { item: { image: string, slug: string } }) => <ListItem image={item?.image} slug={item?.slug} />}
-                    keyExtractor={(item: { image: string, slug: string }) => item?.slug}
-                    contentContainerStyle={{ gap: 20, paddingHorizontal: 16, marginTop: 130, width: "100%", paddingBottom: 100 }}
-                />
-            </ScrollView>
-            <Animated.View style={[styles.animatedHeader, {
-                top: stickyTop,
-                opacity: stickyOpacity
-            }]}
-            >
-                <TouchableWithoutFeedback onPress={handleClickBtn}>
-                    <View style={{ overflow: 'hidden', borderBottomLeftRadius: 24 }}>
-                        <View style={styles.headerContent}>
-                            <View style={styles.backButtonContainer}>
-                                <Image source={chevron_left} style={{ width: 28, height: 28 }} />
-                            </View>
-                            <Text style={styles.headerTitle}>Vẽ tranh cổ động</Text>
-                        </View>
-                    </View>
-                </TouchableWithoutFeedback>
-            </Animated.View>
-        </SafeAreaView >
+        <HeaderShown title="Vẽ tranh cổ động">
+            <View style={styles.frog_draw}>
+                <Image source={frog_draw}></Image>
+            </View>
+            <FlatList
+                scrollEnabled={false}
+                data={content?.content}
+                numColumns={2}
+                columnWrapperStyle={{ gap: 20 }}
+                key={"key"}
+                renderItem={({ item }: { item: { image: string, slug: string } }) => <ListItem image={item?.image} slug={item?.slug} />}
+                keyExtractor={(item: { image: string, slug: string }) => item?.slug}
+                contentContainerStyle={{ gap: 20, paddingHorizontal: 16, marginTop: 100, width: "100%", paddingBottom: 100 }}
+            />
+        </HeaderShown>
     );
 }
 

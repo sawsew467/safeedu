@@ -1,8 +1,8 @@
-import { Text } from 'react-native'
+import DetailDrawPictureModule from '@/components/features/DetailDrawPictureModule'
 
 const DetailDrawPicture = () => {
     return (
-        <Text>DetailDrawPicture</Text>
+        <DetailDrawPictureModule />
     )
 }
 
