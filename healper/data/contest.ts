@@ -9,6 +9,7 @@ import image_detail_contest_4 from "@/assets/images/contest/details/phongchongma
 import image_detail_contest_5 from "@/assets/images/contest/details/phongchongmatuy_5.png"
 import image_detail_contest_6 from "@/assets/images/contest/details/phongchongmatuy_6.png"
 import { DataType } from "@/components/features/Contest"
+import { TypeDetailDrawData } from "../type/Contest"
 
 export const DATA: DataType[] = [
     {
@@ -140,6 +141,59 @@ export const DRAW_DATA = [{
     ]
 }]
 
-export const DETAIL_DRAW_DATA = {
-    title: "Cái chết về ma túy"
-}
+export const DETAIL_DRAW_DATA: TypeDetailDrawData[] = [
+    {
+        id: "anh-1",
+        title: "Cái chết về ma túy",
+        image: image_detail_contest_1,
+        author: "Lê Đức Anh Phương",
+        dobAuthor: "20/09/2004",
+        type: "Tranh vẽ tay",
+        desc: "“Cái chết của ma túy” là một bức tranh mạnh mẽ và đầy cảm xúc, mô tả sự tàn phá của ma túy đối với con người và xã hội. Bối cảnh trung tâm là một hình tượng con người, gầy gò và mệt mỏi, chìm trong bóng tối, với đôi mắt trống rỗng và khuôn mặt mòn mỏi. Những dây xích vô hình của nghiện ngập đang siết chặt quanh cơ thể, như thể họ đang bị giam cầm trong một vòng xoáy không lối thoát. Xung quanh là những mảnh vụn của cuộc đời họ — những mảnh ký ức, niềm vui, hạnh phúc đã bị ma túy phá hủy, rơi rớt như tàn tro."
+    },
+    {
+        id: "anh-2",
+        title: "Đẩy lùi HIV/AIDS",
+        image: image_detail_contest_2,
+        author: "Trần Văn Bảo Thắng",
+        dobAuthor: "19/04/2003",
+        type: "Tranh vẽ máy",
+        desc: "“Cái chết của ma túy” là một bức tranh mạnh mẽ và đầy cảm xúc, mô tả sự tàn phá của ma túy đối với con người và xã hội. Bối cảnh trung tâm là một hình tượng con người, gầy gò và mệt mỏi, chìm trong bóng tối, với đôi mắt trống rỗng và khuôn mặt mòn mỏi. Những dây xích vô hình của nghiện ngập đang siết chặt quanh cơ thể, như thể họ đang bị giam cầm trong một vòng xoáy không lối thoát. Xung quanh là những mảnh vụn của cuộc đời họ — những mảnh ký ức, niềm vui, hạnh phúc đã bị ma túy phá hủy, rơi rớt như tàn tro."
+    },
+    {
+        id: "anh-3",
+        title: "Bài trừ ma túy",
+        image: image_detail_contest_3,
+        author: "Lê Đức Anh Phương",
+        dobAuthor: "20/09/2004",
+        type: "Tranh vẽ máy",
+        desc: "“Cái chết của ma túy” là một bức tranh mạnh mẽ và đầy cảm xúc, mô tả sự tàn phá của ma túy đối với con người và xã hội. Bối cảnh trung tâm là một hình tượng con người, gầy gò và mệt mỏi, chìm trong bóng tối, với đôi mắt trống rỗng và khuôn mặt mòn mỏi. Những dây xích vô hình của nghiện ngập đang siết chặt quanh cơ thể, như thể họ đang bị giam cầm trong một vòng xoáy không lối thoát. Xung quanh là những mảnh vụn của cuộc đời họ — những mảnh ký ức, niềm vui, hạnh phúc đã bị ma túy phá hủy, rơi rớt như tàn tro."
+    },
+    {
+        id: "anh-4",
+        title: "Nói không với ma túy",
+        image: image_detail_contest_4,
+        author: "Lê Đức Anh Phương",
+        dobAuthor: "20/09/2004",
+        type: "Tranh vẽ tay",
+        desc: "“Cái chết của ma túy” là một bức tranh mạnh mẽ và đầy cảm xúc, mô tả sự tàn phá của ma túy đối với con người và xã hội. Bối cảnh trung tâm là một hình tượng con người, gầy gò và mệt mỏi, chìm trong bóng tối, với đôi mắt trống rỗng và khuôn mặt mòn mỏi. Những dây xích vô hình của nghiện ngập đang siết chặt quanh cơ thể, như thể họ đang bị giam cầm trong một vòng xoáy không lối thoát. Xung quanh là những mảnh vụn của cuộc đời họ — những mảnh ký ức, niềm vui, hạnh phúc đã bị ma túy phá hủy, rơi rớt như tàn tro."
+    },
+    {
+        id: "anh-5",
+        title: "Sự ăn mòm ma túy",
+        image: image_detail_contest_5,
+        author: "Lê Đức Anh Phương",
+        dobAuthor: "20/09/2004",
+        type: "Tranh vẽ tay",
+        desc: "“Cái chết của ma túy” là một bức tranh mạnh mẽ và đầy cảm xúc, mô tả sự tàn phá của ma túy đối với con người và xã hội. Bối cảnh trung tâm là một hình tượng con người, gầy gò và mệt mỏi, chìm trong bóng tối, với đôi mắt trống rỗng và khuôn mặt mòn mỏi. Những dây xích vô hình của nghiện ngập đang siết chặt quanh cơ thể, như thể họ đang bị giam cầm trong một vòng xoáy không lối thoát. Xung quanh là những mảnh vụn của cuộc đời họ — những mảnh ký ức, niềm vui, hạnh phúc đã bị ma túy phá hủy, rơi rớt như tàn tro."
+    },
+    {
+        id: "anh-6",
+        title: "Ma túy HIV/AIDS",
+        image: image_detail_contest_6,
+        author: "Lê Đức Anh Phương",
+        dobAuthor: "20/09/2004",
+        type: "Tranh vẽ tay",
+        desc: "“Cái chết của ma túy” là một bức tranh mạnh mẽ và đầy cảm xúc, mô tả sự tàn phá của ma túy đối với con người và xã hội. Bối cảnh trung tâm là một hình tượng con người, gầy gò và mệt mỏi, chìm trong bóng tối, với đôi mắt trống rỗng và khuôn mặt mòn mỏi. Những dây xích vô hình của nghiện ngập đang siết chặt quanh cơ thể, như thể họ đang bị giam cầm trong một vòng xoáy không lối thoát. Xung quanh là những mảnh vụn của cuộc đời họ — những mảnh ký ức, niềm vui, hạnh phúc đã bị ma túy phá hủy, rơi rớt như tàn tro."
+    },
+]

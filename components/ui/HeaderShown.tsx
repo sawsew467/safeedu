@@ -69,28 +69,15 @@ export default function AnimatedHeaderScreen({
         extrapolate: "clamp",
     });
 
-    const rightIconOpacity = rightIcon
-        ? scrollY.interpolate({
-            inputRange: [0, 10],
-            outputRange: [0, 1],
-            extrapolate: "clamp",
-        })
-        : 0;
-
-    const rightIconTranslateY = rightIcon
-        ? scrollY.interpolate({
-            inputRange: [30, 50],
-            outputRange: [10, 0],
-            extrapolate: "clamp",
-        })
-        : 0;
-
     return (
         <>
             <Stack.Screen
                 options={{
                     headerShown: true,
                     headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontWeight: "500"
+                    },
                     headerTitle: title,
                     headerLeft: () => (
                         <Animated.View

@@ -6,9 +6,17 @@ import image_1 from "@/assets/images/contest/details/phongchongmatuy_1.png"
 import chrven_bottom from "@/assets/icons/chevron_bottom.png"
 import chrven_top from "@/assets/icons/chevron_top.png"
 import share_android from "@/assets/icons/share_android.png"
+import { useLocalSearchParams } from "expo-router";
+import { DETAIL_DRAW_DATA } from "@/healper/data/contest";
+import { TypeDetailDrawData } from "@/healper/type/Contest";
 
 function DrawPictureContest() {
+    const { drawPictureID } = useLocalSearchParams();
     const [isExpanded, setExpanded] = React.useState(false);
+
+    const data: TypeDetailDrawData = React.useMemo(() => {
+        return DETAIL_DRAW_DATA.find((item) => item?.id === drawPictureID);
+    }, [drawPictureID])
 
     const toggleExpanded = () => {
         setExpanded(!isExpanded);
@@ -16,28 +24,28 @@ function DrawPictureContest() {
     const handleShare = () => { }
 
     return (
-        <HeaderShown title="Vẽ tranh cổ động" rightIcon={{ image: share_android, onPress: handleShare }}>
+        <HeaderShown title={data?.title} rightIcon={{ image: share_android, onPress: handleShare }}>
             <View style={styles.container}>
                 <View style={styles.imageContainer}>
-                    <Image source={image_1} style={styles.image}></Image>
+                    <Image source={data?.image} style={styles.image}></Image>
                 </View>
                 <View style={styles.flexBoxMetadata}>
                     <View style={styles.metadataContainer}>
                         <Text style={styles.titleMetadata}>Tác giả:</Text>
-                        <Text style={styles.metadata} className="font-pmedium">Võ Thị Thuý Sương</Text>
+                        <Text style={styles.metadata} className="font-pmedium">{data?.author}</Text>
                     </View>
                     <View style={styles.metadataContainer}>
                         <Text style={styles.titleMetadata}>Ngày sinh:</Text>
-                        <Text style={styles.metadata} className="font-pmedium">28/08/2010</Text>
+                        <Text style={styles.metadata} className="font-pmedium">{data?.dobAuthor}</Text>
                     </View>
                     <View style={styles.metadataContainer}>
                         <Text style={styles.titleMetadata} >Thể loại:</Text>
-                        <Text style={styles.metadata} className="font-pmedium">Tranh vẽ máy</Text>
+                        <Text style={styles.metadata} className="font-pmedium">{data?.type}</Text>
                     </View>
                 </View>
                 <View style={styles.flexBoxDesc}>
                     <Text style={styles.text} numberOfLines={isExpanded ? undefined : 3}>
-                        {"    "}“Cái chết của ma túy” là một bức tranh mạnh mẽ và đầy cảm xúc, mô tả sự tàn phá của ma túy đối với con người và xã hội. Bối cảnh trung tâm là một hình tượng con người, gầy gò và mệt mỏi, chìm trong bóng tối, với đôi mắt trống rỗng và khuôn mặt mòn mỏi. Những dây xích vô hình của nghiện ngập đang siết chặt quanh cơ thể, như thể họ đang bị giam cầm trong một vòng xoáy không lối thoát. Xung quanh là những mảnh vụn của cuộc đời họ — những mảnh ký ức, niềm vui, hạnh phúc đã bị ma túy phá hủy, rơi rớt như tàn tro.
+                        {"    "}{data?.desc}
                     </Text>
                     <TouchableOpacity onPress={toggleExpanded} style={styles.expandButtonContainer}>
                         <View style={styles.expandButtonContent}>
