@@ -1,20 +1,16 @@
-import { Image, FlatList, SafeAreaView, ScrollView, View, StyleSheet, Animated, Platform, TouchableWithoutFeedback, TouchableOpacity, Text, TouchableHighlight } from "react-native";
+import { Image, FlatList, View, StyleSheet, Animated, Platform, TouchableOpacity, Text } from "react-native";
 import GlobalStyles from '@/components/ui/SafeViewAndroid';
-import bg_1 from "@/assets/images/contest/bg_1.png"
 import React from "react";
-import ContestComponent from "@/components/features/Contest/ContestComponent";
 import location from "@/assets/icons/location.png"
 import { ContentType, DataType } from "../Contest";
 import { DATA } from "@/healper/data/contest";
-import chevron_left from "@/assets/icons/chevron_left.png"
 import { router, useLocalSearchParams, usePathname } from "expo-router";
 import book from "@/assets/icons/book.png";
 import chrven_bottom from "@/assets/icons/chevron_bottom.png"
 import chrven_top from "@/assets/icons/chevron_top.png"
 import chrven_right from "@/assets/icons/chevron_right.png"
-import contestID from "@/app/contest/[contestID]";
 import HeaderShown from "@/components/ui/HeaderShown";
-
+import ranking from "@/assets/icons/ranking.png"
 type ItemProps = {
     title: {
         title: string,
@@ -262,8 +258,8 @@ function Contest() {
         extrapolate: 'clamp'
     })
 
-    const handleClickBtn = () => {
-        router.back();
+    const handleClickRankingBtn = () => {
+        router.push(`contest/${contestID}/leaderboard`);
     }
 
     const toggleExpanded = () => {
@@ -271,7 +267,7 @@ function Contest() {
     };
 
     return (
-        <HeaderShown title="Mô tả cuộc thi">
+        <HeaderShown title="Mô tả cuộc thi" rightIcon={{ image: ranking, onPress: handleClickRankingBtn }}>
             <View style={styles.imageContainer}>
                 <View style={styles.imageDarkOverlay}></View>
                 <Image source={detailContest?.image} resizeMode="cover" style={styles.backgroundImage} />
