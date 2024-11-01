@@ -1,4 +1,4 @@
-import { Image, FlatList, SafeAreaView, ScrollView, Text, View, StyleSheet, Animated, Platform } from "react-native";
+import { Image, FlatList, SafeAreaView, ScrollView, Text, View, StyleSheet, Animated, Platform, Dimensions, StatusBar, } from "react-native";
 import GlobalStyles from '@/components/ui/SafeViewAndroid';
 import bg_1 from "@/assets/images/contest/bg_1.png"
 import SearchInput from "@/components/ui/SearchInput";
@@ -19,11 +19,11 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   animatedHeader: {
-    height: 200,
+    height: 100,
     backgroundColor: '#fff',
     justifyContent: 'flex-end',
     position: 'absolute',
-    top: 0, // -150 -> 0
+    top: -150, // -150 -> 0
     left: 0,
     right: 0,
     opacity: 1,
@@ -56,10 +56,12 @@ export type ContentType = {
   address: string,
   desc: string,
   joiner: number
-  parts: string[]
+  parts: { title: string, slug: string }[]
 }
+const windowDimensions = Dimensions.get('window');
 
 function Contest() {
+
 
   const scrollY = new Animated.Value(0)
   const [value, setValue] = React.useState("");
@@ -69,7 +71,7 @@ function Contest() {
     extrapolate: 'clamp'
   })
   const stickyTop = scrollY.interpolate({
-    outputRange: [-200, -80],
+    outputRange: [-200, 0],
     inputRange: [0, 160],
     extrapolate: 'clamp'
   })
