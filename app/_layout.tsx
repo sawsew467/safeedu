@@ -40,9 +40,11 @@ const RootLayout = () => {
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="achiverment/index" options={{ headerShown: false }} />
       <Stack.Screen name="contest/[contestID]" options={{ headerShown: false }} />
       <Stack.Screen name="contest/[contestID]/drawPicture" options={{ headerShown: false }} />
       <Stack.Screen name="contest/[contestID]/drawPicture/[drawPictureID]" options={{ headerShown: false }} />
+      <Stack.Screen name="news/[newsIS]" options={{ headerShown: false }} />
     </Stack>
   );
 };
