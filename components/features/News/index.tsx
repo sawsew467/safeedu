@@ -38,12 +38,8 @@ export type DataType = {
   title: string,
   date: string,
   image: ImageSourcePropType,
-  content: ContentType[]
-};
-export type ContentType = {
-  id: string
-  content: string
-  caption: string
+  content: string,
+  caption: string,
 };
 
 function News() {

@@ -1,12 +1,11 @@
+import { DataType } from '@/components/features/News';
+import { router } from 'expo-router';
 import React from 'react'
 import { Dimensions, Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
 import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 
-type Props = {
-    item: {
-        image: ImageSourcePropType,
-        title: string,
-    };
+type SliderItemProps = {
+    item: DataType;
     index: number;
     scrollX: Animated.SharedValue<number>
 }
@@ -14,7 +13,7 @@ type Props = {
 const { width } = Dimensions.get('screen');
 
 
-const SliderItem = ({ item, index, scrollX }: Props) => {
+const SliderItem = ({ item, index, scrollX }: SliderItemProps) => {
     const rnAnimatedStyle = useAnimatedStyle(() => {
         const translateX = interpolate(
             scrollX.value,
@@ -39,7 +38,9 @@ const SliderItem = ({ item, index, scrollX }: Props) => {
     });
 
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+            router.push(`/news/${item?.id}`)
+        }}>
             <Animated.View style={[styles.itemContainer, rnAnimatedStyle]}>
                 <Image source={item.image} style={styles.itemImage} resizeMode="cover" />
                 <View style={styles.overlay} />
