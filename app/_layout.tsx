@@ -44,6 +44,8 @@ const RootLayout = () => {
       <Stack.Screen name="contest/[contestID]" options={{ headerShown: false }} />
       <Stack.Screen name="news/[newsID]" options={{ headerShown: true }} />
       <Stack.Screen name="library/[libraryID]" options={{ headerShown: true }} />
+      <Stack.Screen name="contest/[contestID]/drawPicture" options={{ headerShown: false }} />
+      <Stack.Screen name="contest/[contestID]/drawPicture/[drawPictureID]" options={{ headerShown: false }} />
     </Stack>
   );
 };

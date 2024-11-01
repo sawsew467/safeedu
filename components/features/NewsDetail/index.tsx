@@ -5,6 +5,7 @@ import { DATA } from '@/healper/data/news';
 import { DataType } from '@/components/features/News';
 import newsID from '@/app/news/[newsID]';
 import SafeViewAndroid from '@/components/ui/SafeViewAndroid';
+import HeaderShown from '@/components/ui/HeaderShown';
 
 
 const NewsDetail = () => {
@@ -15,11 +16,13 @@ const NewsDetail = () => {
     }, [newsID]);
 
     return (
-        <SafeAreaView style={[SafeViewAndroid.AndroidSafeArea, styles.safeArea]}>
-            <View style={styles.backgroundContainer}>
-                <Image style={styles.background} source={require("@/assets/images/news_image/newsDetail_background.jpg")} />
-            </View>
-            <ScrollView style={styles.newsContainer} bounces={false}>
+        <HeaderShown title='Mô tả'
+            HeaderComponent={() =>
+                <View style={styles.backgroundContainer}>
+                    <Image style={styles.background} source={require("@/assets/images/news_image/newsDetail_background.jpg")} />
+                </View>
+            }>
+            <View style={styles.newsContainer}>
                 <View style={styles.whiteBoard}>
                     <View style={styles.newsDetailContainer}>
                         <View style={styles.titleContainer}>
@@ -33,10 +36,9 @@ const NewsDetail = () => {
                         <Text style={styles.caption}>{detailNews?.caption}</Text>
                         <Text style={styles.content}>{detailNews?.content}</Text>
                     </View>
-
                 </View>
-            </ScrollView>
-        </SafeAreaView>
+            </View>
+        </HeaderShown>
     )
 }
 
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "30%",
         position: "absolute",
-        zIndex: 1,
+        zIndex: 0,
     },
     background: {
         width: "100%",
