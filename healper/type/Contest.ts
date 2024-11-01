@@ -7,3 +7,8 @@ export type TypeDetailDrawData = {
     type: string,
     desc: string
 }
+export type TypeLeaderBoard = {
+    name: string,
+    avatar: any,
+    point: string
+}
