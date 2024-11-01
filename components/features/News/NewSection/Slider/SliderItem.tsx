@@ -39,7 +39,7 @@ const SliderItem = ({ item, index, scrollX }: SliderItemProps) => {
 
     return (
         <TouchableOpacity onPress={() => {
-            router.push(`/news/${item?.id}`)
+            router.push(`/news/${item?.id}`);
         }}>
             <Animated.View style={[styles.itemContainer, rnAnimatedStyle]}>
                 <Image source={item.image} style={styles.itemImage} resizeMode="cover" />

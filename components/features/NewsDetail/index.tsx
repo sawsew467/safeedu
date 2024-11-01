@@ -7,7 +7,7 @@ import newsID from '@/app/news/[newsID]';
 import SafeViewAndroid from '@/components/ui/SafeViewAndroid';
 
 
-const News = () => {
+const NewsDetail = () => {
     const { newsID } = useLocalSearchParams();
 
     const detailNews = React.useMemo(() => {
@@ -40,7 +40,7 @@ const News = () => {
     )
 }
 
-export default News
+export default NewsDetail
 
 const styles = StyleSheet.create({
     safeArea: {
