@@ -5,15 +5,13 @@ import { router } from 'expo-router'
 
 const style = StyleSheet.create({
     shadow: {
-        // Shadow for iOS
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.04, // equivalent to 10% opacity (#0000000A)
+        shadowOpacity: 0.04,
         shadowRadius: 10,
-        // Shadow for Android
-        elevation: 2, // Adjusted for Android to approximate the iOS shadow effect
-        backgroundColor: '#fff', // Required for elevation to work on Android
-        borderRadius: 24, // Optional: adds rounded corners if desired
+        elevation: 2,
+        backgroundColor: '#fff',
+        borderRadius: 24,
     }
 })
 
@@ -37,6 +35,8 @@ const ContestItem = ({ item }: { item: ContentType }) => {
 const ContestSlide = ({ item }: { item: ContentType[] }) => {
     return (
         <FlatList
+            overScrollMode='never'
+            bounces={false}
             data={item}
             renderItem={({ item }) => <ContestItem item={item} />}
             keyExtractor={(item) => item.id}
