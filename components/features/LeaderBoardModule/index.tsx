@@ -6,8 +6,10 @@ import ranking from '@/assets/icons/ranking.png'
 import frame_ranking_1 from "@/assets/icons/frame_ranking_1.png"
 import frame_ranking_2 from "@/assets/icons/frame_ranking_2.png"
 import bg_ranking from "@/assets/images/contest/bg_ranking.png"
-import { LEADERBOARD_DATA } from '@/healper/data/contest'
+import { DATA, LEADERBOARD_DATA } from '@/healper/data/contest'
 import { TypeLeaderBoard } from '@/healper/type/Contest'
+import { useLocalSearchParams } from 'expo-router'
+import { DataType, ContentType } from '../Contest'
 
 const ListItem = ({ name, point, avatar, index }: TypeLeaderBoard & { index: number }) => {
     return (
@@ -24,11 +26,25 @@ const ListItem = ({ name, point, avatar, index }: TypeLeaderBoard & { index: num
 }
 
 const LeaderBoardModule = () => {
+    const { contestID } = useLocalSearchParams();
+
+    const detailContest = React.useMemo(() => {
+        return DATA.find((item: DataType) => {
+            return (item.content.some((content: ContentType) => content?.id === contestID))
+        }).content.find((content) => content.id === contestID)
+    }, [contestID])
     return (
-        <HeaderShown title="Bảng xếp hạng" HeaderComponent={() => (<View style={styles.bg_container}>
-            <Image style={styles.bg_image} source={bg_leaderboard} resizeMode='cover'></Image>
-        </View>)}>
+        <HeaderShown title="Bảng xếp hạng" HeaderComponent={() => (
+            <View style={styles.bg_container}>
+                <Image style={styles.bg_image} source={bg_leaderboard} resizeMode='cover' />
+            </View>
+        )}>
             <View style={styles.content_container}>
+                <View style={styles.container_title}>
+                    <Text style={styles.title} className='font-pbold'>
+                        {detailContest?.desc}
+                    </Text>
+                </View>
                 <View style={styles.icon_ranking}>
                     <Image source={ranking} />
                 </View>
@@ -91,6 +107,18 @@ const LeaderBoardModule = () => {
     )
 }
 const styles = StyleSheet.create({
+    title: {
+        width: "80%",
+        textAlign: "center",
+        fontSize: 24,
+        color: "#fff"
+    },
+    container_title: {
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        marginBottom: 20
+    },
     point_board: {
         fontSize: 20,
         color: "#03622F",
@@ -162,7 +190,7 @@ const styles = StyleSheet.create({
         height: "100%"
     },
     content_container: {
-        marginTop: 100,
+        marginTop: 50,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
