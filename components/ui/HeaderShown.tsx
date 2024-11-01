@@ -21,6 +21,7 @@ type AnimatedHeaderScreenProps = {
         image: any;
         onPress: () => void;
     };
+    HeaderComponent?: () => ReactNode;
 };
 
 const colors = {
@@ -38,6 +39,7 @@ export default function AnimatedHeaderScreen({
     title,
     children,
     rightIcon,
+    HeaderComponent
 }: AnimatedHeaderScreenProps) {
     const scrollY = useRef(new Animated.Value(0)).current;
     const insets = useSafeAreaInsets();
@@ -99,7 +101,7 @@ export default function AnimatedHeaderScreen({
                                 }}
                             >
                                 <TouchableOpacity style={styles.btnIconRight} onPress={rightIcon?.onPress}>
-                                    <Image source={rightIcon?.image} style={styles.leftIcon} />
+                                    <Image source={rightIcon?.image} style={styles.rightIcon} resizeMode="contain" />
                                 </TouchableOpacity>
                             </Animated.View>
                         )
@@ -123,6 +125,7 @@ export default function AnimatedHeaderScreen({
 
             />
             <SafeAreaView style={headerSafeArea.AndroidSafeArea}>
+                {HeaderComponent && <HeaderComponent />}
                 <ScrollView
                     overScrollMode="never"
                     bounces={false}
@@ -146,7 +149,7 @@ const headerSafeArea = StyleSheet.create({
     AndroidSafeArea: {
         flex: 1,
         backgroundColor: "white",
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight - (windowDimensions.width * 0.15) : 0
+        paddingTop: 0
     }
 });
 
@@ -166,8 +169,7 @@ const styles = StyleSheet.create({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: 54,
-        height: 54,
+        height: 30,
         borderRadius: 999
     },
     scrollViewContent: {
@@ -184,6 +186,6 @@ const styles = StyleSheet.create({
         height: 24
     },
     rightIcon: {
-        marginRight: 16,
+        height: "100%",
     },
 });
