@@ -12,9 +12,8 @@ import {
     Dimensions
 } from "react-native";
 import { router, Stack } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import chevron_left from "@/assets/icons/chevron_left.png"
+import chevron_left_black from "@/assets/icons/chevron_left_black.png"
 type AnimatedHeaderScreenProps = {
     children: ReactNode;
     title?: string;
@@ -87,7 +86,7 @@ export default function AnimatedHeaderScreen({
                             }}
                         >
                             <TouchableOpacity onPress={handleClickLeft} style={styles.btnIconLeft}>
-                                <Image source={chevron_left} style={styles.leftIcon}></Image>
+                                <Image source={chevron_left_black} style={styles.leftIcon}></Image>
                             </TouchableOpacity>
                         </Animated.View>
                     ),
