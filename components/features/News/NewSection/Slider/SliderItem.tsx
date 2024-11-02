@@ -1,4 +1,4 @@
-import { DataType } from '@/components/features/News';
+import { DataType } from '@/healper/type/news-type';
 import { router } from 'expo-router';
 import React from 'react'
 import { Dimensions, Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
         width: width - 32,
         height: 178,
         paddingHorizontal: 16,
-        // top: 76,
         position: 'relative',
     },
     itemImage: {

@@ -9,6 +9,7 @@ import news_background1 from "@/assets/images/news_image/news_background(1).png"
 import news_background2 from "@/assets/images/news_image/news_background(2).png";
 import linear_gradient_1 from "@/assets/images/library_images/linear_gradient_1.png";
 import linear_gradient_2 from "@/assets/images/library_images/linear_gradient_2.png";
+import { LIBRARY_DATA } from "@/healper/data/library";
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -33,7 +34,7 @@ function Library() {
               </View>
             </Button>
           </View>
-          <CardList />
+          <CardList data={LIBRARY_DATA} />
         </View>
       </ScrollView>
       <Image source={news_background1} style={styles.newsBackground1} />

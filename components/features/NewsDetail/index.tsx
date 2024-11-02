@@ -2,10 +2,10 @@ import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-n
 import React from 'react'
 import { useLocalSearchParams } from 'expo-router';
 import { DATA } from '@/healper/data/news';
-import { DataType } from '@/components/features/News';
 import newsID from '@/app/news/[newsID]';
 import SafeViewAndroid from '@/components/ui/SafeViewAndroid';
 import HeaderShown from '@/components/ui/HeaderShown';
+import { DataType } from '@/healper/type/news-type';
 
 
 const NewsDetail = () => {
@@ -22,6 +22,7 @@ const NewsDetail = () => {
                     <Image style={styles.background} source={require("@/assets/images/news_image/newsDetail_background.jpg")} />
                 </View>
             }>
+
             <View style={styles.newsContainer}>
                 <View style={styles.whiteBoard}>
                     <View style={styles.newsDetailContainer}>
@@ -38,6 +39,7 @@ const NewsDetail = () => {
                     </View>
                 </View>
             </View>
+
         </HeaderShown>
     )
 }

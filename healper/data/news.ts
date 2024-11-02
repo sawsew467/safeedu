@@ -1,7 +1,7 @@
-import { DataType } from "@/components/features/News";
 import news_image1 from "@/assets/images/news_image/News_image1.png";
 import news_image2 from "@/assets/images/news_image/News_image2.png";
 import news_image3 from "@/assets/images/news_image/News_image3.png";
+import { DataType } from "@/healper/type/news-type";
 
 export const DATA: DataType[] = [
   {

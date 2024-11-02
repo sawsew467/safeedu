@@ -1,10 +1,8 @@
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import arrow_icon from "@/assets/icons/arrow_icon.png";
-import card_image_1 from "@/assets/images/library_images/card_image_1.png";
-import card_image_2 from "@/assets/images/library_images/card_image_2.png";
-import card_image_3 from "@/assets/images/library_images/card_image_3.png";
-import card_image_4 from "@/assets/images/library_images/card_image_4.png";
+import { LibraryDataType } from '@/healper/type/library-type';
+import { router } from 'expo-router';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -20,87 +18,53 @@ const imageHeight = imageWidth * 1.2;
 
 const textContainerWidth = windowWidth > 400 ? (windowWidth * 0.25) : (windowWidth * 0.3);
 
-const CardList = () => {
+const CardList = ({ data }: { data: LibraryDataType[] }) => {
 
+    const getTextContainer = (index: number) => {
+        switch (index) {
+            case 0:
+                return styles.textContainer_1;
+            case 1:
+                return styles.textContainer_2;
+            case 2:
+                return styles.textContainer_3;
+            case 3:
+                return styles.textContainer_4;
+        }
+    };
 
     return (
         <View style={styles.cardListContainer}>
 
-            <TouchableOpacity >
-                <View style={[styles.cardContainer, styles.cardGreen]}>
-                    <View style={styles.textContainer_1}>
-                        <Text style={[styles.title, styles.whiteTitle]}>
-                            Tổng Quan Về Ma Tuý
-                        </Text>
-                        <View style={styles.infoRow}>
-                            <Text style={[styles.readMoreText, styles.whiteReadMoreText]}>
-                                Xem thông tin
+            {data.map((item, index) => (
+                <TouchableOpacity key={item.id} onPress={() => {
+                    router.push(`/library/${item?.id}`);
+                }}>
+                    <View style={[styles.cardContainer, index % 2 === 0 ? styles.cardGreen : styles.cardYellow]}>
+                        <View style={[getTextContainer(index)]}>
+                            <Text style={[styles.title, index % 2 === 0 ? styles.whiteTitle : styles.blackTitle]}>
+                                {item.title}
                             </Text>
-                            <Image source={arrow_icon} style={[styles.arrow, styles.whiteArrow]} resizeMode='cover' />
+                            <View style={styles.infoRow}>
+                                <Text style={[
+                                    styles.readMoreText,
+                                    index % 2 === 0 ? styles.whiteReadMoreText : styles.blackReadMoreText
+                                ]}>
+                                    Xem thông tin
+                                </Text>
+                                <Image source={arrow_icon} style={[
+                                    styles.arrow,
+                                    index % 2 === 0 ? styles.whiteArrow : styles.blackArrow
+                                ]} resizeMode='cover' />
+                            </View>
+                        </View>
+                        <View style={index % 2 === 0 ? styles.imageContainerRight : styles.imageContainerLeft}>
+                            <Image source={item.image} style={styles.image} resizeMode='contain' />
                         </View>
                     </View>
-                    <View style={styles.imageContainerRight}>
-                        <Image source={card_image_1} style={styles.image} resizeMode='contain' />
-                    </View>
-                </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity>
-                <View style={[styles.cardContainer, styles.cardYellow]}>
-                    <View style={styles.textContainer_2}>
-                        <Text style={[styles.title, styles.blackTitle]}>
-                            Tác Hại Của Ma Tuý
-                        </Text>
-                        <View style={[styles.infoRow]}>
-                            <Text style={[styles.readMoreText, styles.blackReadMoreText]}>
-                                Xem thông tin
-                            </Text>
-                            <Image source={arrow_icon} style={[styles.arrow, styles.blackArrow]} resizeMode='cover' />
-                        </View>
-                    </View>
-                    <View style={styles.imageContainerLeft}>
-                        <Image source={card_image_2} style={styles.image} resizeMode='contain' />
-                    </View>
-                </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity>
-                <View style={[styles.cardContainer, styles.cardGreen]}>
-                    <View style={styles.textContainer_3}>
-                        <Text style={[styles.title, styles.whiteTitle]}>
-                            Cai Nghiện Và Hỗ Trợ
-                        </Text>
-                        <View style={styles.infoRow}>
-                            <Text style={[styles.readMoreText, styles.whiteReadMoreText]}>
-                                Xem thông tin
-                            </Text>
-                            <Image source={arrow_icon} style={[styles.arrow, styles.whiteArrow]} resizeMode='cover' />
-                        </View>
-                    </View>
-                    <View style={styles.imageContainerRight}>
-                        <Image source={card_image_3} style={styles.image} resizeMode='contain' />
-                    </View>
-                </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity>
-                <View style={[styles.cardContainer, styles.cardYellow]}>
-                    <View style={styles.textContainer_4}>
-                        <Text style={[styles.title, styles.blackTitle]}>
-                            Hotline Hỗ Trợ
-                        </Text>
-                        <View style={[styles.infoRow]}>
-                            <Text style={[styles.readMoreText, styles.blackReadMoreText]}>
-                                Xem thông tin
-                            </Text>
-                            <Image source={arrow_icon} style={[styles.arrow, styles.blackArrow]} resizeMode='cover' />
-                        </View>
-                    </View>
-                    <View style={styles.imageContainerLeft}>
-                        <Image source={card_image_4} style={styles.image} resizeMode='contain' />
-                    </View>
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            ))
+            }
 
         </View >
     )
@@ -141,7 +105,7 @@ const styles = StyleSheet.create({
         width: windowWidth * 0.45,
     },
     textContainer_4: {
-        width: textContainerWidth,
+        width: windowWidth * 0.45,
         alignItems: 'flex-end'
     },
     title: {
