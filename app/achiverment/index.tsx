@@ -5,13 +5,13 @@ import { router } from 'expo-router';
 const AchievementCard = ({ title, description }) => {
   const getImageSource = () => {
     switch (title) {
-      case "450 điểm": return require('../../assets/icons/icon_poin.png'); 
-      case "490 điểm": return require('../../assets/icons/icon_share.png'); 
-      case "480 điểm": return require('../../assets/icons/icon_event.png'); 
-      case "Giải nhất": return require('../../assets/icons/icon_giainhat.png'); 
-      case "Giải nhì": return require('../../assets/icons/icon_giainhhi.png'); 
-      case "Giải ba": return require('../../assets/icons/icon_giaiba.png'); 
-      default: return require('../../assets/icons/icon_poin.png'); 
+      case "450 điểm": return require('../../assets/icons/icon_poin.png');
+      case "490 điểm": return require('../../assets/icons/icon_share.png');
+      case "480 điểm": return require('../../assets/icons/icon_event.png');
+      case "Giải nhất": return require('../../assets/icons/icon_giainhat.png');
+      case "Giải nhì": return require('../../assets/icons/icon_giainhhi.png');
+      case "Giải ba": return require('../../assets/icons/icon_giaiba.png');
+      default: return require('../../assets/icons/icon_poin.png');
     }
   };
 
@@ -42,7 +42,7 @@ const AchievementPage = () => {
   ];
 
   return (
-    <ImageBackground 
+    <ImageBackground
       source={require('../../assets/images/backgroundAchi.png')}
       style={styles.backgroundImage}
       imageStyle={{ resizeMode: 'cover' }}
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#343a40',
-    textAlign: 'center', 
+    textAlign: 'center',
   },
   cardContainer: {
     flexDirection: 'row',
@@ -116,11 +116,11 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '30%',
-    backgroundColor: '#ffffff', 
+    backgroundColor: '#ffffff',
     borderRadius: 8,
     padding: 16,
     marginBottom: 16,
-    alignItems: 'center', 
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   icon: {
     width: '100%',
     height: undefined,
-    aspectRatio: 1, 
+    aspectRatio: 1,
     marginBottom: 8,
   },
   cardTitle: {
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
-    marginLeft:'20%',
+    marginLeft: '20%',
   },
   cardDescription: {
     fontSize: 12,

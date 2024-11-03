@@ -1,10 +1,11 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity, FlatList, StyleProp, ImageStyle } from "react-native";
 
 import { Slider } from "@/components/features/News/NewSection/Slider/Slider";
-import { DataType } from "@/components/features/News";
 import { DATA } from "@/healper/data/news";
 
 import logo from "@/assets/images/news_image/news_logo.png";
+import { router } from "expo-router";
+import { DataType } from "@/healper/type/news-type";
 
 export function NewSection({ data }: { data: DataType[] }) {
     return (
@@ -27,7 +28,9 @@ export function NewSection({ data }: { data: DataType[] }) {
                     data={data}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) =>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            router.push(`/news/${item?.id}`)
+                        }}>
                             <View style={styles.listItem}>
                                 <Image source={item.image} style={styles.listImage as StyleProp<ImageStyle>} resizeMode="cover" />
                                 <View style={styles.listTextContainer}>
