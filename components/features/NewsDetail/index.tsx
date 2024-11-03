@@ -15,6 +15,8 @@ const NewsDetail = () => {
         return DATA.find((item: DataType) => item?.id === newsID);
     }, [newsID]);
 
+
+
     return (
         <HeaderShown title='Thông Tin Chi Tiết'
             HeaderComponent={() =>
@@ -35,7 +37,6 @@ const NewsDetail = () => {
                             <Image style={styles.image} source={detailNews?.image} />
                         </View>
                         <Text style={styles.caption}>{detailNews?.caption}</Text>
-                        <Text style={styles.content}>{detailNews?.content}</Text>
                     </View>
                 </View>
             </View>
@@ -45,6 +46,7 @@ const NewsDetail = () => {
 }
 
 export default NewsDetail
+
 
 const styles = StyleSheet.create({
     safeArea: {
