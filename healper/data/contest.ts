@@ -9,7 +9,7 @@ import image_detail_contest_4 from "@/assets/images/contest/details/phongchongma
 import image_detail_contest_5 from "@/assets/images/contest/details/phongchongmatuy_5.png"
 import image_detail_contest_6 from "@/assets/images/contest/details/phongchongmatuy_6.png"
 import { DataType } from "@/components/features/Contest"
-import { TypeDetailDrawData } from "../type/Contest"
+import { TypeDetailDrawData, TypeLeaderBoard } from "../type/Contest"
 
 export const DATA: DataType[] = [
     {
@@ -195,5 +195,43 @@ export const DETAIL_DRAW_DATA: TypeDetailDrawData[] = [
         dobAuthor: "20/09/2004",
         type: "Tranh vẽ tay",
         desc: "“Cái chết của ma túy” là một bức tranh mạnh mẽ và đầy cảm xúc, mô tả sự tàn phá của ma túy đối với con người và xã hội. Bối cảnh trung tâm là một hình tượng con người, gầy gò và mệt mỏi, chìm trong bóng tối, với đôi mắt trống rỗng và khuôn mặt mòn mỏi. Những dây xích vô hình của nghiện ngập đang siết chặt quanh cơ thể, như thể họ đang bị giam cầm trong một vòng xoáy không lối thoát. Xung quanh là những mảnh vụn của cuộc đời họ — những mảnh ký ức, niềm vui, hạnh phúc đã bị ma túy phá hủy, rơi rớt như tàn tro."
+    },
+]
+
+export const LEADERBOARD_DATA: TypeLeaderBoard[] = [
+    {
+        name: "A.phương",
+        avatar: img_contest_detail_1,
+        point: "99"
+    },
+    {
+        name: "B.Thắng",
+        avatar: img_contest_detail_2,
+        point: "80"
+    },
+    {
+        name: "D.Khang",
+        avatar: img_contest_detail_3,
+        point: "78"
+    },
+    {
+        name: "T.Thủy",
+        avatar: img_contest_detail_1,
+        point: "76"
+    },
+    {
+        name: "T.Sương",
+        avatar: img_contest_detail_2,
+        point: "74"
+    },
+    {
+        name: "Q.Như",
+        avatar: img_contest_detail_2,
+        point: "70"
+    },
+    {
+        name: "V.Thiệu",
+        avatar: img_contest_detail_3,
+        point: "60"
     },
 ]
