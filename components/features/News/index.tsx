@@ -33,19 +33,6 @@ const styles = StyleSheet.create({
   }
 })
 
-export type DataType = {
-  id: string,
-  title: string,
-  date: string,
-  image: ImageSourcePropType,
-  content: ContentType[]
-};
-export type ContentType = {
-  id: string
-  content: string
-  caption: string
-};
-
 function News() {
   return (
     <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>

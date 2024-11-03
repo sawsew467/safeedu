@@ -1,23 +1,30 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { Tabs } from "expo-router";
-import { Image, Text, View } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 
-import Home from "@/assets/icons/nav_home.png";
-import Library from "@/assets/icons/nav_library.png";
-import Contest from "@/assets/icons/nav_contest.png";
-import Game from "@/assets/icons/nav_game.png";
-import Account from "@/assets/icons/nav_account.png";
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Entypo from '@expo/vector-icons/Entypo';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import Feather from '@expo/vector-icons/Feather';
 
-const TabIcon = ({ icon, color, name, focused }) => {
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+const styles = StyleSheet.create({
+  iconContainer: {
+    paddingTop: windowHeight * 0.01,
+  }
+})
+
+const TabIcon = ({ IconComponent, color, name, focused }) => {
   return (
     <View className="flex items-center justify-center gap-2">
-      <Image
-        source={icon}
-        resizeMode="contain"
-        tintColor={color}
-        className="w-6 h-6"
-      />
+      <View style={styles.iconContainer}>
+        <IconComponent color={color} size={24} />
+      </View>
       <Text
         className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
         style={{ color: color }}
@@ -51,7 +58,7 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={Home}
+                IconComponent={() => <AntDesign name="home" size={24} color={color} />}
                 color={color}
                 name="Trang chủ"
                 focused={focused}
@@ -66,7 +73,7 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={Library}
+                IconComponent={() => <Feather name="book" size={24} color={color} />}
                 color={color}
                 name="Thư viện"
                 focused={focused}
@@ -82,7 +89,7 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={Contest}
+                IconComponent={() => <AntDesign name="Trophy" size={24} color={color} />}
                 color={color}
                 name="Cuộc thi"
                 focused={focused}
@@ -97,7 +104,7 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={Game}
+                IconComponent={() => <Ionicons name="game-controller-outline" size={24} color={color} />}
                 color={color}
                 name="Trò chơi"
                 focused={focused}
@@ -112,7 +119,7 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={Account}
+                IconComponent={() => <MaterialCommunityIcons name="account-circle-outline" size={24} color={color} />}
                 color={color}
                 name="Tài khoản"
                 focused={focused}

@@ -64,6 +64,10 @@ const RootLayout = () => {
         />
         <Stack.Screen name="news/[newsID]" options={{ headerShown: false }} />
         <Stack.Screen
+          name="library/[libraryID]"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="chatbot/[chatId]"
           options={{ headerShown: false }}
         />
