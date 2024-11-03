@@ -10,7 +10,7 @@ import chrven_bottom from "@/assets/icons/chevron_bottom.png"
 import chrven_top from "@/assets/icons/chevron_top.png"
 import chrven_right from "@/assets/icons/chevron_right.png"
 import HeaderShown from "@/components/ui/HeaderShown";
-import ranking from "@/assets/icons/ranking.png"
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 type ItemProps = {
     title: {
         title: string,
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
 
 const ListItem = ({ title, index, id }: ItemProps) => {
     const handleClickBtn = () => {
-        router.push(`contest/${id}/drawPicture`)
+        router.push(`/contest/${id}/drawPicture`)
     }
     return (
         <TouchableOpacity style={{ paddingHorizontal: 16 }} onPress={handleClickBtn}>
@@ -253,7 +253,7 @@ function Contest() {
 
     const scrollY = new Animated.Value(0)
     const stickyTopViewContent = scrollY.interpolate({
-        outputRange: [-80, -180],
+        outputRange: [-80, -200],
         inputRange: [0, 160],
         extrapolate: 'clamp'
     })
@@ -267,9 +267,15 @@ function Contest() {
     };
 
     return (
-        <HeaderShown title="Mô tả cuộc thi" rightIcon={{ image: ranking, onPress: handleClickRankingBtn }}>
+        <HeaderShown
+            title="Mô tả cuộc thi"
+            rightIcon={{ icon: () => <MaterialIcons name="leaderboard" size={24} color="black" />, onPress: handleClickRankingBtn }}
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+                useNativeDriver: false
+            })}
+        >
             <View style={styles.imageContainer}>
-                <View style={styles.imageDarkOverlay}></View>
+                <View style={styles.imageDarkOverlay} />
                 <Image source={detailContest?.image} resizeMode="cover" style={styles.backgroundImage} />
                 <View style={styles.contentContainer}>
                     <Text style={styles.contentTitle}>{detailContest?.desc}</Text>
@@ -284,6 +290,7 @@ function Contest() {
                 borderTopLeftRadius: 24,
                 borderTopRightRadius: 24,
                 position: 'relative',
+                overflow: "hidden",
                 zIndex: 5,
             }, {
                 top: stickyTopViewContent
