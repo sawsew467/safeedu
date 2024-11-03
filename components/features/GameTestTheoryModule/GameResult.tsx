@@ -1,7 +1,7 @@
 import React from 'react';
-import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import trophy_image from "@/assets/images/game_images/trophy_image.png";
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import ProgressScore from './circleResult';
 const GameResult = () => {
 
@@ -50,6 +50,22 @@ const GameResult = () => {
                         </View>
                     </View>
                 </View>
+                <View style={{ display: "flex", gap: 10 }}>
+                    <TouchableHighlight underlayColor={"#75A815"} onPress={() => {
+                        router.replace("game/1")
+                    }} style={styles.btn_outline}>
+                        <Text style={styles.text_btn_outline}>
+                            Làm lại
+                        </Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight underlayColor={"#fff"} onPress={() => {
+                        router.replace("game")
+                    }} style={styles.btn}>
+                        <Text style={styles.text_btn}>
+                            Trờ về trang chủ
+                        </Text>
+                    </TouchableHighlight>
+                </View>
             </View>
         </SafeAreaView>
     )
@@ -58,6 +74,35 @@ const GameResult = () => {
 export default GameResult
 
 const styles = StyleSheet.create({
+    text_btn: {
+        color: "#fff",
+        fontSize: 20,
+        fontWeight: "700"
+    },
+    text_btn_outline: {
+        color: "#75A815",
+        fontSize: 20,
+        fontWeight: "700"
+    },
+    btn: {
+        width: "100%",
+        backgroundColor: "#75A815",
+        borderRadius: 16,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingVertical: 16
+    },
+    btn_outline: {
+        width: "100%",
+        borderWidth: 2,
+        borderColor: "#75A815",
+        borderRadius: 16,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingVertical: 16
+    },
     correct_circle: {
         borderRadius: 999,
         width: 28,

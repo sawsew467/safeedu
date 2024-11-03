@@ -24,6 +24,7 @@ function Game() {
         <Image
           style={styles.backgroundImage}
           source={require("assets/images/game_images/gamePage_background.png")}
+          defaultSource={require("assets/images/game_images/gamePage_background.png")}
         />
       </View>
       <View style={styles.container}>

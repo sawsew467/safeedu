@@ -19,7 +19,7 @@ const RenderItemAnswer = ({ correctAnswer, stateAnswer, item, index, choiceIndex
         switch (stateAnswer) {
             case "answering":
                 return (
-                    <TouchableHighlight underlayColor="#FFDE16"
+                    <TouchableHighlight underlayColor="#F7941D"
                         onPress={() => handleChoice(index)}
                         style={[styles.answer, itemStyle, choiceIndex === index && styles.choice_answer]}
                     >
@@ -90,7 +90,7 @@ const GameTestTheoryModule = () => {
                 ...listAnswer,
                 totalQuizz: THEORY_TEST_DATA.length
             });
-            router.push({
+            router.replace({
                 pathname: "leaderboard_game/1", params: {
                     item
                 }
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
         color: "#fff",
     },
     choice_answer: {
-        backgroundColor: "#FFDE16",
+        backgroundColor: "#F7941D",
     },
     text_answer: {
         textAlign: "center",
