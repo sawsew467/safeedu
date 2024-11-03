@@ -112,7 +112,7 @@ function Input({ handleSubmit }: TypeInput) {
               </TouchableOpacity>
               <TouchableOpacity disabled={value.trim() === ""}
                 onPress={handleClick} >
-                <FontAwesome6 name="circle-arrow-up" size={40} color={value.trim() === "" ? "#7E7E7EE5" : "#2d2d2de3"} />
+                <FontAwesome6 name="circle-arrow-up" size={30} color={value.trim() === "" ? "#7E7E7EE5" : "#2d2d2de3"} />
               </TouchableOpacity>
             </View>
           </View>
@@ -228,17 +228,18 @@ const styles = StyleSheet.create({
   },
   container_input: {
     display: "flex",
-    gap: 10,
-    minHeight: 120,
+    gap: 0,
+    minHeight: 80,
     paddingHorizontal: 16,
     zIndex: 99,
     paddingTop: 20,
-    paddingBottom: 8
+    paddingBottom: 8,
+    backgroundColor: "#fff"
   },
   input: {
     borderWidth: 1,
     borderColor: "#959494CC",
-    minHeight: 60,
+    minHeight: 40,
     maxHeight: 80,
     width: "100%",
     paddingRight: 8,
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
   comment: {
     textAlign: "center",
     color: "#161717",
-    marginTop: 10,
+    marginTop: 4,
     fontSize: 14
   }
 })

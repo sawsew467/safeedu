@@ -156,8 +156,7 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>((
 const headerSafeArea = StyleSheet.create({
     AndroidSafeArea: {
         flex: 1,
-        backgroundColor: "white",
-        paddingTop: 0
+        paddingTop: 0,
     }
 });
 
