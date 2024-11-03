@@ -8,7 +8,6 @@ const windowHeight = Dimensions.get('window').height;
 
 function Game() {
   return (
-    // <SafeAreaView style={GlobalStyles.AndroidSafeArea} className="bg-white">
     <>
       <View style={styles.background}>
         <Image style={styles.backgroundImage} source={require('assets/images/game_images/gamePage_background.png')} />
@@ -83,7 +82,6 @@ function Game() {
         </ScrollView>
       </View>
     </>
-    // </SafeAreaView>
   );
 }
 
@@ -101,7 +99,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   container: {
-    // paddingVertical: 60,
     paddingTop: 60,
     paddingHorizontal: 20,
   },
@@ -140,8 +137,7 @@ const styles = StyleSheet.create({
   memoryGameTextContainer: {
     display: "flex",
     flexDirection: "column",
-    width: windowWidth - 200, // 232
-    // height: 85,
+    width: windowWidth - 200,
     gap: 8,
   },
   memoryGameTitle: {
@@ -152,16 +148,14 @@ const styles = StyleSheet.create({
   },
   memoryGameDescription: {
     fontWeight: "700",
-    fontSize: 16,
+    fontSize: 14,
     lineHeight: 24.75,
     color: "#75A815",
   },
   startButton: {
-    // width: 120,
-    // flex: 1,
     alignSelf: "flex-start",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     backgroundColor: "#75A815",
     justifyContent: "center",
     borderRadius: 12,
@@ -174,14 +168,14 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   startButtonText: {
-    fontSize: 24,
+    fontSize: 22,
     color: "#FFFFFF",
     textAlign: "center",
   },
 
   memoryGameCardContainer: {
-    width: 110, //110
-    height: 130, //130
+    width: 110,
+    height: 130,
     position: "relative",
     borderRadius: 12,
     shadowOffset: {
@@ -214,10 +208,10 @@ const styles = StyleSheet.create({
   overlayTextContainer: {
     position: "absolute",
     bottom: 4,
-    left: 15,
+    left: 20,
   },
   overlayText: {
-    fontSize: 14,
+    fontSize: 12,
     lineHeight: 16.41,
     color: "#FFFFFF",
     // position: "absolute",
@@ -299,7 +293,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   challengeGameOverlayText: {
-    fontSize: 16,
+    fontSize: 12,
     lineHeight: 18.75,
     color: "#FFFFFF",
   }
