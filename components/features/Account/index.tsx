@@ -11,10 +11,10 @@ const highlightContentData = [
 ];
 function Account() {
   return (
-    <ImageBackground 
-      source={require('../../../assets/images/background.png')} 
+    <ImageBackground
+      source={require('../../../assets/images/background.png')}
       style={styles.backgroundImage}
-      >
+    >
       <ScrollView style={styles.container}>
         <View style={styles.profileContainer}>
           <Image
@@ -42,15 +42,14 @@ function Account() {
             <Text style={styles.cardText}>Đã tim, bài viết</Text>
           </View>
           <TouchableWithoutFeedback onPress={() => {
-            console.log(1);
             router.push("/achiverment")
           }} >
             <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Icon name="trophy" size={20} color="#FFFFFF" style={styles.cardIcon} />
-              <Text style={styles.cardTitle}>Thành tựu</Text>
-            </View>
-            <Text style={styles.cardText}>Xếp hạng</Text>
+              <View style={styles.cardHeader}>
+                <Icon name="trophy" size={20} color="#FFFFFF" style={styles.cardIcon} />
+                <Text style={styles.cardTitle}>Thành tựu</Text>
+              </View>
+              <Text style={styles.cardText}>Xếp hạng</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -85,7 +84,7 @@ function Account() {
                   <Text style={styles.contentTitle}>{item.title}</Text>
                   <View style={styles.progressContent}>
                     <View style={styles.progressContainer}>
-                    <View style={[styles.progressBar, { width: `${item.progress}%` }]} />                               
+                      <View style={[styles.progressBar, { width: `${item.progress}%` }]} />
                     </View>
                     <Text style={styles.progressText}>{item.progress}% correct</Text>
                   </View>
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
     gap: 7,
     marginBottom: 16,
   },
-  cardB:{
+  cardB: {
     width: '45%',
     height: '100%',
     backgroundColor: "#78AA1A",
@@ -186,19 +185,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cardIcon: {
-    marginRight: 8, 
+    marginRight: 8,
   },
   cardTitle: {
-    fontWeight: '700',          
-    fontSize: 20,     
-    letterSpacing: 0.04,         
-    textAlign: 'center',        
+    fontWeight: '700',
+    fontSize: 20,
+    letterSpacing: 0.04,
+    textAlign: 'center',
     color: '#FFFFFF',
   },
   cardText: {
-    fontWeight: '400',        
-    fontSize: 12,    
-    letterSpacing: 0.04,      
+    fontWeight: '400',
+    fontSize: 12,
+    letterSpacing: 0.04,
     color: '#FFFFFF',
     marginLeft: 20,
     marginTop: 0,
@@ -213,7 +212,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft: '5%',
   },
-    searchIcon: {
+  searchIcon: {
     marginRight: 8,
   },
   highlightTitle: {
@@ -223,7 +222,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   contentList: {
-    width: '100%', 
+    width: '100%',
     marginBottom: 10,
   },
   contentItem: {
@@ -235,47 +234,47 @@ const styles = StyleSheet.create({
   },
   contentImage: {
     width: 50,
-    height:50,
+    height: 50,
     borderRadius: 10,
     marginRight: 10,
   },
   contentInfo: {
     flex: 1,
   },
-  contentTitle: {    
+  contentTitle: {
     fontWeight: '700',
     fontSize: 16,
     marginBottom: 4,
   },
   progressContent: {
     display: 'flex',
-    flexDirection: 'row', 
-    alignItems: 'center', 
+    flexDirection: 'row',
+    alignItems: 'center',
     width: '100%',
   },
-    progressContainer: {
+  progressContainer: {
     width: '72%',
-    flexDirection: 'row', 
-    alignItems: 'center', 
+    flexDirection: 'row',
+    alignItems: 'center',
     height: 12,
     backgroundColor: '#CEEFD8',
     borderRadius: 5,
     overflow: 'hidden',
-    marginTop: 4, 
+    marginTop: 4,
   },
   progressBar: {
     height: '100%',
-    width: '60%', 
+    width: '60%',
     backgroundColor: '#03622F',
     borderRadius: 4,
   },
   progressText: {
     width: '32%',
-    marginLeft: '4%', 
+    marginLeft: '4%',
     fontSize: 12,
     color: 'black',
   },
-  
+
 });
 
 export default Account;
