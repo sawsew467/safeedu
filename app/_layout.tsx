@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import "react-native-url-polyfill/auto";
 import { SplashScreen, Stack } from "expo-router";
+import Providers from "@/providers";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -36,30 +37,38 @@ const RootLayout = () => {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="achiverment/index" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="contest/[contestID]"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="contest/[contestID]/leaderboard"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="contest/[contestID]/drawPicture"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="contest/[contestID]/drawPicture/[drawPictureID]"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name="news/[newsIS]" options={{ headerShown: false }} />
-      <Stack.Screen name="chatbot/[chatId]" options={{ headerShown: false }} />
-    </Stack>
+    <Providers>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="achiverment/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="contest/[contestID]"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="contest/[contestID]/leaderboard"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="contest/[contestID]/drawPicture"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="contest/[contestID]/drawPicture/[drawPictureID]"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="news/[newsID]" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="chatbot/[chatId]"
+          options={{ headerShown: false }}
+        />
+      </Stack>
+    </Providers>
   );
 };
 
