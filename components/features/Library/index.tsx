@@ -4,6 +4,7 @@ import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
 import { Button } from "@/components/ui/Button";
 import CardList from "@/components/features/Library/CardList";
 
+import Ionicons from '@expo/vector-icons/Ionicons';
 import chatIcon from "@/assets/icons/menuIcon/chatIcon.png";
 import news_background1 from "@/assets/images/news_image/news_background(1).png";
 import news_background2 from "@/assets/images/news_image/news_background(2).png";
@@ -25,13 +26,7 @@ function Library() {
           <View style={styles.header}>
             <Text style={styles.headerText}>Thông tin về ma tuý</Text>
             <Button style={[styles.menuButton]}>
-              <View style={styles.chatIconContainer}>
-                <Image
-                  source={chatIcon}
-                  style={styles.chatIcon}
-                  resizeMode="contain"
-                />
-              </View>
+              <Ionicons name="chatbox-ellipses-outline" size={20} color="#8C8C8A" />
             </Button>
           </View>
           <CardList data={LIBRARY_DATA} />
@@ -84,6 +79,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 90,
     left: -18,
+    pointerEvents: "none",
   },
   linearBackground2: {
     width: 40,
@@ -92,6 +88,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 236,
     left: 132,
+    pointerEvents: "none",
   },
   linearBackground3: {
     width: 49,
@@ -100,6 +97,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 400,
     left: imageLeft,
+    pointerEvents: "none",
   },
   linearBackground4: {
     width: 87,
@@ -108,6 +106,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 310,
     left: 320,
+    pointerEvents: "none",
   },
   linearBackground5: {
     width: 97,
@@ -116,6 +115,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 490,
     left: 150,
+    pointerEvents: "none",
   },
   linearBackground6: {
     width: 97,
@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 550,
     left: 310,
+    pointerEvents: "none",
   },
   linearBackground7: {
     width: 97,
@@ -132,6 +133,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 690,
     left: 200,
+    pointerEvents: "none",
   },
   linearBackground8: {
     width: 97,
@@ -140,6 +142,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 750,
     left: 344,
+    pointerEvents: "none",
   },
   header: {
     padding: 20,

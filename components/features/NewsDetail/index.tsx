@@ -16,7 +16,7 @@ const NewsDetail = () => {
     }, [newsID]);
 
     return (
-        <HeaderShown title='Mô tả'
+        <HeaderShown title='Thông Tin Chi Tiết'
             HeaderComponent={() =>
                 <View style={styles.backgroundContainer}>
                     <Image style={styles.background} source={require("@/assets/images/news_image/newsDetail_background.jpg")} />

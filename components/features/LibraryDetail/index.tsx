@@ -1,5 +1,5 @@
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { useLocalSearchParams } from 'expo-router';
 
 import HeaderShown from '@/components/ui/HeaderShown';
@@ -18,12 +18,16 @@ const LibraryDetail = () => {
         return [LIBRARY_DATA[foundIndex], foundIndex];
     }, [libraryID]);
 
+    const [selectedButton, setSelectedButton] = useState('primary');
+
     const bgColor = index % 2 === 0 ? styles.bgGreen : styles.bgYellow;
     const colorTitle = index % 2 > -1 ? styles.whiteTitle : styles.blackTitle;
     const textColor = index % 2 === 0 ? "#75A815" : "#F6CB1E";
 
+    const selectedSubtitle = selectedButton === 'primary' ? detailLibrary.subtitle[0] : detailLibrary.subtitle[1];
+
     return (
-        <HeaderShown title={detailLibrary.title}
+        <HeaderShown title="Thông Tin Chi Tiết"
             HeaderComponent={() =>
                 <View style={[styles.cardContainer, bgColor]}>
                     <View style={styles.textContainer}>
@@ -43,40 +47,43 @@ const LibraryDetail = () => {
                 </View>
 
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity style={[styles.primaryButton, bgColor]}>
-                        <Text style={styles.primaryText}>Ma tuý là gì?</Text>
+
+                    <TouchableOpacity
+                        style={[styles.button, selectedButton === 'primary' ? bgColor : styles.secondaryButton]}
+                        onPress={() => setSelectedButton('primary')}
+                    >
+                        <Text
+                            style={[styles.buttonText, selectedButton === 'primary' ? styles.primaryText : [styles.secondaryText, { color: textColor }]]}
+                        >
+                            {detailLibrary.subtitle[0].title}
+                        </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.secondaryButton}>
-                        <Text style={[styles.secondaryText, { color: textColor }]}>Ma tuý là gì?</Text>
+                    <TouchableOpacity
+                        style={[styles.button, selectedButton === 'secondary' ? bgColor : styles.secondaryButton]}
+                        onPress={() => setSelectedButton('secondary')}
+                    >
+                        <Text
+                            style={[styles.buttonText, selectedButton === 'secondary' ? styles.primaryText : [styles.secondaryText, { color: textColor }]]}
+                        >
+                            {detailLibrary.subtitle[1].title}
+                        </Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.contentContainer}>
-                    {detailLibrary?.content.map((contentItem) => (
-                        <Text style={styles.contentText} key={contentItem?.id}>{contentItem?.content}</Text>
+                    {selectedSubtitle?.content.map((content, index) => (
+                        <Text style={styles.contentText} key={`${selectedSubtitle.id}-content-${index}`}>{content}</Text>
                     ))}
                 </View>
 
                 <View style={styles.sectionContainer}>
-                    {detailLibrary?.content.map((contentItem) => (
-                        <View style={styles.container} key={contentItem?.id}>
+                    {selectedSubtitle?.image.map((img, imgIndex) => (
+                        <View style={styles.container} key={`${selectedSubtitle.id}-image-${imgIndex}`}>
                             <View style={styles.imageContainer}>
-                                <Image style={styles.image} source={contentItem?.image} key={contentItem?.id} />
+                                <Image style={styles.image} source={img} />
                             </View>
-                            <Text style={styles.imageDescription}>{contentItem?.imageDescription}</Text>
+                            <Text style={styles.imageDescription}>{selectedSubtitle.imageDescription[imgIndex]}</Text>
                         </View>
-                    ))}
-                </View>
-
-                <View style={styles.contentContainer}>
-                    {detailLibrary?.content.map((contentItem) => (
-                        <Text style={styles.contentText} key={contentItem?.id}>{contentItem?.content}</Text>
-                    ))}
-                </View>
-
-                <View style={styles.contentContainer}>
-                    {detailLibrary?.content.map((contentItem) => (
-                        <Text style={styles.contentText} key={contentItem?.id}>{contentItem?.content}</Text>
                     ))}
                 </View>
 
@@ -179,9 +186,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         gap: 8,
     },
-    primaryButton: {
-        width: 93,
-        height: 34,
+    button: {
+        padding: 9,
         borderRadius: 12,
         justifyContent: "center",
         shadowOffset: {
@@ -192,19 +198,16 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.12,
         elevation: 10,
     },
+    primaryButton: {
+        backgroundColor: "#75A815",
+    },
     secondaryButton: {
-        width: 93,
-        height: 34,
-        borderRadius: 12,
         backgroundColor: "#FFFFFF",
-        justifyContent: "center",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowRadius: 12,
-        shadowOpacity: 0.12,
-        elevation: 10,
+    },
+    buttonText: {
+        fontWeight: "500",
+        fontSize: 12,
+        textAlign: "center",
     },
     primaryText: {
         fontWeight: "500",
