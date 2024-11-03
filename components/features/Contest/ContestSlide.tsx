@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Image, Text, TouchableOpacity, FlatList, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import { ContentType } from '.'
-import { router } from 'expo-router'
+import { Link, router } from 'expo-router'
 
 const style = StyleSheet.create({
     shadow: {
@@ -17,9 +17,7 @@ const style = StyleSheet.create({
 
 const ContestItem = ({ item }: { item: ContentType }) => {
     return (
-        <TouchableOpacity onPress={() => {
-            router.push(`/contest/${item?.id}`)
-        }} style={style.shadow} >
+        <Link href={`/contest/${item?.id}`} style={style.shadow} >
             <View className='w-60 rounded-3xl overflow-hidden'>
                 <Image source={item.image} className='w-full h-44' resizeMode='cover' />
                 <View className='p-4'>
@@ -28,7 +26,7 @@ const ContestItem = ({ item }: { item: ContentType }) => {
                     <Text className='text-sm font-normal mt-5 text-[#7E7E7E]'>{item.joiner} người tham gia</Text>
                 </View>
             </View>
-        </TouchableOpacity>
+        </Link>
     )
 }
 
