@@ -1,9 +1,9 @@
 import NewsDetail from '@/components/features/NewsDetail'
 import React from 'react';
-const newsID = () => {
+const NewsID = () => {
     return (
         <NewsDetail />
     )
 }
 
-export default newsID
+export default NewsID
