@@ -6,6 +6,7 @@ import newsID from '@/app/news/[newsID]';
 import SafeViewAndroid from '@/components/ui/SafeViewAndroid';
 import HeaderShown from '@/components/ui/HeaderShown';
 import { DataType } from '@/healper/type/news-type';
+import GameResult from '@/components/features/GameTestTheoryModule/GameResult';
 
 
 const NewsDetail = () => {
