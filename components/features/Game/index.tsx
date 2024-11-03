@@ -57,6 +57,8 @@ function Game() {
 
             <View style={styles.gameListContainer}>
               <FlatList
+                overScrollMode="never"
+                scrollEnabled={false}
                 data={GAME_DATA}
                 numColumns={2}
                 keyExtractor={(item) => item.id}
