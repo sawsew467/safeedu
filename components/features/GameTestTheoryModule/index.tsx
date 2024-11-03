@@ -44,7 +44,7 @@ const RenderItemAnswer = ({ correctAnswer, stateAnswer, item, index, choiceIndex
     }
     return cellRender();
 };
-
+const { width } = Dimensions.get("window")
 const GameTestTheoryModule = () => {
 
     const [choiceIndex, setChoiceIndex] = React.useState(null)
@@ -97,11 +97,11 @@ const GameTestTheoryModule = () => {
             })
         }
     }
-
     const answers = React.useMemo(() => {
         return THEORY_TEST_DATA[questionIndex].answer.sort(() => Math.random() - 0.5)
     }, [questionIndex])
 
+    console.log('THEORY_TEST_DATA', answers)
     const question = React.useMemo(() => {
         return THEORY_TEST_DATA[questionIndex].question
     }, [questionIndex])
@@ -114,32 +114,41 @@ const GameTestTheoryModule = () => {
         <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
             <ImageBackground source={bg_game_1} style={styles.bg} resizeMode='cover' />
             <View style={styles.container_game}>
-                <View style={styles.container_control_game}>
-                    <CountdownTimer style={styles.count_down} handleEndQuizz={handleEndQuizz} isReset={isReset} setReset={setReset} />
-                    <View style={styles.container_number_question}>
-                        <Text style={styles.number_question} className='font-pbold'>{questionIndex + 1}/{THEORY_TEST_DATA.length}</Text>
+                <CountdownTimer style={styles.count_down} handleEndQuizz={handleEndQuizz} isReset={isReset} setReset={setReset} />
+                <View style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+                    <View style={styles.container_question}>
+                        <Text style={styles.number_questions} className='font-pregular'>Câu {questionIndex + 1} trên {THEORY_TEST_DATA.length}</Text>
                     </View>
                     <View style={styles.question}>
-                        <Text style={styles.text_question} className='font-pbold'>
+                        <Text style={styles.text_question} className='font-psemibold'>
                             {question}
                         </Text>
                     </View>
+                </View>
+                <View style={styles.container_control_game}>
                     <FlatList
                         style={{ width: "100%" }}
                         data={answers}
                         contentContainerStyle={styles.answers}
                         keyExtractor={(item) => item}
                         renderItem={({ item, index }) => <RenderItemAnswer correctAnswer={correctAnswer} stateAnswer={stateAnswer} item={item} index={index} choiceIndex={choiceIndex} handleChoice={handleChoice} />}
-                        columnWrapperStyle={{ justifyContent: 'space-between', }}
-                        numColumns={2}
                     />
                 </View>
             </View>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
 const styles = StyleSheet.create({
+    number_questions: {
+        color: "#ffffff53",
+        fontSize: 18,
+    },
+    container_question: {
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     correct_answer: {
         backgroundColor: "#75A815",
     },
@@ -178,9 +187,9 @@ const styles = StyleSheet.create({
         textTransform: "capitalize"
     },
     answer: {
-        width: "45%",
-        padding: 25,
-        borderRadius: 32,
+        width: "100%",
+        padding: 15,
+        borderRadius: 16,
         backgroundColor: "#fff",
         overflow: 'hidden',
         borderWidth: 2,
@@ -194,24 +203,22 @@ const styles = StyleSheet.create({
         gap: 10
     },
     text_question: {
-        fontSize: 16,
+        fontSize: 20,
         color: "#fff",
         textAlign: "center",
         textTransform: "capitalize"
     },
     question: {
-        width: "50%",
+        width: "100%",
         padding: 20,
         borderRadius: 32,
-        backgroundColor: "#F7941D",
         overflow: 'hidden',
-        borderWidth: 2,
-        borderColor: "#FFDE16"
     },
     container_control_game: {
         position: "relative",
         display: "flex",
         flexDirection: "column",
+        justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
         // height: 300,

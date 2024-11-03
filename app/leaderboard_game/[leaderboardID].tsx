@@ -1,9 +1,10 @@
-import LeaderboardGameModule from "@/components/features/LeaderboardGameModule"
+import GameResult from "@/components/features/GameTestTheoryModule/GameResult"
 import React from "react"
 
 const index = () => {
     return (
-        <LeaderboardGameModule />
+        <GameResult />
+
     )
 }
 

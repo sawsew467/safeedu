@@ -17,32 +17,31 @@ const NewsDetail = () => {
     }, [newsID]);
 
     return (
-        <GameResult />
-        // <HeaderShown title='Thông Tin Chi Tiết'
-        //     HeaderComponent={() =>
-        //         <View style={styles.backgroundContainer}>
-        //             <Image style={styles.background} source={require("@/assets/images/news_image/newsDetail_background.jpg")} />
-        //         </View>
-        //     }>
+        <HeaderShown title='Thông Tin Chi Tiết'
+            HeaderComponent={() =>
+                <View style={styles.backgroundContainer}>
+                    <Image style={styles.background} source={require("@/assets/images/news_image/newsDetail_background.jpg")} />
+                </View>
+            }>
 
-        //     <View style={styles.newsContainer}>
-        //         <View style={styles.whiteBoard}>
-        //             <View style={styles.newsDetailContainer}>
-        //                 <View style={styles.titleContainer}>
-        //                     <Text style={styles.title}>{detailNews?.title}</Text>
-        //                 </View>
-        //                 <Text style={styles.newsDate}>{detailNews?.date}</Text>
-        //                 <Text style={styles.content}>{detailNews?.content}</Text>
-        //                 <View style={styles.imageContainer}>
-        //                     <Image style={styles.image} source={detailNews?.image} />
-        //                 </View>
-        //                 <Text style={styles.caption}>{detailNews?.caption}</Text>
-        //                 <Text style={styles.content}>{detailNews?.content}</Text>
-        //             </View>
-        //         </View>
-        //     </View>
+            <View style={styles.newsContainer}>
+                <View style={styles.whiteBoard}>
+                    <View style={styles.newsDetailContainer}>
+                        <View style={styles.titleContainer}>
+                            <Text style={styles.title}>{detailNews?.title}</Text>
+                        </View>
+                        <Text style={styles.newsDate}>{detailNews?.date}</Text>
+                        <Text style={styles.content}>{detailNews?.content}</Text>
+                        <View style={styles.imageContainer}>
+                            <Image style={styles.image} source={detailNews?.image} />
+                        </View>
+                        <Text style={styles.caption}>{detailNews?.caption}</Text>
+                        <Text style={styles.content}>{detailNews?.content}</Text>
+                    </View>
+                </View>
+            </View>
 
-        // </HeaderShown>
+        </HeaderShown>
     )
 }
 
