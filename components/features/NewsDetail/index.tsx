@@ -35,7 +35,6 @@ const NewsDetail = () => {
                             <Image style={styles.image} source={detailNews?.image} />
                         </View>
                         <Text style={styles.caption}>{detailNews?.caption}</Text>
-                        <Text style={styles.content}>{detailNews?.content}</Text>
                     </View>
                 </View>
             </View>
