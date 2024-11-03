@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     },
     count_down: {
         position: "absolute",
-        top: 10,
+        top: height * 0.005,
         right: 10,
         zIndex: 99,
     },
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
         textTransform: "capitalize"
     },
     answer: {
-        width: 200,
+        width: "45%",
         padding: 25,
         borderRadius: 32,
         backgroundColor: "#fff",
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
         textTransform: "capitalize"
     },
     question: {
-        width: 300,
+        width: "50%",
         padding: 20,
         borderRadius: 32,
         backgroundColor: "#F7941D",
@@ -214,14 +214,15 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         width: "100%",
-        height: 300,
+        // height: 300,
         gap: 20,
     },
     container_game: {
+        // flex: 1,
         position: "relative",
         display: "flex",
         width: "100%",
-        height: height,
+        height: height * 0.85,
         flexDirection: "column",
         justifyContent: "flex-end",
     },
