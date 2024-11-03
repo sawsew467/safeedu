@@ -1,4 +1,4 @@
-import React, { useRef, ReactNode, useCallback } from "react";
+import React, { useRef, ReactNode, forwardRef } from "react";
 import {
     View,
     Animated,
@@ -9,19 +9,23 @@ import {
     Platform,
     StatusBar,
     Image,
-    Dimensions
+    Dimensions,
+    ScrollViewProps,
+    ScrollViewComponent
 } from "react-native";
 import { router, Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import chevron_left_black from "@/assets/icons/chevron_left_black.png"
-type AnimatedHeaderScreenProps = {
+import Entypo from '@expo/vector-icons/Entypo';
+interface AnimatedHeaderScreenProps extends ScrollViewProps {
     children: ReactNode;
     title?: string;
     rightIcon?: {
-        image: any;
+        icon: any;
         onPress: () => void;
     };
     HeaderComponent?: () => ReactNode;
+    FooterComponent?: () => ReactNode;
+    ref: React.MutableRefObject<ScrollView | null>
 };
 
 const colors = {
@@ -33,14 +37,15 @@ const colors = {
     tint: "#4A90E2",
 };
 
-const windowDimensions = Dimensions.get('window');
 
-export default function AnimatedHeaderScreen({
+const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(({
     title,
     children,
     rightIcon,
-    HeaderComponent
-}: AnimatedHeaderScreenProps) {
+    HeaderComponent,
+    FooterComponent,
+    ...props
+}, ref) => {
     const scrollY = useRef(new Animated.Value(0)).current;
     const insets = useSafeAreaInsets();
 
@@ -88,7 +93,7 @@ export default function AnimatedHeaderScreen({
                             }}
                         >
                             <TouchableOpacity onPress={handleClickLeft} style={styles.btnIconLeft}>
-                                <Image source={chevron_left_black} style={styles.leftIcon}></Image>
+                                <Entypo name="chevron-left" size={24} color="black" />
                             </TouchableOpacity>
                         </Animated.View>
                     ),
@@ -101,7 +106,7 @@ export default function AnimatedHeaderScreen({
                                 }}
                             >
                                 <TouchableOpacity style={styles.btnIconRight} onPress={rightIcon?.onPress}>
-                                    <Image source={rightIcon?.image} style={styles.rightIcon} resizeMode="contain" />
+                                    <rightIcon.icon />
                                 </TouchableOpacity>
                             </Animated.View>
                         )
@@ -124,9 +129,11 @@ export default function AnimatedHeaderScreen({
 
 
             />
-            <SafeAreaView style={headerSafeArea.AndroidSafeArea}>
+            <SafeAreaView style={headerSafeArea.AndroidSafeArea} >
                 {HeaderComponent && <HeaderComponent />}
                 <ScrollView
+                    ref={ref}
+                    {...props}
                     overScrollMode="never"
                     bounces={false}
                     style={styles.scrollView}
@@ -139,17 +146,17 @@ export default function AnimatedHeaderScreen({
                 >
                     <View style={styles.content}>{children}</View>
                 </ScrollView>
+                {FooterComponent && <FooterComponent />}
             </SafeAreaView>
 
         </>
     );
-}
+})
 
 const headerSafeArea = StyleSheet.create({
     AndroidSafeArea: {
         flex: 1,
-        backgroundColor: "white",
-        paddingTop: 0
+        paddingTop: 0,
     }
 });
 
@@ -181,11 +188,9 @@ const styles = StyleSheet.create({
     headerBackground: {
         borderBottomWidth: 0,
     },
-    leftIcon: {
-        width: 24,
-        height: 24
-    },
     rightIcon: {
         height: "100%",
     },
 });
+
+export default AnimatedHeaderScreen;

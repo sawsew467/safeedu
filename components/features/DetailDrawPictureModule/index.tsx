@@ -5,7 +5,7 @@ import HeaderShown from "@/components/ui/HeaderShown";
 import image_1 from "@/assets/images/contest/details/phongchongmatuy_1.png"
 import chrven_bottom from "@/assets/icons/chevron_bottom.png"
 import chrven_top from "@/assets/icons/chevron_top.png"
-import share_android from "@/assets/icons/share_android.png"
+import AntDesign from '@expo/vector-icons/AntDesign';
 import { useLocalSearchParams } from "expo-router";
 import { DETAIL_DRAW_DATA } from "@/healper/data/contest";
 import { TypeDetailDrawData } from "@/healper/type/Contest";
@@ -24,7 +24,7 @@ function DrawPictureContest() {
     const handleShare = () => { }
 
     return (
-        <HeaderShown title={data?.title} rightIcon={{ image: share_android, onPress: handleShare }}>
+        <HeaderShown title={data?.title} rightIcon={{ icon: () => <AntDesign name="sharealt" size={24} color="black" />, onPress: handleShare }}>
             <View style={styles.container}>
                 <View style={styles.imageContainer}>
                     <Image source={data?.image} style={styles.image}></Image>

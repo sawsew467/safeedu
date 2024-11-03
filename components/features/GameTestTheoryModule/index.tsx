@@ -1,7 +1,7 @@
 import SafeViewAndroid from '@/components/ui/SafeViewAndroid'
 import React from 'react'
 import { Dimensions, FlatList, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableHighlight, View } from 'react-native'
-import bg_game_1 from "@/assets/images/game_images/bg_game_test_theory.png"
+import bg_game_1 from "@/assets/images/game_images/gamePage_background.png"
 import CountdownTimer from './count_down'
 import { THEORY_TEST_DATA } from '@/healper/data/theory_test'
 import { router } from 'expo-router'
@@ -112,7 +112,7 @@ const GameTestTheoryModule = () => {
 
     return (
         <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
-            <ImageBackground source={bg_game_1} style={styles.bg} resizeMode='cover' />
+            <ImageBackground source={bg_game_1} defaultSource={bg_game_1} style={styles.bg} resizeMode='cover' />
             <View style={styles.container_game}>
                 <CountdownTimer style={styles.count_down} handleEndQuizz={handleEndQuizz} isReset={isReset} setReset={setReset} />
                 <View style={{ flex: 1, display: "flex", justifyContent: "center" }}>
