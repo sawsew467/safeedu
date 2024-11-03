@@ -3,6 +3,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router"; // Import router để chuyển trang
+import * as Google from "expo-auth-session/providers/google";
+import { useAuthRequest } from "expo-auth-session";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +13,10 @@ const SignIn = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const router = useRouter(); // Sử dụng router để điều hướng
+    // Tạo yêu cầu đăng nhập với Google
+    const [request, response, promptAsync] = Google.useAuthRequest({
+      clientId: "YOUR_CLIENT_ID.apps.googleusercontent.com",
+    });
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -22,15 +28,35 @@ const SignIn = () => {
 
     // Kiểm tra thông tin đăng nhập
     if (email === "user1" && password === "pass1") {
-      router.push("/home"); // Chuyển hướng sang trang Home
+      router.push("/home"); 
     } else {
       // Thiết lập thông báo lỗi
       setError({
-        email: email !== "user1" ? "Không đúng tên đăng nhập" : "",
+        email: email !== "user1" ? "Không tìm thấy email" : "",
         password: password !== "pass1" ? "Sai mật khẩu" : "",
       });
     }
   };
+  const handleSignUp = () => {
+    router.push("/start"); 
+  };
+
+   // Xử lý khi nhấn vào Đăng nhập bằng Google
+   const handleGoogleSignIn = async () => {
+    if (request) {
+      promptAsync();
+    }
+  };
+
+  // Xử lý phản hồi từ API Google
+  React.useEffect(() => {
+    if (response?.type === "success") {
+      const { authentication } = response;
+      // Ở đây bạn có thể gọi API backend để xác thực token từ Google
+      console.log("Google Auth Token:", authentication);
+      router.push("/home"); 
+    }
+  }, [response]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -44,7 +70,7 @@ const SignIn = () => {
             <Text style={styles.label}>Nhập email</Text>
             <TextInput
               style={styles.input}
-              placeholder="Abc"
+              placeholder="example@gmail.com"
               value={email}
               onChangeText={setEmail}
             />
@@ -73,11 +99,15 @@ const SignIn = () => {
               <Text style={styles.loginText}>Đăng nhập</Text>
             </TouchableOpacity>
 
-            <Text style={styles.googleLogin}>Đăng nhập bằng Google</Text>
+             <TouchableOpacity onPress={handleGoogleSignIn}>
+              <Text style={styles.googleLogin}>Đăng nhập bằng Google</Text>
+            </TouchableOpacity>
 
             <View style={styles.signUpContainer}>
               <Text style={styles.signUpText}>Tạo tài khoản mới?</Text>
-              <Text style={styles.signUpLink}>Đăng kí</Text>
+              <TouchableOpacity onPress={handleSignUp}>
+                <Text style={styles.signUpLink}>Đăng kí</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -102,7 +132,6 @@ const styles = StyleSheet.create({
   form: {
     width: "90%",
     padding: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderRadius: 20,
   },
   label: {
@@ -112,14 +141,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    height: 40,
+    height: 60,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 8,
+    borderRadius: 16,
     paddingLeft: 10,
     paddingRight: 40,
     marginBottom: 15,
     backgroundColor: "#fff",
+    elevation: 4,
   },
   errorText: {
     color: "red",
@@ -132,13 +162,17 @@ const styles = StyleSheet.create({
   eyeIcon: {
     position: "absolute",
     right: 10,
-    top: 8,
-  },
+    top: "40%", 
+    transform: [{ translateY: -12 }], 
+  },  
   loginButton: {
+    marginTop: 16,
     backgroundColor: "#75A815",
-    paddingVertical: 10,
-    borderRadius: 8,
+    paddingVertical: 12,
+    borderRadius: 16,
     alignItems: "center",
+    justifyContent: "center",
+    height: 60,
   },
   loginText: {
     color: "#fff",
@@ -147,7 +181,7 @@ const styles = StyleSheet.create({
   },
   googleLogin: {
     textAlign: "center",
-    color: "#888",
+    color: "black",
     marginTop: 15,
     fontSize: 14,
   },
