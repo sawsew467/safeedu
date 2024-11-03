@@ -1,57 +1,214 @@
-import React from "react";
-import { StyleSheet, Text, View, Keyboard, Image, TouchableOpacity, TextInput, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Image, TextInput, Alert, TouchableHighlight, ActivityIndicator, FlatList, KeyboardAvoidingView, Platform, Keyboard, TouchableOpacity } from "react-native";
 import file_upload from "@/assets/icons/file_upload.png"
 import mic from "@/assets/icons/mic.png"
+import delete_icon from "@/assets/icons/delete_icon.png"
 import submit from "@/assets/icons/submit.png"
+import * as ImagePicker from "expo-image-picker";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Fontisto from '@expo/vector-icons/Fontisto';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 type TypeInput = {
-  setValue: (value: string) => void,
-  handleSubmit: () => void
+  handleSubmit: (content: string) => void
 }
-function Input({ setValue, handleSubmit }: TypeInput) {
-  const value = React.useRef('');
+function Input({ handleSubmit }: TypeInput) {
+  const [value, setTestValue] = React.useState<string>("");
   const handleChange = (e: string) => {
-    value.current = e;
-  }
-  const handleClick = () => {
-    setValue(value.current);
-    handleSubmit();
+    setTestValue(e)
   }
 
-  return <View style={styles.container_input}>
-    <View style={styles.input}>
-      <View style={styles.control_input}>
-        <TouchableOpacity style={styles.btn_upload}>
-          <Image source={file_upload} style={{ width: 28, height: 28 }} />
-        </TouchableOpacity>
-        <TextInput
-          blurOnSubmit={false}
-          multiline={true}
-          onChangeText={handleChange}
-          placeholder="Nhập câu hỏi..." style={styles.text_input} />
-        <TouchableOpacity style={styles.mic}>
-          <Image source={mic} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.submit} onPress={handleClick} >
-          <Image source={submit} style={{ width: 20, height: 20 }} />
-        </TouchableOpacity>
+  const handleDeleteImage = (index: number) => {
+    const newFiles = files.toSpliced(index, 1);
+    setFile(newFiles);
+  }
+  const handleLoading = (index: number) => {
+    const newFiles = files.toSpliced(index, 1, { isLoading: false, uri: files[index]?.uri });
+    setFile(newFiles);
+  }
+  const handleClick = () => {
+    handleSubmit(value.trim());
+  }
+
+  const [files, setFile] = useState([]);
+
+  const [error, setError] = useState(null);
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.
+      requestMediaLibraryPermissionsAsync();
+
+    if (status !== "granted") {
+
+      Alert.alert(
+        "Permission Denied",
+        `Sorry, we need camera 
+               roll permission to upload images.`
+      );
+    } else {
+      const result =
+        await ImagePicker.launchImageLibraryAsync();
+
+      if (!result.canceled) {
+
+        setFile([...files, { isLoading: true, uri: result.assets[0].uri }]);
+
+        setError(null);
+      }
+    }
+  };
+
+  return (
+    <KeyboardAvoidingView
+      {...(Platform.OS === 'ios'
+        ? {
+          behavior: 'position',
+          keyboardVerticalOffset: 20, // calculate height using onLayout callback method
+        }
+        : {})}>
+      <View style={styles.container_input}>
+        <View style={[files.length !== 0 && styles.container_input_image]}>
+          {files.length !== 0 && (
+            <FlatList
+              horizontal
+              contentContainerStyle={styles.file_container}
+              data={files}
+              keyExtractor={(file) => file?.uri}
+              renderItem={({ item, index }) => (
+                <View key={item?.uri} style={styles.imageContainer}>
+                  {item?.isLoading &&
+                    <View style={styles.container_loading_image}>
+                      <ActivityIndicator style={styles.loading_image} size="large" color="##75A815" />
+                    </View>
+                  }
+                  <>
+                    <Image source={{ uri: item?.uri }}
+                      style={styles.image}
+                      onLoad={() => handleLoading(index)}
+                    />
+                    <TouchableOpacity onPress={() => handleDeleteImage(index)} style={styles.btn_delete_image}>
+                      <Image source={delete_icon} style={styles.delete_image} />
+                    </TouchableOpacity>
+                  </>
+                </View>)} />
+          )}
+          <View style={[styles.input, files.length !== 0 ? styles.has_image : styles.not_has_image]}>
+            <View style={styles.control_input}>
+              <TouchableOpacity
+                disabled={files.some((file) => file.isLoading)}
+                style={styles.btn_upload}
+                onPress={pickImage}>
+                <MaterialIcons name="upload-file" size={28} color="#7E7E7EE5" />
+              </TouchableOpacity>
+              <View style={styles.conteiner_text_input} >
+                <TextInput
+                  blurOnSubmit={false}
+                  multiline={true}
+                  onChangeText={handleChange}
+                  placeholder="Nhập câu hỏi..." style={styles.text_input} />
+              </View>
+              <TouchableOpacity style={styles.mic}>
+                <Fontisto name="mic" size={24} color="#757575" />
+              </TouchableOpacity>
+              <TouchableOpacity disabled={value.trim() === ""}
+                onPress={handleClick} >
+                <FontAwesome6 name="circle-arrow-up" size={40} color={value.trim() === "" ? "#7E7E7EE5" : "#2d2d2de3"} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        <Text style={styles.comment} className="font-pregular">Trợ lý AI có thể nhầm lẫn, hãy cẩn thận nhé!</Text>
       </View>
-    </View>
-    <Text style={styles.comment} className="font-pregular">Trợ lý AI có thể nhầm lẫn, hãy cẩn thận nhé!</Text>
-  </View>;
+    </KeyboardAvoidingView>
+  );
 }
 
 const styles = StyleSheet.create({
+  conteiner_text_input: {
+    display: "flex",
+    justifyContent: 'center',
+    height: "100%",
+    flex: 1,
+  },
+  container_loading_image: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: "flex",
+    justifyContent: 'center',
+    alignContent: "center",
+    zIndex: 999
+  },
+  loading_image: {
+
+  },
+  file_container: {
+    paddingHorizontal: 8,
+    display: "flex",
+    flexDirection: "row",
+    gap: 8,
+    flexGrow: 0,
+    overflow: "scroll",
+    paddingBottom: 8
+  },
+  delete_image: {
+    width: 25,
+    height: 25,
+  },
+  btn_delete_image: {
+    position: "absolute",
+    top: 4,
+    right: 4,
+    width: 25,
+    height: 25,
+    zIndex: 99,
+  },
+  not_has_image: {
+    borderRadius: 999,
+  },
+  has_image: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderTopWidth: 1
+  },
+  container_input_image: {
+    display: "flex",
+    borderWidth: 1,
+    gap: 10,
+    paddingTop: 8,
+    borderRadius: 16
+  },
+  image: {
+    width: 80,
+    height: 80,
+    borderRadius: 16,
+  },
+  imageContainer: {
+    position: "relative",
+    width: 80,
+    backgroundColor: "#0000004d",
+    borderRadius: 16
+  },
+  img: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
   submit: {
     padding: 10,
+    width: 40,
+    height: 40,
     borderRadius: 999,
-    backgroundColor: "#7E7E7EE5"
   },
   mic: {
     width: 20
   },
   text_input: {
-    height: "100%",
-    flex: 1,
+
   },
   btn_upload: {
     display: "flex",
@@ -70,20 +227,20 @@ const styles = StyleSheet.create({
     paddingLeft: 20
   },
   container_input: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 100,
+    display: "flex",
+    gap: 10,
+    minHeight: 120,
     paddingHorizontal: 16,
-    zIndex: 99
+    zIndex: 99,
+    paddingTop: 20,
+    paddingBottom: 8
   },
   input: {
     borderWidth: 1,
     borderColor: "#959494CC",
-    height: 60,
+    minHeight: 60,
+    maxHeight: 80,
     width: "100%",
-    borderRadius: 999,
     paddingRight: 8,
     display: "flex",
     flexDirection: "row",

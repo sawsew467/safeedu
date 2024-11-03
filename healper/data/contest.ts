@@ -2,6 +2,7 @@
 import img_contest_detail_1 from "@/assets/images/contest/contest-detail_1.png"
 import img_contest_detail_2 from "@/assets/images/contest/contest-detail_2.png"
 import img_contest_detail_3 from "@/assets/images/contest/contest-detail_3.png"
+import img_contest_detail_4 from "@/assets/images/contest/contest-detail_4.png"
 import image_detail_contest_1 from "@/assets/images/contest/details/phongchongmatuy_1.png"
 import image_detail_contest_2 from "@/assets/images/contest/details/phongchongmatuy_2.png"
 import image_detail_contest_3 from "@/assets/images/contest/details/phongchongmatuy_3.png"
@@ -42,7 +43,7 @@ export const DATA: DataType[] = [
             },
             {
                 id: "content4",
-                image: img_contest_detail_1,
+                image: img_contest_detail_4,
                 address: "Quảng Ninh",
                 desc: "Cuộc Thi Sáng Tạo Chống Ma Túy",
                 joiner: 300,
@@ -64,7 +65,7 @@ export const DATA: DataType[] = [
             },
             {
                 id: "content6",
-                image: img_contest_detail_3,
+                image: img_contest_detail_4,
                 address: "Hồ Chí Minh",
                 desc: "Cuộc Thi Sáng Tạo Chống Ma Túy",
                 joiner: 140,
@@ -94,7 +95,7 @@ export const DATA: DataType[] = [
         content: [
             {
                 id: "content9",
-                image: img_contest_detail_1,
+                image: img_contest_detail_4,
                 address: "Đà Nẵng",
                 desc: "Cuộc thi về phòng chống ma tuý Đà Nẵng",
                 joiner: 200,
