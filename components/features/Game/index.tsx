@@ -1,55 +1,87 @@
 import React from "react";
-import { Dimensions, FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import GlobalStyles from '@/components/ui/SafeViewAndroid';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import GlobalStyles from "@/components/ui/SafeViewAndroid";
 import { GAME_DATA } from "@/healper/data/game";
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 function Game() {
   return (
     <>
       <View style={styles.background}>
-        <Image style={styles.backgroundImage} source={require('assets/images/game_images/gamePage_background.png')} />
+        <Image
+          style={styles.backgroundImage}
+          source={require("assets/images/game_images/gamePage_background.png")}
+        />
       </View>
       <View style={styles.container}>
-        <ScrollView bounces={false} >
-
+        <ScrollView bounces={false}>
           <View style={styles.headerContainer}>
             <Text style={styles.headerTitle}>Trò Chơi Giải Trí</Text>
           </View>
 
           <View style={styles.whiteBoardContainer}>
-
             <View style={styles.sectionContainer}>
               <View style={styles.memoryGameInfo}>
                 <View style={styles.memoryGameTextContainer}>
                   <Text style={styles.memoryGameTitle}>Trò chơi ghi nhớ</Text>
-                  <Text style={styles.memoryGameDescription}>Luyện tập về các câu hỏi phòng tránh ma túy ngay nào</Text>
+                  <Text style={styles.memoryGameDescription}>
+                    Luyện tập về các câu hỏi phòng tránh ma túy ngay nào
+                  </Text>
                 </View>
                 <TouchableOpacity style={styles.startButton}>
-                  <Text style={styles.startButtonText} numberOfLines={1} className="font-pbold">Bắt đầu</Text>
+                  <Text
+                    style={styles.startButtonText}
+                    numberOfLines={1}
+                    className="font-pbold"
+                  >
+                    Bắt đầu
+                  </Text>
                 </TouchableOpacity>
               </View>
 
               <View style={styles.memoryGameCardContainer}>
-                <Image style={styles.memoryGameImage} source={require('assets/images/game_images/game_image_1.png')} />
+                <Image
+                  style={styles.memoryGameImage}
+                  source={require("assets/images/game_images/game_image_1.png")}
+                />
                 <View style={styles.overlayBackgroundContainer}>
-                  <Image style={styles.overlayBackgroundImage} source={require('assets/images/game_images/text_container_overlay_green_image.png')} />
+                  <Image
+                    style={styles.overlayBackgroundImage}
+                    source={require("assets/images/game_images/text_container_overlay_green_image.png")}
+                  />
                 </View>
                 <View style={styles.overlayTextContainer}>
-                  <Text style={styles.overlayText} numberOfLines={1} className="font-pbold">Cóc leo mây</Text>
+                  <Text
+                    style={styles.overlayText}
+                    numberOfLines={1}
+                    className="font-pbold"
+                  >
+                    Cóc leo mây
+                  </Text>
                 </View>
               </View>
             </View>
-
           </View>
 
           <View style={styles.whiteBoardContainer}>
-
             <View style={styles.challengeGameHeader}>
               <View style={styles.challengeGameEmojiContainer}>
-                <Image style={styles.challengeGameEmoji} source={require('assets/icons/emoji_fire_.png')} />
+                <Image
+                  style={styles.challengeGameEmoji}
+                  source={require("assets/icons/emoji_fire_.png")}
+                />
               </View>
               <Text style={styles.challengeGameTitle}>Trò Chơi Thử Thách</Text>
             </View>
@@ -62,23 +94,35 @@ function Game() {
                 numColumns={2}
                 keyExtractor={(item) => item.id}
                 columnWrapperStyle={styles.challengeGameCardList}
-                contentContainerStyle={{ gap: 24, paddingHorizontal: 20, paddingVertical: 10, }}
+                contentContainerStyle={{
+                  gap: 24,
+                  paddingHorizontal: 20,
+                  paddingVertical: 10,
+                }}
                 renderItem={({ item }) => (
                   <TouchableOpacity style={styles.challengeGameCardContainer}>
-                    <Image style={styles.challengeGameImage} source={item.image} />
-                    <View style={styles.challengeGameOverlayBackgroundContainer}>
-                      <Image style={styles.challengeGameOverlayBackgroundImage} source={require('assets/images/game_images/text_container_overlay_green_image.png')} />
-                    </View>
+                    <Image
+                      style={styles.challengeGameImage}
+                      source={item.image}
+                    />
                     <View style={styles.challengeGameOverlayTextContainer}>
-                      <Text style={styles.challengeGameOverlayText} numberOfLines={1} className="font-pbold">{item.title}</Text>
+                      <Text
+                        style={styles.challengeGameOverlayText}
+                        numberOfLines={1}
+                        className="font-pbold"
+                      >
+                        {item.title}
+                      </Text>
+                      <Image
+                        style={styles.challengeGameOverlayBackgroundImage}
+                        source={require("assets/images/game_images/text_container_overlay_green_image.png")}
+                      />
                     </View>
                   </TouchableOpacity>
                 )}
               />
             </View>
-
           </View>
-
         </ScrollView>
       </View>
     </>
@@ -91,7 +135,7 @@ const styles = StyleSheet.create({
   background: {
     width: "100%",
     height: "100%",
-    position: "absolute"
+    position: "absolute",
   },
   backgroundImage: {
     width: "100%",
@@ -103,17 +147,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     alignItems: "center",
   },
   headerTitle: {
     flex: 1,
-    fontWeight: '700',
+    fontWeight: "700",
     fontSize: 24,
     lineHeight: 38.4,
     textAlign: "center",
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
   whiteBoardContainer: {
     width: "100%",
@@ -189,7 +233,7 @@ const styles = StyleSheet.create({
   memoryGameImage: {
     width: "100%",
     height: "100%",
-    resizeMode: "contain"
+    resizeMode: "contain",
   },
   overlayBackgroundContainer: {
     position: "absolute",
@@ -203,7 +247,7 @@ const styles = StyleSheet.create({
   overlayBackgroundImage: {
     width: "100%",
     height: "100%",
-    resizeMode: "contain"
+    resizeMode: "contain",
   },
   overlayTextContainer: {
     position: "absolute",
@@ -253,10 +297,9 @@ const styles = StyleSheet.create({
     // gap: 24,
   },
   challengeGameCardContainer: {
-    width: "45%",
+    width: "46%",
     aspectRatio: 164 / 188,
     position: "relative",
-    // borderWidth: 2,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -264,37 +307,42 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOpacity: 0.18,
     elevation: 10,
+    borderRadius: 12,
+    overflow: "hidden",
   },
   challengeGameImage: {
     width: "100%",
     height: "100%",
     resizeMode: "cover",
     borderRadius: 12,
-
   },
   challengeGameOverlayBackgroundContainer: {
     width: "100%",
     aspectRatio: 164 / 42,
     position: "absolute",
     bottom: -4,
+    borderWidth: 1,
   },
   challengeGameOverlayBackgroundImage: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
     width: "100%",
     height: "100%",
-    resizeMode: "contain",
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
+    resizeMode: "cover",
   },
   challengeGameOverlayTextContainer: {
-    position: 'absolute',
-    bottom: 3,
-    left: 4,
-    alignItems: "center",
-    justifyContent: "center",
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
   },
   challengeGameOverlayText: {
-    fontSize: 12,
-    lineHeight: 18.75,
+    position: "relative",
+    zIndex: 1,
+    marginHorizontal: 4,
+    marginVertical: 6,
+    textAlign: "center",
     color: "#FFFFFF",
-  }
-})
+  },
+});
