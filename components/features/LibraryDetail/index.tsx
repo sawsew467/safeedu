@@ -243,14 +243,16 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         width: windowWidth * 0.38,
-        height: windowWidth * 0.38 * 1.2,
+        // height: windowWidth * 0.38 * 1.2,
+        aspectRatio: 5 / 4,
     },
     image: {
         width: "100%",
         height: "100%",
-        resizeMode: "contain",
+        resizeMode: "cover",
     },
     imageDescription: {
+        marginTop: 10,
         width: windowWidth * 0.4,
         fontWeight: "500",
         fontSize: 12,
