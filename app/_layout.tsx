@@ -37,20 +37,43 @@ const RootLayout = () => {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="achiverment/index" options={{ headerShown: false }} />
-      <Stack.Screen name="contest/[contestID]" options={{ headerShown: false }} />
-      <Stack.Screen name="contest/[contestID]/leaderboard" options={{ headerShown: false }} />
-      <Stack.Screen name="contest/[contestID]/drawPicture" options={{ headerShown: false }} />
-      <Stack.Screen name="contest/[contestID]/drawPicture/[drawPictureID]" options={{ headerShown: false }} />
-      <Stack.Screen name="news/[newsID]" options={{ headerShown: false }} />
-      <Stack.Screen name="library/[libraryID]" options={{ headerShown: false }} />
-      <Stack.Screen name="leaderboard_game/[leaderboardID]" options={{ headerShown: false }} />
-      <Stack.Screen name="game/[gameID]" options={{ headerShown: false }} />
-    </Stack>
+    <Providers>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="achiverment/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="contest/[contestID]"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="contest/[contestID]/leaderboard"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="contest/[contestID]/drawPicture"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="contest/[contestID]/drawPicture/[drawPictureID]"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="news/[newsID]" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="library/[libraryID]"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="leaderboard_game/[leaderboardID]"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="game/[gameID]" options={{ headerShown: false }} />
+      </Stack>
+    </Providers>
   );
 };
 
