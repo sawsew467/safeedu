@@ -1,21 +1,21 @@
-import { Image, FlatList, SafeAreaView, ScrollView, View, StyleSheet, Animated, Platform, TouchableWithoutFeedback, TouchableOpacity, Text, TouchableHighlight } from "react-native";
+import { Image, FlatList, View, StyleSheet, Animated, Platform, TouchableOpacity, Text } from "react-native";
 import GlobalStyles from '@/components/ui/SafeViewAndroid';
-import bg_1 from "@/assets/images/contest/bg_1.png"
 import React from "react";
-import ContestComponent from "@/components/features/Contest/ContestComponent";
 import location from "@/assets/icons/location.png"
 import { ContentType, DataType } from "../Contest";
 import { DATA } from "@/healper/data/contest";
-import chevron_left from "@/assets/icons/chevron_left.png"
 import { router, useLocalSearchParams, usePathname } from "expo-router";
 import book from "@/assets/icons/book.png";
 import chrven_bottom from "@/assets/icons/chevron_bottom.png"
 import chrven_top from "@/assets/icons/chevron_top.png"
 import chrven_right from "@/assets/icons/chevron_right.png"
-import contestID from "@/app/contest/[contestID]";
-
+import HeaderShown from "@/components/ui/HeaderShown";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 type ItemProps = {
-    title: string;
+    title: {
+        title: string,
+        slug: string
+    };
     index: number;
     id: string;
 };
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     itemText: {
         fontSize: 16,
         color: '#333',
-        justifyContent: 'center'
+        fontFamily: "pbold"
     },
     animatedHeader: {
         height: 80,
@@ -105,22 +105,25 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 24,
         height: 64,
         position: 'absolute',
-        top: 0,
+        top: 35,
         left: 0,
         right: 0,
         zIndex: 10,
+        backgroundColor: 'white',
+
     },
     headerContent: {
-        backgroundColor: 'white',
+        display: "flex",
+        marginLeft: 10,
         height: 64,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
+        alignContent: "center"
     },
     backButtonContainer: {
         width: 28,
         height: 28,
-        padding: 8,
         flexDirection: 'row',
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
@@ -132,6 +135,7 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         height: 400,
+        marginTop: 0,
     },
     imageDarkOverlay: {
         width: '100%',
@@ -145,13 +149,13 @@ const styles = StyleSheet.create({
         zIndex: 2,
     },
     backgroundImage: {
-        flex: 1,
+        width: "100%",
+        height: "100%",
         justifyContent: 'center',
         backgroundColor: 'black',
         position: 'absolute',
         right: 0,
         left: 0,
-        width: '100%',
     },
     contentContainer: {
         marginTop: 96,
@@ -225,12 +229,12 @@ const styles = StyleSheet.create({
 
 const ListItem = ({ title, index, id }: ItemProps) => {
     const handleClickBtn = () => {
-        router.push(`contest/${id}/${title}`)
+        router.push(`/contest/${id}/drawPicture`)
     }
     return (
         <TouchableOpacity style={{ paddingHorizontal: 16 }} onPress={handleClickBtn}>
             <View style={styles.item}>
-                <Text style={styles.itemText}>{`${index + 1}. ${title}`}</Text>
+                <Text style={styles.itemText}>{`${index + 1}. ${title?.title}`}</Text>
                 <Image source={chrven_right} style={{ width: 24, height: 24 }} />
             </View>
         </TouchableOpacity>
@@ -248,24 +252,14 @@ function Contest() {
     }, [contestID])
 
     const scrollY = new Animated.Value(0)
-    const stickyOpacity = scrollY.interpolate({
-        outputRange: [0, 1],
-        inputRange: [0, 160],
-        extrapolate: 'clamp'
-    })
-    const stickyTop = scrollY.interpolate({
-        outputRange: [-60, 0],
-        inputRange: [0, 160],
-        extrapolate: 'clamp'
-    })
     const stickyTopViewContent = scrollY.interpolate({
-        outputRange: [-80, -180],
+        outputRange: [-80, -200],
         inputRange: [0, 160],
         extrapolate: 'clamp'
     })
 
-    const handleClickBtn = () => {
-        router.back();
+    const handleClickRankingBtn = () => {
+        router.push(`contest/${contestID}/leaderboard`);
     }
 
     const toggleExpanded = () => {
@@ -273,97 +267,66 @@ function Contest() {
     };
 
     return (
-        <SafeAreaView style={styles.safeAreaView}>
-            <ScrollView
-                overScrollMode="never"
-                bounces={false}
-                onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-                    useNativeDriver: false
-                })}
-                style={{ position: 'relative' }}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                scrollEventThrottle={16}
-            >
-                <View style={styles.headerContainer}>
-                    <TouchableWithoutFeedback onPress={handleClickBtn}>
-                        <View style={styles.headerContent}>
-                            <View style={styles.backButtonContainer}>
-                                <Image source={chevron_left} style={{ width: 28, height: 28 }} />
-                            </View>
-                            <Text style={styles.headerTitle}>Cuộc thi</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
-                <View style={styles.imageContainer}>
-                    <View style={styles.imageDarkOverlay}></View>
-                    <Image source={detailContest?.image} resizeMode="cover" style={styles.backgroundImage} />
-                    <View style={styles.contentContainer}>
-                        <Text style={styles.contentTitle}>{detailContest?.desc}</Text>
-                        <View style={styles.locationContainer}>
-                            <Image source={location} style={styles.locationIcon} />
-                            <Text style={styles.locationText}>{detailContest?.address}</Text>
-                        </View>
+        <HeaderShown
+            title="Mô tả cuộc thi"
+            rightIcon={{ icon: () => <MaterialIcons name="leaderboard" size={24} color="black" />, onPress: handleClickRankingBtn }}
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+                useNativeDriver: false
+            })}
+        >
+            <View style={styles.imageContainer}>
+                <View style={styles.imageDarkOverlay} />
+                <Image source={detailContest?.image} resizeMode="cover" style={styles.backgroundImage} />
+                <View style={styles.contentContainer}>
+                    <Text style={styles.contentTitle}>{detailContest?.desc}</Text>
+                    <View style={styles.locationContainer}>
+                        <Image source={location} style={styles.locationIcon} />
+                        <Text style={styles.locationText}>{detailContest?.address}</Text>
                     </View>
                 </View>
-                <Animated.View style={[{
-                    height: '100%',
-                    borderTopLeftRadius: 24,
-                    borderTopRightRadius: 24,
-                    position: 'relative',
-                    zIndex: 5,
-                }, {
-                    top: stickyTopViewContent
-                }]}>
-                    <FlatList
-                        scrollEnabled={false}
-                        style={styles.flatListContainer}
-                        data={detailContest.parts}
-                        renderItem={({ item, index }: { item: string, index: number }) => <ListItem title={item} index={index} id={contestID} />}
-                        keyExtractor={(item: string) => item}
-                        ListHeaderComponent={() => (
-                            <View style={styles.flatListHeaderContainer}>
-                                <View style={styles.flatListHeaderContent}>
-                                    <Image source={book} style={styles.bookIcon} />
-                                    <Text style={styles.flatListHeaderTitle}>Thể lệ cuộc thi</Text>
-                                </View>
-                                <View>
-                                    <Text style={styles.text} numberOfLines={isExpanded ? undefined : 3}>
-                                        {"    "}Cuộc thi về phòng chống ma túy tại Đà Nẵng có những hoạt động đáng chú ý nhằm nâng cao nhận thức trong cộng đồng, đặc biệt là học sinh. Một trong những cuộc thi tiêu biểu là Cuộc thi sáng tác phim ngắn về phòng, chống tệ nạn ma túy trong học đường. Cuộc thi này thu hút sự tham gia nhiệt tình của các trường học trên địa bàn Đà Nẵng, khuyến khích học sinh sử dụng phim ngắn để truyền tải thông điệp mạnh mẽ về tác hại của ma túy. Các phim dự thi được đánh giá cao về chất lượng nội dung và kỹ thuật sản xuất.
-                                    </Text>
-                                    <TouchableOpacity onPress={toggleExpanded} style={styles.expandButtonContainer}>
-                                        <View style={styles.expandButtonContent}>
-                                            <Text style={styles.readMoreText}>
-                                                {isExpanded ? 'Lược bớt' : 'Xem thêm'}
-                                            </Text>
-                                            <View style={styles.expandButtonIcon} >
-                                                <Image source={isExpanded ? chrven_top : chrven_bottom} />
-                                            </View>
+            </View>
+            <Animated.View style={[{
+                height: '100%',
+                borderTopLeftRadius: 24,
+                borderTopRightRadius: 24,
+                position: 'relative',
+                overflow: "hidden",
+                zIndex: 5,
+            }, {
+                top: stickyTopViewContent
+            }]}>
+                <FlatList
+                    scrollEnabled={false}
+                    style={styles.flatListContainer}
+                    data={detailContest.parts}
+                    renderItem={({ item, index }: { item: { title: string, slug: string }, index: number }) => <ListItem title={item} index={index} id={contestID} />}
+                    keyExtractor={(item: { title: string, slug: string }) => item.slug}
+                    ListHeaderComponent={() => (
+                        <View style={styles.flatListHeaderContainer}>
+                            <View style={styles.flatListHeaderContent}>
+                                <Image source={book} style={styles.bookIcon} />
+                                <Text style={styles.flatListHeaderTitle}>Thể lệ cuộc thi</Text>
+                            </View>
+                            <View>
+                                <Text style={styles.text} numberOfLines={isExpanded ? undefined : 3}>
+                                    {"    "}Cuộc thi về phòng chống ma túy tại Đà Nẵng có những hoạt động đáng chú ý nhằm nâng cao nhận thức trong cộng đồng, đặc biệt là học sinh. Một trong những cuộc thi tiêu biểu là Cuộc thi sáng tác phim ngắn về phòng, chống tệ nạn ma túy trong học đường. Cuộc thi này thu hút sự tham gia nhiệt tình của các trường học trên địa bàn Đà Nẵng, khuyến khích học sinh sử dụng phim ngắn để truyền tải thông điệp mạnh mẽ về tác hại của ma túy. Các phim dự thi được đánh giá cao về chất lượng nội dung và kỹ thuật sản xuất.
+                                </Text>
+                                <TouchableOpacity onPress={toggleExpanded} style={styles.expandButtonContainer}>
+                                    <View style={styles.expandButtonContent}>
+                                        <Text style={styles.readMoreText}>
+                                            {isExpanded ? 'Lược bớt' : 'Xem thêm'}
+                                        </Text>
+                                        <View style={styles.expandButtonIcon} >
+                                            <Image source={isExpanded ? chrven_top : chrven_bottom} />
                                         </View>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>)}
-                        contentContainerStyle={{ gap: 20, paddingVertical: 16, overflow: "hidden" }}
-                    />
-                </Animated.View>
-            </ScrollView>
-            <Animated.View style={[styles.animatedHeader, {
-                top: stickyTop,
-                opacity: stickyOpacity
-            }]}
-            >
-                <TouchableWithoutFeedback onPress={handleClickBtn}>
-                    <View style={{ overflow: 'hidden', borderBottomLeftRadius: 24 }}>
-                        <View style={styles.headerContent}>
-                            <View style={styles.backButtonContainer}>
-                                <Image source={chevron_left} style={{ width: 28, height: 28 }} />
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                            <Text style={styles.headerTitle}>Cuộc thi</Text>
-                        </View>
-                    </View>
-                </TouchableWithoutFeedback>
+                        </View>)}
+                    contentContainerStyle={{ gap: 20, paddingVertical: 16, overflow: "hidden" }}
+                />
             </Animated.View>
-        </SafeAreaView >
+        </HeaderShown>
     );
 }
 

@@ -11,10 +11,17 @@ const highlightContentData = [
 ];
 function Account() {
   return (
+<<<<<<< HEAD
     <ImageBackground 
       source={require('../../../assets/images/background.png')} 
       style={styles.backgroundImage}
       >
+=======
+    <ImageBackground
+      source={require('../../../assets/images/background.png')}
+      style={styles.backgroundImage}
+    >
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
       <ScrollView style={styles.container}>
         <View style={styles.profileContainer}>
           <Image
@@ -42,6 +49,7 @@ function Account() {
             <Text style={styles.cardText}>Đã tim, bài viết</Text>
           </View>
           <TouchableWithoutFeedback onPress={() => {
+<<<<<<< HEAD
             console.log(1);
             router.push("/achiverment")
           }} >
@@ -51,6 +59,16 @@ function Account() {
               <Text style={styles.cardTitle}>Thành tựu</Text>
             </View>
             <Text style={styles.cardText}>Xếp hạng</Text>
+=======
+            router.push("/achiverment")
+          }} >
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Icon name="trophy" size={20} color="#FFFFFF" style={styles.cardIcon} />
+                <Text style={styles.cardTitle}>Thành tựu</Text>
+              </View>
+              <Text style={styles.cardText}>Xếp hạng</Text>
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -85,7 +103,11 @@ function Account() {
                   <Text style={styles.contentTitle}>{item.title}</Text>
                   <View style={styles.progressContent}>
                     <View style={styles.progressContainer}>
+<<<<<<< HEAD
                     <View style={[styles.progressBar, { width: `${item.progress}%` }]} />                               
+=======
+                      <View style={[styles.progressBar, { width: `${item.progress}%` }]} />
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
                     </View>
                     <Text style={styles.progressText}>{item.progress}% correct</Text>
                   </View>
@@ -168,7 +190,11 @@ const styles = StyleSheet.create({
     gap: 7,
     marginBottom: 16,
   },
+<<<<<<< HEAD
   cardB:{
+=======
+  cardB: {
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
     width: '45%',
     height: '100%',
     backgroundColor: "#78AA1A",
@@ -186,6 +212,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cardIcon: {
+<<<<<<< HEAD
     marginRight: 8, 
   },
   cardTitle: {
@@ -199,6 +226,21 @@ const styles = StyleSheet.create({
     fontWeight: '400',        
     fontSize: 12,    
     letterSpacing: 0.04,      
+=======
+    marginRight: 8,
+  },
+  cardTitle: {
+    fontWeight: '700',
+    fontSize: 20,
+    letterSpacing: 0.04,
+    textAlign: 'center',
+    color: '#FFFFFF',
+  },
+  cardText: {
+    fontWeight: '400',
+    fontSize: 12,
+    letterSpacing: 0.04,
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
     color: '#FFFFFF',
     marginLeft: 20,
     marginTop: 0,
@@ -213,7 +255,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft: '5%',
   },
+<<<<<<< HEAD
     searchIcon: {
+=======
+  searchIcon: {
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
     marginRight: 8,
   },
   highlightTitle: {
@@ -223,7 +269,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   contentList: {
+<<<<<<< HEAD
     width: '100%', 
+=======
+    width: '100%',
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
     marginBottom: 10,
   },
   contentItem: {
@@ -235,20 +285,29 @@ const styles = StyleSheet.create({
   },
   contentImage: {
     width: 50,
+<<<<<<< HEAD
     height:50,
+=======
+    height: 50,
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
     borderRadius: 10,
     marginRight: 10,
   },
   contentInfo: {
     flex: 1,
   },
+<<<<<<< HEAD
   contentTitle: {    
+=======
+  contentTitle: {
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
     fontWeight: '700',
     fontSize: 16,
     marginBottom: 4,
   },
   progressContent: {
     display: 'flex',
+<<<<<<< HEAD
     flexDirection: 'row', 
     alignItems: 'center', 
     width: '100%',
@@ -257,25 +316,51 @@ const styles = StyleSheet.create({
     width: '72%',
     flexDirection: 'row', 
     alignItems: 'center', 
+=======
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
+  progressContainer: {
+    width: '72%',
+    flexDirection: 'row',
+    alignItems: 'center',
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
     height: 12,
     backgroundColor: '#CEEFD8',
     borderRadius: 5,
     overflow: 'hidden',
+<<<<<<< HEAD
     marginTop: 4, 
   },
   progressBar: {
     height: '100%',
     width: '60%', 
+=======
+    marginTop: 4,
+  },
+  progressBar: {
+    height: '100%',
+    width: '60%',
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
     backgroundColor: '#03622F',
     borderRadius: 4,
   },
   progressText: {
     width: '32%',
+<<<<<<< HEAD
     marginLeft: '4%', 
     fontSize: 12,
     color: 'black',
   },
   
+=======
+    marginLeft: '4%',
+    fontSize: 12,
+    color: 'black',
+  },
+
+>>>>>>> 56c9bcc6c695a44d40bcc07e8e418a9c86b090a1
 });
 
 export default Account;
