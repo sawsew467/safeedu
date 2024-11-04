@@ -27,7 +27,10 @@ const Welcome = () => {
               className="w-[240px] h-[240px]"
               resizeMode="contain"
             />
-            <Text style={{ fontSize: 60 }} className="leading-[70px] text-black font-psemibold">
+            <Text
+              style={{ fontSize: 60 }}
+              className="leading-[70px] text-black font-psemibold"
+            >
               SafeEdu
             </Text>
           </View>
@@ -38,7 +41,7 @@ const Welcome = () => {
           </Text>
 
           <Button
-            onPress={() => router.push("/sign-in")}
+            onPress={() => router.push("/home")}
             className="mt-4 w-full"
             variant="primary"
           >
