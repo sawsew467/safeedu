@@ -10,24 +10,15 @@ import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-
-const styles = StyleSheet.create({
-  iconContainer: {
-    paddingTop: windowHeight * 0.01,
-  }
-})
-
 const TabIcon = ({ IconComponent, color, name, focused }) => {
   return (
-    <View className="flex items-center justify-center gap-2">
-      <View style={styles.iconContainer}>
-        <IconComponent color={color} size={24} />
-      </View>
+    <View className="flex items-center justify-center relative w-64">
+      <IconComponent color={color} size={24} />
       <Text
-        className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
+        className={`${focused ? "font-psemibold" : "font-pregular"} text-xs text-center mt-2 `}
         style={{ color: color }}
+      // numberOfLines={1}
+      // ellipsizeMode="clip"
       >
         {name}
       </Text>
@@ -48,6 +39,7 @@ const TabLayout = () => {
             borderTopWidth: 1,
             borderTopColor: "#00000080",
             height: 84,
+            paddingTop: 16,
           },
         }}
       >

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 function News() {
   return (
     <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
-      <ScrollView bounces={false}>
+      <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
         <NavMenu />
         <NewSection data={DATA} />
       </ScrollView>

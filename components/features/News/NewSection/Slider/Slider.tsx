@@ -34,7 +34,7 @@ export function Slider({ data }: { data: DataType[] }) {
 }
 const styles = StyleSheet.create({
     sliderContainer: {
-        height: 240,
+        height: 218,
         marginTop: 76,
     }
 })
