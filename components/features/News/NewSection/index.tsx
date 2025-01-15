@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View, TouchableOpacity, FlatList, StyleProp, I
 import { Slider } from "@/components/features/News/NewSection/Slider/Slider";
 import { DATA } from "@/healper/data/news";
 
-import nav_background from "@/assets/images/home_background_nav.png";
+import nav_background from "@/assets/images/background_nav_home.png";
 import logo from "@/assets/images/news_image/news_logo.png";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
@@ -12,6 +12,23 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { router } from "expo-router";
 import { DataType } from "@/healper/type/news-type";
 import { Button } from "@/components/ui/Button";
+
+const buttons = [
+    {
+        id: 1,
+        icon: () => <Ionicons name="extension-puzzle-outline" size={24} color="#75A815" />,
+        text: "Trò chơi",
+        route: "game",
+        bgColor: "bg-white",
+    },
+    {
+        id: 2,
+        icon: () => <Feather name="book" size={24} color="#75A815" />,
+        text: "Thư viện",
+        route: "library",
+        bgColor: "bg-white",
+    },
+];
 
 export function NewSection({ data }: { data: DataType[] }) {
     return (
@@ -25,30 +42,23 @@ export function NewSection({ data }: { data: DataType[] }) {
                 />
             </View>
             <Slider data={DATA} />
-            <View className="flex-1 items-center justify-center">
-                <Image source={nav_background} resizeMode="contain" className="w-full absolute" />
-                <View className="flex flex-row ">
-                    <Button className="flex-1 h-[52px] ml-3 mr-1.5 bg-white rounded-2xl ">
-                        <View className="flex flex-col justify-center items-center">
-                            <Ionicons name="extension-puzzle-outline" size={24} color="#75A815" />
-                            <Text className="text-[#75A815]">Trò chơi</Text>
-                        </View>
-                    </Button>
-                    <Button className="flex-1 h-[52px] mx-1.5 bg-[#75A815] rounded-2xl ">
-                        <View className="flex flex-col justify-center items-center">
-                            <Feather name="book" size={24} color="white" />
-                            <Text className="text-white">Thư viện</Text>
-                        </View>
-                    </Button>
-                    <Button className="flex-1 h-[52px] ml-1.5 mr-3 bg-white rounded-2xl ">
-                        <View className="flex flex-col justify-center items-center">
-                            <MaterialCommunityIcons name="account-circle-outline" size={24} color="#75A815" />
-                            <Text className="text-[#75A815]">Tài khoản</Text>
-                        </View>
-                    </Button>
+            <View className="flex-1 items-center justify-center mt-4">
+                <Image source={nav_background} resizeMode="contain" className="w-[110%] absolute" />
+                <View className="flex flex-row justify-center items-center">
+                    {buttons.map((button) => (
+                        <Button onPress={() => { router.push(button.route) }}
+                            key={button.id}
+                            className={`flex-1 h-[120%] mx-1.5 ${button.bgColor} rounded-2xl`}
+                        >
+                            <View className="flex flex-col justify-center items-center">
+                                {button.icon()}
+                                <Text className="text-[#75A815]">{button.text}</Text>
+                            </View>
+                        </Button>
+                    ))}
                 </View>
             </View>
-            <View className="mt-6">
+            <View className="mt-10">
                 <View className="flex flex-row items-center mb-3">
                     <Text style={styles.suggestionText}>Tin mới</Text>
                     <View className="w-7 h-8 ml-2">

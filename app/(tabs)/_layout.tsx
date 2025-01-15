@@ -17,8 +17,6 @@ const TabIcon = ({ IconComponent, color, name, focused }) => {
       <Text
         className={`${focused ? "font-psemibold" : "font-pregular"} text-xs text-center mt-2 `}
         style={{ color: color }}
-      // numberOfLines={1}
-      // ellipsizeMode="clip"
       >
         {name}
       </Text>
