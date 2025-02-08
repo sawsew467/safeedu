@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router"; 
+import { useRouter } from "expo-router";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -12,84 +12,84 @@ const SignUp = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
-  const router = useRouter(); 
+  const router = useRouter();
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
   const toggleConfirmPasswordVisibility = () => setConfirmPasswordVisible(!confirmPasswordVisible);
 
   const handleSignUp = () => {
-    router.push("/sign-in"); 
+    router.push("/sign-in");
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.avatarContainer}>
-          <Image
-            source={require('../../assets/images/backgroundSignin.png')} // Đường dẫn đến ảnh trong thư mục nội bộ
-            style={styles.avatar}
-          />
-        </View>
+    // <SafeAreaView style={styles.safeArea}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.avatarContainer}>
+        <Image
+          source={require('../../assets/images/backgroundSignin.png')} // Đường dẫn đến ảnh trong thư mục nội bộ
+          style={styles.avatar}
+        />
+      </View>
 
 
-        <View style={styles.form}>
-          <Text style={styles.label}>Nhập tên của bạn</Text>
+      <View style={styles.form}>
+        <Text style={styles.label}>Nhập tên của bạn</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Họ và tên"
+          value={name}
+          onChangeText={setName}
+        />
+
+        <Text style={styles.label}>Nhập ngày sinh</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="DD/MM/YYYY"
+          value={dob}
+          onChangeText={setDob}
+        />
+
+        <Text style={styles.label}>Nhập email</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+        />
+
+        <Text style={styles.label}>Nhập mật khẩu</Text>
+        <View style={styles.passwordContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Họ và tên"
-            value={name}
-            onChangeText={setName}
+            placeholder="●●●●●●●"
+            secureTextEntry={!passwordVisible}
+            value={password}
+            onChangeText={setPassword}
           />
-
-          <Text style={styles.label}>Nhập ngày sinh</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="DD/MM/YYYY"
-            value={dob}
-            onChangeText={setDob}
-          />
-
-          <Text style={styles.label}>Nhập email</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-          />
-
-          <Text style={styles.label}>Nhập mật khẩu</Text>
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="●●●●●●●"
-              secureTextEntry={!passwordVisible}
-              value={password}
-              onChangeText={setPassword}
-            />
-            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
-              <Ionicons name={passwordVisible ? "eye" : "eye-off"} size={24} color="#888" />
-            </TouchableOpacity>
-          </View>
-
-          <Text style={styles.label}>Xác nhận mật khẩu</Text>
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="●●●●●●●"
-              secureTextEntry={!confirmPasswordVisible}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-            />
-            <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.eyeIcon}>
-              <Ionicons name={confirmPasswordVisible ? "eye" : "eye-off"} size={24} color="#888" />
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-            <Text style={styles.signUpText}>Đăng kí</Text>
+          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+            <Ionicons name={passwordVisible ? "eye" : "eye-off"} size={24} color="#888" />
           </TouchableOpacity>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+
+        <Text style={styles.label}>Xác nhận mật khẩu</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="●●●●●●●"
+            secureTextEntry={!confirmPasswordVisible}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+          <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.eyeIcon}>
+            <Ionicons name={confirmPasswordVisible ? "eye" : "eye-off"} size={24} color="#888" />
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
+          <Text style={styles.signUpText}>Đăng kí</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+    // </SafeAreaView>
   );
 };
 
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     padding: 20,
     paddingBottom: 100,
+    backgroundColor: "#FFFFFF",
   },
   avatarContainer: {
     alignItems: "center",
@@ -142,8 +143,8 @@ const styles = StyleSheet.create({
   eyeIcon: {
     position: "absolute",
     right: 10,
-    top: "40%", 
-    transform: [{ translateY: -12 }], 
+    top: "40%",
+    transform: [{ translateY: -12 }],
   },
   signUpButton: {
     marginTop: 16,

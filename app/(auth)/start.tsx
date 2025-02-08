@@ -10,14 +10,17 @@ const Start = () => {
   };
 
   const handleGoBack = () => {
-    router.back(); 
+    router.back();
   };
 
   return (
-    <ImageBackground 
-      source={require('../../assets/images/background_start.png')} // Thay đổi đường dẫn tới hình ảnh nền của bạn
-      style={styles.container}
-    >
+    <>
+      <ImageBackground
+        source={require('../../assets/images/start-background.png')} // Thay đổi đường dẫn tới hình ảnh nền của bạn
+        className="w-[100%] h-[70%] absolute bg-white"
+        resizeMode="contain"
+      >
+      </ImageBackground>
       <View style={styles.content}>
         <Text style={styles.title}>BẮT ĐẦU HÀNH TRÌNH KIẾN THỨC</Text>
         <Text style={styles.subtitle}>Tạo hồ sơ để bắt đầu hành trình chinh phục kiến thức phòng chống ma túy!</Text>
@@ -34,24 +37,19 @@ const Start = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </ImageBackground>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    
-    alignItems: "center",
-    padding: 20,
-   
-  },
   content: {
-    justifyContent: "center", 
-    alignItems: "center", 
-    padding: 20,
-    flex:1,
-    marginTop:250,    
+    height: "100%",
+    backgroundColor: "#FFFFFF",
+    // justifyContent: "center",
+    alignItems: "center",
+    padding: 0,
+    flex: 1,
+    marginTop: "105%",
   },
   title: {
     width: 300,
@@ -83,6 +81,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     borderColor: "#FFFFFF",
+    boxShadow: "0 2 20 -10",
     marginRight: 32,
     elevation: 4,
   },
@@ -98,6 +97,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 16,
+    boxShadow: "0 2 20 -10",
     marginLeft: 32,
   },
   continueButtonText: {
