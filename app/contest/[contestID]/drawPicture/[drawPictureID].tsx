@@ -1,9 +1,11 @@
-import DetailDrawPictureModule from '@/components/features/DetailDrawPictureModule'
+import DetailDrawPictureModule from "@/components/features/DetailDrawPictureModule";
+import { View } from "react-native";
 
 const DetailDrawPicture = () => {
-    return (
-        <DetailDrawPictureModule />
-    )
-}
+  return (
+    // <DetailDrawPictureModule />
+    <View />
+  );
+};
 
-export default DetailDrawPicture
+export default DetailDrawPicture;

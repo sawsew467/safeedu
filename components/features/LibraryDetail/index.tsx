@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Animated,
   Dimensions,
   Image,
   StyleSheet,
@@ -8,13 +9,18 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import RenderHTML from "react-native-render-html";
+
+import Entypo from "@expo/vector-icons/Entypo";
 
 import HeaderShown from "@/components/ui/HeaderShown";
+
 import { LIBRARY_DATA } from "@/healper/data/library";
 import { useGetLibraryQuery } from "@/services/library/library.api";
-import RenderHTML from "react-native-render-html";
+
 import { styles_mardown } from "@/healper/style/renderHtml";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -38,13 +44,15 @@ const LibraryDetail = () => {
       }
     );
 
-  const [selectedButton, setSelectedButton] = useState("primary");
-
   const bgColor =
     JSON.parse(index) % 2 === 0 ? styles.bgGreen : styles.bgYellow;
   const colorTitle =
     JSON.parse(index) % 2 > -1 ? styles.whiteTitle : styles.blackTitle;
   const textColor = JSON.parse(index) % 2 === 0 ? "#75A815" : "#F6CB1E";
+
+  const handleBack = () => {
+    router.replace("..");
+  };
 
   const CustomImageRenderer = ({ tnode }) => {
     const uri = tnode.attributes.src;
@@ -105,6 +113,12 @@ const LibraryDetail = () => {
           </View>
         </View>
       )}
+      // rightIcon={{
+      //   icon: () => (
+      //     <MaterialIcons name="leaderboard" size={24} color="black" />
+      //   ),
+      //   onPress: handleBack,
+      // }}
     >
       <View style={styles.detailContainer}>
         <View style={styles.imageHeaderContainer}>
@@ -157,7 +171,9 @@ const LibraryDetail = () => {
         <View>
           <RenderHTML
             contentWidth={windowWidth - externalPadingContent}
-            source={{ html: libraryDetailData?.description }}
+            source={{
+              html: `${libraryDetailData?.description}`,
+            }}
             enableExperimentalMarginCollapsing={true}
             classesStyles={styles_mardown}
             tagsStyles={styles_mardown}
@@ -199,6 +215,14 @@ const LibraryDetail = () => {
 export default LibraryDetail;
 
 const styles = StyleSheet.create({
+  btnIconLeft: {
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: 54,
+    height: 54,
+    borderRadius: 999,
+  },
   cardListContainer: {
     paddingVertical: 18,
     paddingHorizontal: 12,

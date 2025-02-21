@@ -12,12 +12,20 @@
       "backgroundColor": "#ffffff"
     },
     "scheme": "sora",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
+      "enablePngCrunchInReleaseBuilds": false,
       "supportsTablet": true,
-      "package": "com.fpt.safeedu"
+      "package": "com.fpt.safeedu",
+      "bundleIdentifier": "com.fpt.safeedu",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "enablePngCrunchInReleaseBuilds": false,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -27,6 +35,17 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-router", "expo-font"]
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "7f956b94-258e-44c2-9f5e-f9b94350642d"
+      }
+    }
   }
 }

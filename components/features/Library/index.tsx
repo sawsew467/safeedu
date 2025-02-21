@@ -17,36 +17,22 @@ import chatIcon from "@/assets/icons/menuIcon/chatIcon.png";
 import news_background1 from "@/assets/images/news_image/news_background1.png";
 import news_background2 from "@/assets/images/news_image/news_background2.png";
 
-import { LIBRARY_DATA } from "@/healper/data/library";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { router } from "expo-router";
+import HeaderShown from "@/components/ui/HeaderShown";
+import React from "react";
 
 const windowWidth = Dimensions.get("window").width;
-const imageLeft = windowWidth > 400 ? 210 : 182;
 
 function Library() {
   return (
-    <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
+    <HeaderShown title="Thư viện" isScroll={false}>
       <View style={styles.libraryContainer}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Thông tin về ma tuý</Text>
-          <Button
-            onPress={() => {
-              router.push("/chatbot/1");
-            }}
-            style={[styles.menuButton]}
-          >
-            <Ionicons
-              name="chatbox-ellipses-outline"
-              size={20}
-              color="#8C8C8A"
-            />
-          </Button>
-        </View>
         <CardList />
       </View>
       <Image source={news_background1} style={styles.newsBackground1} />
       <Image source={news_background2} style={styles.newsBackground2} />
-    </SafeAreaView>
+    </HeaderShown>
   );
 }
 

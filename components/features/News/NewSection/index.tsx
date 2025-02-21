@@ -20,7 +20,7 @@ import { compareDatesStrict, formatDate } from "@/utils/format-date";
 import { useGetAllNewsQuery } from "@/services/news/news.api";
 import { useGetAllTopicsQuery } from "@/services/topic/topic.api";
 import { Topic } from "@/healper/type/topic.type";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TypeNews } from "@/healper/type/news.type";
 
 import nav_background from "@/assets/images/background_nav_home.png";
@@ -31,20 +31,20 @@ import { Button } from "@/components/ui/Button";
 const width = Dimensions.get("window").width;
 
 const buttons = [
-  {
-    id: 1,
-    icon: () => (
-      <Ionicons name="extension-puzzle-outline" size={24} color="#75A815" />
-    ),
-    text: "Trò chơi",
-    route: "game",
-    bgColor: "bg-white",
-  },
+  // {
+  //   id: 1,
+  //   icon: () => (
+  //     <Ionicons name="extension-puzzle-outline" size={24} color="#75A815" />
+  //   ),
+  //   text: "Trò chơi",
+  //   route: "game",
+  //   bgColor: "bg-white",
+  // },
   {
     id: 2,
     icon: () => <Feather name="book" size={24} color="#75A815" />,
     text: "Thư viện",
-    route: "library",
+    route: "/library",
     bgColor: "bg-white",
   },
 ];
@@ -71,18 +71,81 @@ export function NewSection() {
       selectFromResult: ({ data, isFetching }) => {
         const activeData =
           data?.items?.filter((item: TypeNews) => item?.isActive) ?? [];
-
+        const slideData = activeData
+          ?.sort((item: TypeNews, other: TypeNews) =>
+            compareDatesStrict(other?.created_at, item?.created_at)
+          )
+          .slice(0, 5);
         return {
           newsData: activeData,
-          newsSliderData: activeData
-            ?.sort((item: TypeNews, other: TypeNews) =>
-              compareDatesStrict(other?.created_at, item?.created_at)
-            )
-            .slice(0, 5),
+          newsSliderData: slideData,
           isFetching,
         };
       },
     }
+  );
+
+  const header = React.useMemo(
+    () => (
+      <View>
+        <Text style={styles.newsText}>Tin mới</Text>
+        <View style={styles.logoContainer}>
+          <Image
+            source={logo}
+            style={styles.logoImage as StyleProp<ImageStyle>}
+            resizeMode="cover"
+          />
+        </View>
+        <Slider data={newsSliderData} />
+        {/* <View className="flex-1 items-center justify-center mt-6 mb-8">
+          <Image
+            source={nav_background}
+            resizeMode="contain"
+            className="w-[110%] absolute"
+          />
+          <View className="flex flex-row justify-center items-center">
+            {buttons.map((button) => (
+              <Button
+                onPress={() => {
+                  router.push(button.route);
+                }}
+                key={button.id}
+                className={`flex-1 h-[120%] mx-1.5 ${button.bgColor} rounded-2xl`}
+              >
+                <View className="flex flex-col justify-center items-center">
+                  {button.icon()}
+                  <Text className="text-[#75A815]">{button.text}</Text>
+                </View>
+              </Button>
+            ))}
+          </View>
+        </View> */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.tabContainer}
+        >
+          {topicData?.map((tab: Topic) => (
+            <TouchableOpacity
+              key={tab._id}
+              onPress={() => setActiveTab(tab._id)}
+              style={styles.tab}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === tab._id && styles.activeTabText,
+                ]}
+              >
+                {tab?.topic_name}
+              </Text>
+              {activeTab === tab._id && <View style={styles.activeIndicator} />}
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+    ),
+    [activeTab, newsSliderData]
   );
 
   const onRefresh = () => {
@@ -95,72 +158,12 @@ export function NewSection() {
       refreshControl={
         <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
       }
-      ListHeaderComponent={() => (
-        <View>
-          <Text style={styles.newsText}>Tin mới</Text>
-          <View style={styles.logoContainer}>
-            <Image
-              source={logo}
-              style={styles.logoImage as StyleProp<ImageStyle>}
-              resizeMode="cover"
-            />
-          </View>
-          <Slider data={newsSliderData} />
-          <View className="flex-1 items-center justify-center mt-4 mb-8">
-            <Image
-              source={nav_background}
-              resizeMode="contain"
-              className="w-[110%] absolute"
-            />
-            <View className="flex flex-row justify-center items-center">
-              {buttons.map((button) => (
-                <Button
-                  onPress={() => {
-                    router.push(button.route);
-                  }}
-                  key={button.id}
-                  className={`flex-1 h-[120%] mx-1.5 ${button.bgColor} rounded-2xl`}
-                >
-                  <View className="flex flex-col justify-center items-center">
-                    {button.icon()}
-                    <Text className="text-[#75A815]">{button.text}</Text>
-                  </View>
-                </Button>
-              ))}
-            </View>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.tabContainer}
-          >
-            {topicData?.map((tab: Topic) => (
-              <TouchableOpacity
-                key={tab._id}
-                onPress={() => setActiveTab(tab._id)}
-                style={styles.tab}
-              >
-                <Text
-                  style={[
-                    styles.tabText,
-                    activeTab === tab._id && styles.activeTabText,
-                  ]}
-                >
-                  {tab?.topic_name}
-                </Text>
-                {activeTab === tab._id && (
-                  <View style={styles.activeIndicator} />
-                )}
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      )}
+      ListHeaderComponent={header}
       contentContainerStyle={styles.flatListContainer}
       data={newsData?.filter(
         (item: TypeNews) => item?.topic_id?._id === activeTab
       )}
-      keyExtractor={(item) => item._id}
+      keyExtractor={(item) => item?._id}
       renderItem={({ item }) => (
         <TouchableOpacity
           onPress={() => {
@@ -295,6 +298,7 @@ const styles = StyleSheet.create({
   flatListContainer: {
     marginTop: 20,
     gap: 8,
+    paddingBottom: 80,
   },
   listItem: {
     flexDirection: "row",

@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import "react-native-url-polyfill/auto";
 import { SplashScreen, Stack } from "expo-router";
 import Providers from "@/providers";
+import { View } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -29,11 +30,11 @@ const RootLayout = () => {
   }, [fontsLoaded, error]);
 
   if (!fontsLoaded) {
-    return null;
+    return <View />;
   }
 
   if (!fontsLoaded && !error) {
-    return null;
+    return <View />;
   }
 
   return (
@@ -46,7 +47,7 @@ const RootLayout = () => {
           name="achiverment/index"
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="contest/[contestID]"
           options={{ headerShown: false }}
         />
@@ -57,21 +58,21 @@ const RootLayout = () => {
         <Stack.Screen
           name="contest/[contestID]/drawPicture"
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="contest/[contestID]/drawPicture/[drawPictureID]"
           options={{ headerShown: false }}
-        />
+        /> */}
         <Stack.Screen name="news/[newsID]" options={{ headerShown: false }} />
         <Stack.Screen
           name="library/[libraryID]"
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="leaderboard_game/[leaderboardID]"
           options={{ headerShown: false }}
-        />
-        <Stack.Screen name="game/[gameID]" options={{ headerShown: false }} />
+        /> */}
+        {/* <Stack.Screen name="game/[gameID]" options={{ headerShown: false }} /> */}
       </Stack>
     </Providers>
   );

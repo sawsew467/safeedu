@@ -2,27 +2,20 @@ import {
   ActivityIndicator,
   Dimensions,
   Image,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   View,
-  useWindowDimensions,
 } from "react-native";
 import React from "react";
 import { useLocalSearchParams } from "expo-router";
-import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
 import HeaderShown from "@/components/ui/HeaderShown";
-import { DataType } from "@/healper/type/news-type";
-import GameResult from "@/components/features/GameTestTheoryModule/GameResult";
 import { useGetNewsQuery } from "@/services/news/news.api";
 import { formatDate } from "@/utils/format-date";
 import RenderHtml from "react-native-render-html";
-import { coverHTMLToReactNative } from "@/utils/cover-html-to-reactnative";
 import { styles_mardown } from "@/healper/style/renderHtml";
 const externalPadingContent = 60;
 
-const NewsDetail = () => {
+export default function NewsDetail() {
   const { newsID }: { newsID: string } = useLocalSearchParams();
   const width = Dimensions.get("window").width;
 
@@ -127,7 +120,11 @@ const NewsDetail = () => {
             </View>
             <RenderHtml
               contentWidth={width - externalPadingContent}
-              source={{ html: newsDetailData?.content }}
+              source={{
+                html:
+                  newsDetailData?.content ??
+                  "<p>Có vẻ có một số lỗi xảy ra với trang này</p>",
+              }}
               enableExperimentalMarginCollapsing={true}
               classesStyles={styles_mardown}
               tagsStyles={styles_mardown}
@@ -138,9 +135,7 @@ const NewsDetail = () => {
       </View>
     </HeaderShown>
   );
-};
-
-export default NewsDetail;
+}
 
 const styles = StyleSheet.create({
   container_detailNews: {

@@ -4,18 +4,14 @@ import { router } from "expo-router";
 import React from "react";
 import {
   Dimensions,
-  Image,
-  ImageSourcePropType,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from "react-native";
 import Animated, {
   Extrapolation,
   interpolate,
-  SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
 
@@ -29,13 +25,6 @@ const { width } = Dimensions.get("screen");
 
 const SliderItem = ({ item, index, scrollX }: SliderItemProps) => {
   const rnAnimatedStyle = useAnimatedStyle(() => {
-    const translateX = interpolate(
-      scrollX.value,
-      [(index - 1) * width, index * width, (index + 1) * width],
-      [-width * 0.125, 0, width * 0.125],
-      Extrapolation.CLAMP
-    );
-
     const scale = interpolate(
       scrollX.value,
       [(index - 1) * width, index * width, (index + 1) * width],
@@ -44,8 +33,8 @@ const SliderItem = ({ item, index, scrollX }: SliderItemProps) => {
     );
 
     return {
-      transform: [{ translateX }, { scale }],
-    } as ViewStyle;
+      transform: [{ scale }],
+    };
   });
 
   return (
@@ -55,9 +44,9 @@ const SliderItem = ({ item, index, scrollX }: SliderItemProps) => {
       }}
     >
       <Animated.View style={[styles.itemContainer, rnAnimatedStyle]}>
-        <Image
+        <Animated.Image
           source={{ uri: item.image }}
-          style={styles.itemImage}
+          style={[styles.itemImage]}
           resizeMode="cover"
         />
         <View style={styles.overlay} />
@@ -99,18 +88,16 @@ const styles = StyleSheet.create({
     height: 178,
     paddingHorizontal: 16,
     position: "relative",
+    overflow: "hidden",
+    borderRadius: 30,
   },
   itemImage: {
     width: "100%",
     height: "100%",
-    borderRadius: 30,
   },
   overlay: {
     position: "absolute",
-    width: "100%",
-    height: "100%",
-    bottom: 0,
-    borderRadius: 30,
+    inset: 0,
     backgroundColor: "rgba(0, 0, 0, 0.3)",
   },
   backgroundOverlay: {
