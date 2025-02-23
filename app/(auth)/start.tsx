@@ -6,7 +6,7 @@ const Start = () => {
   const router = useRouter();
 
   const handleNavigateToHome = () => {
-    router.push("/sign-up"); // Navigate to the home screen
+    router.push("/phone-verification"); // Navigate to the home screen
   };
 
   const handleGoBack = () => {
