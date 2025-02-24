@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "sora",
+    "name": "SafeEdu",
     "slug": "sora",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,25 +11,29 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "scheme": "sora",
+    "scheme": "SafeEdu",
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "enablePngCrunchInReleaseBuilds": false,
       "supportsTablet": true,
       "package": "com.fpt.safeedu",
       "bundleIdentifier": "com.fpt.safeedu",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "backgroundColor": "#ffffff",
+      "image": "./assets/adaptive-icon.png",
+      "resizeMode": "cover"
     },
     "android": {
-      "enablePngCrunchInReleaseBuilds": false,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "backgroundColor": "#ffffff",
+      "image": "./assets/adaptive-icon.png",
+      "imageWidth": 150,
       "package": "com.fpt.safeedu"
     },
     "web": {
@@ -46,6 +50,7 @@
       "eas": {
         "projectId": "7f956b94-258e-44c2-9f5e-f9b94350642d"
       }
-    }
+    },
+    "owner": "leducanhphuong"
   }
 }
