@@ -96,17 +96,19 @@ export default function NewsDetail() {
         <View style={styles.whiteBoard}>
           <View style={styles.newsDetailContainer}>
             <View style={styles.titleContainer}>
-              <Text style={styles.title}>{newsDetailData?.title}</Text>
+              <Text style={styles.title} className="font-pbold">
+                {newsDetailData?.title}
+              </Text>
             </View>
             <View style={styles.container_detailNews}>
-              <Text style={styles.newsDate}>
+              <Text style={styles.newsDate} className="font-plight">
                 {formatDate(
                   newsDetailData?.updated_at ?? newsDetailData?.created_at,
                   "DD MMMM ,YYYY - HH:mm"
                 )}
               </Text>
               <View style={styles.badge}>
-                <Text style={styles.text_badge}>
+                <Text style={styles.text_badge} className="font-psemibold">
                   {newsDetailData?.topic_id?.topic_name}
                 </Text>
               </View>

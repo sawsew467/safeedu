@@ -8,6 +8,7 @@ import {
   Dimensions,
   ImageBackground,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import {
   useCreateChatMutation,
@@ -18,13 +19,20 @@ import {
 import { Button } from "@/components/ui/Button";
 import HeaderShown from "@/components/ui/HeaderShown";
 import bg from "@/assets/images/chatbox/bg.png";
-import Feather from "@expo/vector-icons/Feather";
 import avatar_chatbot from "@/assets/icons/avatar_chatbot.png";
 import { COMMON_QUESTIONS } from "@/healper/data/chatbot";
 import Input from "./input";
 import { TypeChat } from "@/healper/type/chatbot-type";
-import { content } from "@/tailwind.config";
 import Markdown from "react-native-markdown-display";
+import * as Clipboard from "expo-clipboard";
+
+import Feather from "@expo/vector-icons/Feather";
+import Octicons from "@expo/vector-icons/Octicons";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Toast from "react-native-toast-message";
+import ReportDialog from "./report-dialog";
+
 const ListCommonQuestion = ({
   text,
   handleClick,
@@ -39,72 +47,14 @@ const ListCommonQuestion = ({
   </Button>
 );
 
-const FrameChat = ({
-  content,
-  role,
-  isLoading,
-  isEnd,
-}: TypeChat & { isLoading: boolean; isEnd: boolean }) => {
-  if (isEnd && isLoading)
-    return (
-      <View
-        style={[
-          styles.container_frame_chat,
-          { justifyContent: role === "user" ? "flex-end" : "flex-start" },
-        ]}
-      >
-        {role === "chatbot" && (
-          <Image source={avatar_chatbot} style={styles.avatar_chatbot} />
-        )}
-        <View
-          style={[
-            styles.frame_chat,
-            role === "user" ? styles.user_style : styles.chatbot_style,
-          ]}
-        >
-          <ActivityIndicator size="large" color="##75A815" />
-        </View>
-      </View>
-    );
-  return (
-    <View
-      style={[
-        styles.container_frame_chat,
-        { justifyContent: role === "user" ? "flex-end" : "flex-start" },
-      ]}
-    >
-      {role === "chatbot" && (
-        <Image source={avatar_chatbot} style={styles.avatar_chatbot} />
-      )}
-      <View
-        style={[
-          styles.frame_chat,
-          role === "user" ? styles.user_style : styles.chatbot_style,
-        ]}
-      >
-        <Text style={styles.text_frame_chat} className="font-pregular">
-          {role === "chatbot" ? (
-            <Markdown
-              style={{
-                body: {
-                  color: "#000",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  flex: 1,
-                  width: width * 0.7,
-                },
-              }}
-            >
-              {content}
-            </Markdown>
-          ) : (
-            content
-          )}
-        </Text>
-      </View>
-    </View>
-  );
-};
+const TabChat = ({ IconComponent, color, actions }) => (
+  <TouchableOpacity
+    onPress={() => actions()}
+    className="flex items-center justify-center relative"
+  >
+    <IconComponent color={color} size={24} />
+  </TouchableOpacity>
+);
 
 const { height, width } = Dimensions.get("window"); // Lấy chiều rộng màn hình
 function ChatContent() {
@@ -112,13 +62,18 @@ function ChatContent() {
   const [createChat] = useCreateChatMutation();
   const [getChatMessages] = useGetChatMessagesMutation();
 
+  const [{ statusLike, isReport }, setActions] = useState({
+    statusLike: "none",
+    isReport: false,
+  });
+
   const [loading, setLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
   const [chatData, setChatData] = useState<TypeChat[]>([]);
   const scrollViewRef = useRef(null);
 
-  console.log("🚀 ~ Chatbot ~ chatData:", chatData);
+  // console.log("🚀 ~ Chatbot ~ chatData:", chatData);
 
-  const handleClickMoreInfor = () => {};
   const handleAddUserMessage = (content: string) => {
     setChatData((prevChatData) => [
       ...prevChatData,
@@ -127,6 +82,154 @@ function ChatContent() {
         role: "user",
       },
     ]);
+  };
+
+  const tabActions = [
+    {
+      IconComponent: () =>
+        statusLike !== "like" ? (
+          <AntDesign name="like2" size={24} />
+        ) : (
+          <AntDesign name="like1" size={24} color="#75A815" />
+        ),
+      actions: () =>
+        setActions((prev) => ({
+          ...prev,
+          statusLike: prev.statusLike === "like" ? "none" : "like",
+        })),
+    },
+    {
+      IconComponent: () =>
+        statusLike !== "dislike" ? (
+          <AntDesign name="dislike2" size={24} />
+        ) : (
+          <AntDesign name="dislike1" size={24} color="#75A815" />
+        ),
+      color: "black",
+      actions: () =>
+        setActions((prev) => ({
+          ...prev,
+          statusLike: prev.statusLike === "dislike" ? "none" : "dislike",
+        })),
+    },
+    {
+      IconComponent: () => <Feather name="copy" size={24} color="black" />,
+      color: "black",
+      actions: (e) => {
+        Clipboard.setString(e);
+        Toast.show({
+          type: "success",
+          text1: "Thành công",
+          text2: "Đã sao chép thành công! ✅",
+          position: "top",
+        });
+      },
+    },
+    {
+      IconComponent: () => <Octicons name="report" size={24} />,
+      color: "black",
+      actions: () => {
+        setActions((prev) => ({ ...prev, isReport: true }));
+      },
+    },
+  ];
+
+  const FrameChat = ({
+    content,
+    role,
+    isLoading,
+    isEnd,
+  }: TypeChat & { isLoading: boolean; isEnd: boolean }) => {
+    if (isEnd && isLoading)
+      return (
+        <View
+          style={[
+            styles.content_frame_chat,
+            { justifyContent: role === "user" ? "flex-end" : "flex-start" },
+          ]}
+        >
+          {role === "chatbot" && (
+            <>
+              <Image source={avatar_chatbot} style={styles.avatar_chatbot} />
+            </>
+          )}
+          <View
+            style={[
+              styles.frame_chat,
+              role === "user" ? styles.user_style : styles.chatbot_style,
+            ]}
+          >
+            <ActivityIndicator size="large" color="##75A815" />
+          </View>
+        </View>
+      );
+    return (
+      <View style={styles.container_frame_chat}>
+        <View
+          style={[
+            styles.content_frame_chat,
+            { justifyContent: role === "user" ? "flex-end" : "flex-start" },
+          ]}
+        >
+          {role === "chatbot" && (
+            <>
+              <Image source={avatar_chatbot} style={styles.avatar_chatbot} />
+            </>
+          )}
+          <View
+            style={[
+              styles.frame_chat,
+              role === "user" ? styles.user_style : styles.chatbot_style,
+            ]}
+          >
+            <Text style={styles.text_frame_chat} className="font-pregular">
+              {role === "chatbot" ? (
+                <Markdown
+                  style={{
+                    body: {
+                      color: "#000",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      flex: 1,
+                      width: width * 0.7,
+                    },
+                  }}
+                >
+                  {content}
+                </Markdown>
+              ) : (
+                content
+              )}
+            </Text>
+          </View>
+        </View>
+        {role === "chatbot" && (
+          <View style={styles.container_action}>
+            {tabActions?.map(({ IconComponent, color, actions }) => (
+              <TabChat
+                IconComponent={IconComponent}
+                color={color}
+                actions={() => actions(content)}
+              />
+            ))}
+          </View>
+        )}
+      </View>
+    );
+  };
+
+  const handleDialog = (status: "cancel" | "send") => {
+    if (status === "send") {
+      Toast.show({
+        type: "success",
+        text1: "Báo cáo thành công",
+        text2: "Cảm ơn bạn đã báo cáo vi phạm",
+      });
+    }
+    setActions((prev) => ({
+      ...prev,
+      isReport: false,
+    }));
   };
 
   const handleAddBotMessage = (content: string) => {
@@ -188,86 +291,113 @@ function ChatContent() {
             },
           });
           const messages = messagesResponse.data.data;
-          console.log("🚀 ~ intervalId ~ messages:", messages);
+          // console.log("🚀 ~ intervalId ~ messages:", messages);
 
           if (messages.length > 1) {
             clearInterval(intervalId);
             const [answer] = messages;
-            console.log("Message content:", answer.content);
+            // console.log("Message content:", answer.content);
             handleAddBotMessage(answer.content);
             setLoading(false);
           }
         } catch (error) {
-          console.log("Fetch error:", error);
+          // console.log("Fetch error:", error);
         }
       }, 1000);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   return (
-    <HeaderShown
-      isBack={false}
-      title="Trợ lí tư vấn"
-      ref={scrollViewRef}
-      style={{ paddingBottom: 120, flexGrow: 1 }}
-      onContentSizeChange={(contentWidth, contentHeight) => {
-        scrollViewRef?.current?.scrollTo({
-          x: 0,
-          y: contentHeight,
-          animated: true,
-        });
-      }}
-      FooterComponent={() => <Input handleSubmit={handleSendMessage} />}
-      // rightIcon={{
-      //     icon: () => <Feather name="more-horizontal" size={24} color="black" />,
-      //     onPress: handleClickMoreInfor,
-      // }}
-    >
-      <View style={styles.container_content}>
-        <View style={styles.container_header}>
-          <Image source={avatar_chatbot} />
-          {chatData.length === 0 && (
-            <FlatList
-              scrollEnabled={false}
-              numColumns={2}
-              contentContainerStyle={{
-                gap: 8,
-                width: "100%",
-                marginTop: 24,
-                marginBottom: 20,
-              }}
-              columnWrapperStyle={{ gap: 8 }}
-              data={COMMON_QUESTIONS}
-              keyExtractor={(item: string) => item}
-              renderItem={({ item }: { item: string }) => (
-                <ListCommonQuestion
-                  handleClick={handleSendMessage}
-                  text={item}
-                />
-              )}
-            />
-          )}
+    <>
+      <HeaderShown
+        isBack={false}
+        title="Trợ lí tư vấn"
+        ref={scrollViewRef}
+        style={{ paddingBottom: 120, flexGrow: 1 }}
+        onContentSizeChange={(contentWidth, contentHeight) => {
+          scrollViewRef?.current?.scrollTo({
+            x: 0,
+            y: contentHeight,
+            animated: true,
+          });
+        }}
+        FooterComponent={() => <Input handleSubmit={handleSendMessage} />}
+        // rightIcon={{
+        //     icon: () => <Feather name="more-horizontal" size={24} color="black" />,
+        //     onPress: handleClickMoreInfor,
+        // }}
+      >
+        <View style={styles.container_content}>
+          <View style={styles.container_header}>
+            <Image source={avatar_chatbot} />
+            {chatData.length === 0 && (
+              <FlatList
+                scrollEnabled={false}
+                numColumns={2}
+                contentContainerStyle={{
+                  gap: 8,
+                  width: "100%",
+                  marginTop: 24,
+                  marginBottom: 20,
+                }}
+                columnWrapperStyle={{ gap: 8 }}
+                data={COMMON_QUESTIONS}
+                keyExtractor={(item: string) => item}
+                renderItem={({ item }: { item: string }) => (
+                  <ListCommonQuestion
+                    handleClick={handleSendMessage}
+                    text={item}
+                  />
+                )}
+              />
+            )}
+          </View>
+          <FlatList
+            contentContainerStyle={styles.container_chat}
+            scrollEnabled={false}
+            data={chatData}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({
+              item,
+              index,
+            }: {
+              item: TypeChat;
+              index: number;
+            }) => (
+              <FrameChat
+                {...item}
+                isLoading={loading}
+                isEnd={index + 1 === chatData.length && item.role === "chatbot"}
+              />
+            )}
+          />
         </View>
-        <FlatList
-          contentContainerStyle={styles.container_chat}
-          scrollEnabled={false}
-          data={chatData}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }: { item: TypeChat; index: number }) => (
-            <FrameChat
-              {...item}
-              isLoading={loading}
-              isEnd={index + 1 === chatData.length && item.role === "chatbot"}
-            />
-          )}
-        />
-      </View>
-    </HeaderShown>
+      </HeaderShown>
+      <ReportDialog
+        visible={isReport}
+        handleDialog={handleDialog}
+        setSelectedOption={setSelectedOption}
+        selectedOption={selectedOption}
+      />
+      <Toast />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
+  container_frame_chat: {},
+  container_action: {
+    marginTop: 20,
+    paddingInline: 50,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    width: "100%",
+    gap: 20,
+  },
+  btn_more: {
+    borderWidth: 0,
+    borderColor: "none",
+  },
   text_frame_chat: {
     color: "#fff",
     flex: 1,
@@ -297,7 +427,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 16,
   },
-  container_frame_chat: {
+  content_frame_chat: {
     width: "100%",
     display: "flex",
     flexDirection: "row",

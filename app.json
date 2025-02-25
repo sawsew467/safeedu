@@ -2,7 +2,7 @@
   "expo": {
     "name": "SafeEdu",
     "slug": "sora",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -51,6 +51,6 @@
         "projectId": "7f956b94-258e-44c2-9f5e-f9b94350642d"
       }
     },
-    "owner": "leducanhphuong"
+    "owner": "safeedu"
   }
 }
