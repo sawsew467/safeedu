@@ -1,12 +1,12 @@
 import React from "react";
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
-import { useRouter } from "expo-router"; // Import the router for navigation
+import { useRouter } from "expo-router";
 
 const Start = () => {
   const router = useRouter();
 
   const handleNavigateToHome = () => {
-    router.push("/phone-verification"); // Navigate to the home screen
+    router.push("/phone-verification");
   };
 
   const handleGoBack = () => {
@@ -16,7 +16,7 @@ const Start = () => {
   return (
     <>
       <ImageBackground
-        source={require('../../assets/images/start-background.png')} // Thay đổi đường dẫn tới hình ảnh nền của bạn
+        source={require('../../assets/images/start-background.png')}
         className="w-[100%] h-[70%] absolute bg-white"
         resizeMode="contain"
       >
@@ -26,12 +26,10 @@ const Start = () => {
         <Text style={styles.subtitle}>Tạo hồ sơ để bắt đầu hành trình chinh phục kiến thức phòng chống ma túy!</Text>
 
         <View style={styles.buttonContainer}>
-          {/* Nút Quay lại */}
           <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
             <Text style={styles.backButtonText}>Quay lại</Text>
           </TouchableOpacity>
 
-          {/* Nút Tiếp tục */}
           <TouchableOpacity style={styles.continueButton} onPress={handleNavigateToHome}>
             <Text style={styles.continueButtonText}>Tiếp tục</Text>
           </TouchableOpacity>

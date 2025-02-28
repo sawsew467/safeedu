@@ -4,7 +4,6 @@ import "react-native-url-polyfill/auto";
 import { SplashScreen, Stack } from "expo-router";
 import Providers from "@/providers";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {

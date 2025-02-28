@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image } from "react-native";
-import { router, useRouter } from "expo-router"; // Import the router for navigation
+import { router, useRouter } from "expo-router";
 import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
 import { OtpInput } from "react-native-otp-entry";
 
@@ -13,7 +13,7 @@ const OTPVerification = () => {
     return (
         <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
             <ImageBackground
-                source={require('../../assets/images/phone-verification-background.png')} // Thay đổi đường dẫn tới hình ảnh nền của bạn
+                source={require('../../assets/images/phone-verification-background.png')}
                 className="absolute top-0 bottom-0 left-0 right-0"
                 resizeMode="cover"
 
@@ -50,7 +50,6 @@ const OTPVerification = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     className="mt-5 max-w-full items-center justify-center bg-white py-3 rounded-3xl shadow-md shadow-black/20"
-                // onPress={}
                 >
                     <Text className="text-primary text-lg font-normal">Gửi lại OTP</Text>
                 </TouchableOpacity>

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image } from "react-native";
-import { router, useRouter } from "expo-router"; // Import the router for navigation
+import { router, useRouter } from "expo-router";
 import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
 
 const UserTypeScreen = () => {
@@ -12,7 +12,7 @@ const UserTypeScreen = () => {
     return (
         <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
             <ImageBackground
-                source={require('../../assets/images/phone-verification-background.png')} // Thay đổi đường dẫn tới hình ảnh nền của bạn
+                source={require('../../assets/images/phone-verification-background.png')}
                 className="absolute top-0 bottom-0 left-0 right-0"
                 resizeMode="cover"
 

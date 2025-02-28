@@ -12,8 +12,8 @@ const SignIn = () => {
   const [error, setError] = useState({ email: "", password: "" });
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const router = useRouter(); // Sử dụng router để điều hướng
-  // Tạo yêu cầu đăng nhập với Google
+  const router = useRouter();
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     clientId: "YOUR_CLIENT_ID.apps.googleusercontent.com",
   });
@@ -23,14 +23,14 @@ const SignIn = () => {
   };
 
   const handleSignIn = () => {
-    // Xóa thông báo lỗi cũ
+
     setError({ email: "", password: "" });
 
-    // Kiểm tra thông tin đăng nhập
+
     if (email === "user1" && password === "pass1") {
       router.push("/home");
     } else {
-      // Thiết lập thông báo lỗi
+
       setError({
         email: email !== "user1" ? "Không tìm thấy email" : "",
         password: password !== "pass1" ? "Sai mật khẩu" : "",
@@ -41,18 +41,18 @@ const SignIn = () => {
     router.push("/start");
   };
 
-  // Xử lý khi nhấn vào Đăng nhập bằng Google
+
   const handleGoogleSignIn = async () => {
     if (request) {
       promptAsync();
     }
   };
 
-  // Xử lý phản hồi từ API Google
+
   React.useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
-      // Ở đây bạn có thể gọi API backend để xác thực token từ Google
+
       console.log("Google Auth Token:", authentication);
       router.push("/home");
     }
