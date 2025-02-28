@@ -1,9 +1,13 @@
 import React, { useRef, useState } from "react";
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image } from "react-native";
-import { useRouter } from "expo-router"; // Import the router for navigation
+import { router, useRouter } from "expo-router"; // Import the router for navigation
 import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
 
 const UserTypeScreen = () => {
+
+    const handleNavigationToSignUp = () => {
+        router.push("/sign-up");
+    };
 
     return (
         <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
@@ -41,6 +45,12 @@ const UserTypeScreen = () => {
                         source={require('../../assets/images/login/user-type-screen/user_type_logo.png')}
                         className="absolute w-[132px] h-[132px] right-0 -top-[132px]"
                     />
+                    <TouchableOpacity
+                        className="mt-10 max-w-full items-center justify-center bg-primary py-3 rounded-3xl shadow-md shadow-black/20"
+                        onPress={handleNavigationToSignUp}
+                    >
+                        <Text className="text-white text-lg font-normal">Tiếp tục</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </SafeAreaView>
