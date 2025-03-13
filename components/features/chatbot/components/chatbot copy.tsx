@@ -53,21 +53,21 @@ const ChatComponent = () => {
             },
           });
           const messages = messagesResponse.data.data;
-          console.log("🚀 ~ intervalId ~ messages:", messages);
+          // console.log("🚀 ~ intervalId ~ messages:", messages);
 
           if (messages.length > 1) {
             clearInterval(intervalId);
             const [answer] = messages;
-            console.log("Message content:", answer.content);
+            // console.log("Message content:", answer.content);
             setMessage(answer.content);
             setLoading(false);
           }
         } catch (error) {
-          console.log("Fetch error:", error);
+          // console.log("Fetch error:", error);
         }
       }, 1000);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

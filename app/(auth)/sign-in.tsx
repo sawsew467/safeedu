@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ImageBackground,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router"; // Import router để chuyển trang
 import * as Google from "expo-auth-session/providers/google";
@@ -13,10 +20,10 @@ const SignIn = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const router = useRouter(); // Sử dụng router để điều hướng
-    // Tạo yêu cầu đăng nhập với Google
-    const [request, response, promptAsync] = Google.useAuthRequest({
-      clientId: "YOUR_CLIENT_ID.apps.googleusercontent.com",
-    });
+  // Tạo yêu cầu đăng nhập với Google
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    clientId: "YOUR_CLIENT_ID.apps.googleusercontent.com",
+  });
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -28,7 +35,7 @@ const SignIn = () => {
 
     // Kiểm tra thông tin đăng nhập
     if (email === "user1" && password === "pass1") {
-      router.push("/home"); 
+      router.push("/home");
     } else {
       // Thiết lập thông báo lỗi
       setError({
@@ -38,11 +45,11 @@ const SignIn = () => {
     }
   };
   const handleSignUp = () => {
-    router.push("/start"); 
+    router.push("/start");
   };
 
-   // Xử lý khi nhấn vào Đăng nhập bằng Google
-   const handleGoogleSignIn = async () => {
+  // Xử lý khi nhấn vào Đăng nhập bằng Google
+  const handleGoogleSignIn = async () => {
     if (request) {
       promptAsync();
     }
@@ -53,8 +60,8 @@ const SignIn = () => {
     if (response?.type === "success") {
       const { authentication } = response;
       // Ở đây bạn có thể gọi API backend để xác thực token từ Google
-      console.log("Google Auth Token:", authentication);
-      router.push("/home"); 
+      // console.log("Google Auth Token:", authentication);
+      router.push("/home");
     }
   }, [response]);
 
@@ -74,7 +81,11 @@ const SignIn = () => {
               value={email}
               onChangeText={setEmail}
             />
-            {error.email ? <Text style={styles.errorText}>{error.email}</Text> : null}
+            {error.email ? (
+              <Text style={styles.errorText}>{error.email}</Text>
+            ) : (
+              <Text />
+            )}
 
             <Text style={styles.label}>Nhập mật khẩu</Text>
             <View style={styles.passwordContainer}>
@@ -85,7 +96,10 @@ const SignIn = () => {
                 value={password}
                 onChangeText={setPassword}
               />
-              <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+              <TouchableOpacity
+                onPress={togglePasswordVisibility}
+                style={styles.eyeIcon}
+              >
                 <Ionicons
                   name={passwordVisible ? "eye" : "eye-off"}
                   size={24}
@@ -93,13 +107,17 @@ const SignIn = () => {
                 />
               </TouchableOpacity>
             </View>
-            {error.password ? <Text style={styles.errorText}>{error.password}</Text> : null}
+            {error.password ? (
+              <Text style={styles.errorText}>{error.password}</Text>
+            ) : (
+              <Text />
+            )}
 
             <TouchableOpacity style={styles.loginButton} onPress={handleSignIn}>
               <Text style={styles.loginText}>Đăng nhập</Text>
             </TouchableOpacity>
 
-             <TouchableOpacity onPress={handleGoogleSignIn}>
+            <TouchableOpacity onPress={handleGoogleSignIn}>
               <Text style={styles.googleLogin}>Đăng nhập bằng Google</Text>
             </TouchableOpacity>
 
@@ -162,9 +180,9 @@ const styles = StyleSheet.create({
   eyeIcon: {
     position: "absolute",
     right: 10,
-    top: "40%", 
-    transform: [{ translateY: -12 }], 
-  },  
+    top: "40%",
+    transform: [{ translateY: -12 }],
+  },
   loginButton: {
     marginTop: 16,
     backgroundColor: "#75A815",

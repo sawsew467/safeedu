@@ -79,7 +79,6 @@ function Account() {
           </View>
           <TouchableWithoutFeedback
             onPress={() => {
-              console.log(1);
               router.push("/achiverment");
             }}
           >

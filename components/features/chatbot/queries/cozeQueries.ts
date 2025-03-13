@@ -1,3 +1,4 @@
+import constants from "@/settings/constants";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const cozeApi = createApi({
@@ -5,10 +6,7 @@ export const cozeApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://api.coze.com/",
     prepareHeaders: (headers) => {
-      headers.set(
-        "Authorization",
-        "Bearer pat_7uRHdTxXluJeojYbtSAVFJQK2LqqOKG9kT8zeVSQDa2rO7ABuPoSqjwi101b1kfK"
-      );
+      headers.set("Authorization", `Bearer ${constants.AI_TOKEN}`);
       headers.set("Content-Type", "application/json");
       return headers;
     },

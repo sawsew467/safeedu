@@ -14,7 +14,6 @@ import ChatContent from "./ChatContent";
 import { useMemo } from "react";
 
 function Chatbot() {
-  console.log('1', 1)
   const background = useMemo(() => {
     return <Image source={bg} defaultSource={bg} style={styles.bg_image} resizeMode="cover" />
   }, [])

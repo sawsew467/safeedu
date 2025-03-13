@@ -5,7 +5,7 @@ import { Text } from 'react-native'
 const LeaderboardGameModule = () => {
     const params = useLocalSearchParams();
     const data = JSON.parse(params.item as string);
-    console.log('params', data)
+    // console.log('params', data)
 
     return (
         <Text>{params.listQuizz}</Text>

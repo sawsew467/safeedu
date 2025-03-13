@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import auth from "@/components/features/chatbot/slices";
 import { cozeApi } from "@/components/features/chatbot/queries/cozeQueries";
 import { baseApi } from "./baseQuery";
+import { rtkQueryErrorLogger } from "./midleware";
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(baseApi.middleware)
-      .concat(cozeApi.middleware),
+      .concat(cozeApi.middleware)
+      .concat(rtkQueryErrorLogger),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
