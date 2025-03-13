@@ -77,7 +77,7 @@ const TabLayout = () => {
             ),
           }}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="chatbot"
           options={{
             title: "chatbot",
@@ -97,7 +97,7 @@ const TabLayout = () => {
               />
             ),
           }}
-        />
+        /> */}
         <Tabs.Screen
           name="notifications"
           options={{

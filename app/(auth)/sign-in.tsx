@@ -60,7 +60,7 @@ const SignIn = () => {
     if (response?.type === "success") {
       const { authentication } = response;
       // Ở đây bạn có thể gọi API backend để xác thực token từ Google
-      console.log("Google Auth Token:", authentication);
+      // console.log("Google Auth Token:", authentication);
       router.push("/home");
     }
   }, [response]);

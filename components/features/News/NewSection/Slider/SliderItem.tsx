@@ -51,11 +51,17 @@ const SliderItem = ({ item, index, scrollX }: SliderItemProps) => {
         />
         <View style={styles.overlay} />
         <View style={styles.titleContainerOverlay}>
-          <Text style={styles.titleOverlay} numberOfLines={1}>
+          <Text
+            className="font-pregular"
+            style={styles.titleOverlay}
+            numberOfLines={1}
+          >
             {item.title}
           </Text>
           <View style={styles.badge}>
-            <Text style={styles.text_badge}>{item?.topic_id?.topic_name}</Text>
+            <Text className="font-pregular" style={styles.text_badge}>
+              {item?.topic_id?.topic_name}
+            </Text>
           </View>
         </View>
       </Animated.View>

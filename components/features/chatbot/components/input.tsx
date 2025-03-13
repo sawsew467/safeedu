@@ -123,13 +123,13 @@ function Input({ handleSubmit }: TypeInput) {
             ]}
           >
             <View style={styles.control_input}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 disabled={files.some((file) => file.isLoading)}
                 style={styles.btn_upload}
                 onPress={pickImage}
               >
                 <MaterialIcons name="upload-file" size={28} color="#7E7E7EE5" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <View style={styles.conteiner_text_input}>
                 <TextInput
                   blurOnSubmit={false}

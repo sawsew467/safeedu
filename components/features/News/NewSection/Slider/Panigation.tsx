@@ -16,17 +16,12 @@ const Panigation = ({
   panigationIndex: number;
   scrollX: SharedValue<number>;
 }) => {
-  console.log("panigationIndex", panigationIndex);
+  // console.log("panigationIndex", panigationIndex);
 
   return (
     <View style={styles.container}>
       {items?.map((_, index) => {
         const rnAnimatedStyle = useAnimatedStyle(() => {
-          console.log(
-            "panigationIndex",
-            panigationIndex,
-            panigationIndex === index
-          );
           const dotWidth = interpolate(
             scrollX.value,
             [(index - 1) * width, index * width, (index + 1) * width],

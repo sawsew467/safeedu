@@ -49,19 +49,24 @@ const CardList = () => {
   useEffect(() => {
     setActiveTab(topicData[0]?._id);
   }, [isSuccess]);
-  const { libraryData, isFetching, refetch } = useGetAllLibraryQuery(
-    undefined,
-    {
-      selectFromResult: ({ data, isFetching }) => ({
+  const { libraryData, isFetching, refetch, isSuccessLibrary } =
+    useGetAllLibraryQuery(undefined, {
+      selectFromResult: ({
+        data,
+        isFetching,
+        isSuccess: isSuccessLibrary,
+      }) => ({
         libraryData:
           data?.items?.filter((item: TypeLibrary) => item?.isActive) ?? [],
         isFetching,
+        isSuccessLibrary,
       }),
-    }
-  );
+    });
 
   const onRefresh = () => {
-    refetch();
+    if (isSuccessLibrary) {
+      refetch();
+    }
   };
 
   const getTextContainer = (index: number) => {
@@ -96,6 +101,7 @@ const CardList = () => {
                   styles.tabText,
                   activeTab === tab._id && styles.activeTabText,
                 ]}
+                className="font-pregular"
               >
                 {tab?.topic_name}
               </Text>
@@ -166,6 +172,7 @@ const CardList = () => {
                     styles.title,
                     index % 2 === 0 ? styles.whiteTitle : styles.blackTitle,
                   ]}
+                  className="font-pmedium"
                   numberOfLines={2}
                 >
                   {item?.category_name}
@@ -178,6 +185,7 @@ const CardList = () => {
                         ? styles.whiteReadMoreText
                         : styles.blackReadMoreText,
                     ]}
+                    className="font-pregular"
                   >
                     Xem thông tin
                   </Text>

@@ -64,26 +64,42 @@ export function NewSection() {
     setActiveTab(topicData[0]?._id);
   }, [isSuccess]);
 
-  const { newsData, newsSliderData, isFetching, refetch } = useGetAllNewsQuery(
-    undefined,
-    {
-      skip: !isSuccess,
-      selectFromResult: ({ data, isFetching }) => {
-        const activeData =
-          data?.items?.filter((item: TypeNews) => item?.isActive) ?? [];
-        const slideData = activeData
-          ?.sort((item: TypeNews, other: TypeNews) =>
-            compareDatesStrict(other?.created_at, item?.created_at)
-          )
-          .slice(0, 5);
-        return {
-          newsData: activeData,
-          newsSliderData: slideData,
-          isFetching,
-        };
-      },
-    }
-  );
+  const {
+    newsData,
+    newsSliderData,
+    isFetching,
+    refetch,
+    isSuccessNews,
+    error,
+    isError,
+  } = useGetAllNewsQuery(undefined, {
+    skip: !isSuccess,
+    selectFromResult: ({
+      data,
+      isFetching,
+      isSuccess: isSuccessNews,
+      error,
+      isError,
+    }) => {
+      const activeData =
+        data?.items?.filter((item: TypeNews) => item?.isActive) ?? [];
+      const slideData = activeData
+        ?.sort((item: TypeNews, other: TypeNews) =>
+          compareDatesStrict(other?.created_at, item?.created_at)
+        )
+        .slice(0, 5);
+      return {
+        newsData: activeData,
+        newsSliderData: slideData,
+        isFetching,
+        isSuccessNews,
+        error,
+        isError,
+      };
+    },
+  });
+  console.log("error", isSuccessNews);
+  console.log("isError", isError);
 
   const header = React.useMemo(
     () => (
@@ -136,6 +152,7 @@ export function NewSection() {
                   styles.tabText,
                   activeTab === tab._id && styles.activeTabText,
                 ]}
+                className="font-pregular"
               >
                 {tab?.topic_name}
               </Text>
@@ -149,7 +166,9 @@ export function NewSection() {
   );
 
   const onRefresh = () => {
-    refetch();
+    if (isSuccessNews) {
+      refetch();
+    }
   };
 
   return (
@@ -178,7 +197,9 @@ export function NewSection() {
               alt={`image about ${item?.title}`}
             />
             <View style={styles.listTextContainer}>
-              <Text style={styles.listTitle}>{item?.title}</Text>
+              <Text className="font-pmedium" style={styles.listTitle}>
+                {item?.title}
+              </Text>
               <Text style={styles.listDate}>
                 {formatDate(item?.updated_at ?? item?.create_at)}
               </Text>

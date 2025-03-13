@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "SafeEdu",
-    "slug": "sora",
+    "slug": "safeedu",
     "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,8 +17,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "package": "com.fpt.safeedu",
-      "bundleIdentifier": "com.fpt.safeedu",
+      "package": "com.edu.safeedu",
+      "bundleIdentifier": "com.edu.safeedu",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
@@ -34,7 +34,7 @@
       "backgroundColor": "#ffffff",
       "image": "./assets/adaptive-icon.png",
       "imageWidth": 150,
-      "package": "com.fpt.safeedu"
+      "package": "com.edu.safeedu"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -48,9 +48,15 @@
         "origin": false
       },
       "eas": {
-        "projectId": "7f956b94-258e-44c2-9f5e-f9b94350642d"
+        "projectId": "630c8166-49d0-426b-9dbe-1391effb91db"
       }
     },
-    "owner": "safeedu"
+    "owner": "safeedu",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/630c8166-49d0-426b-9dbe-1391effb91db"
+    }
   }
 }

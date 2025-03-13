@@ -25,11 +25,13 @@ import Input from "./input";
 import { TypeChat } from "@/healper/type/chatbot-type";
 import Markdown from "react-native-markdown-display";
 import * as Clipboard from "expo-clipboard";
+import uuid from "react-native-uuid";
 
 import Feather from "@expo/vector-icons/Feather";
 import Octicons from "@expo/vector-icons/Octicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
 import ReportDialog from "./report-dialog";
 
@@ -56,16 +58,35 @@ const TabChat = ({ IconComponent, color, actions }) => (
   </TouchableOpacity>
 );
 
+const ErrorScreen = ({ onRetry }) => {
+  return (
+    <View style={styles.errorContainer}>
+      <Text style={styles.errorText}>
+        Cuộc trò chuyện bị gián đoạn vì một số lỗi không mong muốn. Xin hãy tải
+        lại!!!
+      </Text>
+      <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
+        <Ionicons name="refresh" size={24} color="red" />
+        <Text style={styles.retryText}>Thử lại</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const { height, width } = Dimensions.get("window"); // Lấy chiều rộng màn hình
 function ChatContent() {
   const [createConversation] = useCreateConversationMutation();
-  const [createChat] = useCreateChatMutation();
-  const [getChatMessages] = useGetChatMessagesMutation();
+  const [createChat, { isError: isErrorCreateChat }] = useCreateChatMutation();
+  const [getChatMessages, { isError: isErrorCreateMessage }] =
+    useGetChatMessagesMutation();
 
-  const [{ statusLike, isReport }, setActions] = useState({
-    statusLike: "none",
+  const [error, setError] = useState(false);
+
+  const [{ isReport }, setActions] = useState({
     isReport: false,
   });
+
+  const [statusLike, setStatusLike] = useState({});
 
   const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
@@ -80,43 +101,52 @@ function ChatContent() {
       {
         content: content,
         role: "user",
+        id_message: uuid.v4(),
       },
     ]);
   };
 
   const tabActions = [
     {
-      IconComponent: () =>
-        statusLike !== "like" ? (
+      name: "like",
+      IconComponent: (id: string) =>
+        statusLike[id]?.status !== "like" ? (
           <AntDesign name="like2" size={24} />
         ) : (
           <AntDesign name="like1" size={24} color="#75A815" />
         ),
-      actions: () =>
-        setActions((prev) => ({
+      actions: (_, id: string) => {
+        setStatusLike((prev) => ({
           ...prev,
-          statusLike: prev.statusLike === "like" ? "none" : "like",
-        })),
+          [id]: {
+            status: prev[id].status === "like" ? "none" : "like",
+          },
+        }));
+      },
     },
     {
-      IconComponent: () =>
-        statusLike !== "dislike" ? (
+      name: "dislike",
+      IconComponent: (id: string) =>
+        statusLike[id]?.status !== "dislike" ? (
           <AntDesign name="dislike2" size={24} />
         ) : (
           <AntDesign name="dislike1" size={24} color="#75A815" />
         ),
       color: "black",
-      actions: () =>
-        setActions((prev) => ({
+      actions: (_, id: string) =>
+        setStatusLike((prev) => ({
           ...prev,
-          statusLike: prev.statusLike === "dislike" ? "none" : "dislike",
+          [id]: {
+            status: prev[id].status === "dislike" ? "none" : "dislike",
+          },
         })),
     },
     {
+      name: "copy",
       IconComponent: () => <Feather name="copy" size={24} color="black" />,
       color: "black",
-      actions: (e) => {
-        Clipboard.setString(e);
+      actions: (content: string) => {
+        Clipboard.setString(content);
         Toast.show({
           type: "success",
           text1: "Thành công",
@@ -126,6 +156,7 @@ function ChatContent() {
       },
     },
     {
+      name: "report",
       IconComponent: () => <Octicons name="report" size={24} />,
       color: "black",
       actions: () => {
@@ -136,11 +167,13 @@ function ChatContent() {
 
   const FrameChat = ({
     content,
+    error,
     role,
     isLoading,
     isEnd,
-  }: TypeChat & { isLoading: boolean; isEnd: boolean }) => {
-    if (isEnd && isLoading)
+    id_message,
+  }: TypeChat & { isLoading: boolean; isEnd: boolean; error: boolean }) => {
+    if (isEnd && isLoading && !error)
       return (
         <View
           style={[
@@ -180,6 +213,13 @@ function ChatContent() {
             style={[
               styles.frame_chat,
               role === "user" ? styles.user_style : styles.chatbot_style,
+              role === "chatbot" &&
+                error &&
+                isEnd && {
+                  backgroundColor: "#f8a5a5",
+                  borderWidth: 1,
+                  borderColor: "#ff3535",
+                },
             ]}
           >
             <Text style={styles.text_frame_chat} className="font-pregular">
@@ -205,13 +245,15 @@ function ChatContent() {
         </View>
         {role === "chatbot" && (
           <View style={styles.container_action}>
-            {tabActions?.map(({ IconComponent, color, actions }) => (
-              <TabChat
-                IconComponent={IconComponent}
-                color={color}
-                actions={() => actions(content)}
-              />
-            ))}
+            {tabActions?.map(
+              ({ IconComponent, color, actions }, index: number) => (
+                <TabChat
+                  IconComponent={() => IconComponent(id_message)}
+                  color={color}
+                  actions={() => actions(content, id_message)}
+                />
+              )
+            )}
           </View>
         )}
       </View>
@@ -232,7 +274,7 @@ function ChatContent() {
     }));
   };
 
-  const handleAddBotMessage = (content: string) => {
+  const handleAddBotMessage = (content: string, id_message: string | null) => {
     if (content) {
       setChatData((prevData) => {
         const data = prevData;
@@ -242,15 +284,23 @@ function ChatContent() {
           {
             content: content,
             role: "chatbot",
+            id_message,
           },
         ];
       });
+      setStatusLike((prev) => ({
+        ...prev,
+        [id_message]: {
+          status: "none",
+        },
+      }));
     } else {
       setChatData((prevData) => [
         ...prevData,
         {
           content: content,
           role: "chatbot",
+          id_message,
         },
       ]);
     }
@@ -259,7 +309,7 @@ function ChatContent() {
     try {
       setLoading(true);
       handleAddUserMessage(content);
-      handleAddBotMessage("");
+      handleAddBotMessage("", null);
       const conversationResponse = await createConversation().unwrap();
       const { id: conversationId } = conversationResponse.data;
 
@@ -280,8 +330,14 @@ function ChatContent() {
           ],
         },
       }).unwrap();
-      const { id: chatId } = chatResponse.data;
-
+      if (chatResponse.code != 0) {
+        setError(true);
+        setLoading(false);
+        handleAddBotMessage("Đã có lỗi xảy ra", uuid.v4());
+        return;
+      }
+      const { id: chatId } = chatResponse?.data;
+      let count = 0;
       const intervalId = setInterval(async () => {
         try {
           const messagesResponse = await getChatMessages({
@@ -291,20 +347,26 @@ function ChatContent() {
             },
           });
           const messages = messagesResponse.data.data;
-          // console.log("🚀 ~ intervalId ~ messages:", messages);
+          count++;
+          if (count > 15) {
+            handleAddBotMessage("Đã có lỗi xảy ra", uuid.v4());
+            setError(true);
+            setLoading(false);
+            clearInterval(intervalId);
+            count = 0;
+          }
 
           if (messages.length > 1) {
             clearInterval(intervalId);
             const [answer] = messages;
-            // console.log("Message content:", answer.content);
-            handleAddBotMessage(answer.content);
+            handleAddBotMessage(answer.content, answer.id);
             setLoading(false);
           }
-        } catch (error) {
+        } catch {
           // console.log("Fetch error:", error);
         }
       }, 1000);
-    } catch (error) {}
+    } catch {}
   };
   return (
     <>
@@ -320,7 +382,18 @@ function ChatContent() {
             animated: true,
           });
         }}
-        FooterComponent={() => <Input handleSubmit={handleSendMessage} />}
+        FooterComponent={() =>
+          error ? (
+            <ErrorScreen
+              onRetry={() => {
+                setChatData([]);
+                setError(false);
+              }}
+            />
+          ) : (
+            <Input handleSubmit={handleSendMessage} />
+          )
+        }
         // rightIcon={{
         //     icon: () => <Feather name="more-horizontal" size={24} color="black" />,
         //     onPress: handleClickMoreInfor,
@@ -355,7 +428,7 @@ function ChatContent() {
             contentContainerStyle={styles.container_chat}
             scrollEnabled={false}
             data={chatData}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item, index) => item.id_message}
             renderItem={({
               item,
               index,
@@ -365,8 +438,10 @@ function ChatContent() {
             }) => (
               <FrameChat
                 {...item}
+                error={error}
                 isLoading={loading}
                 isEnd={index + 1 === chatData.length && item.role === "chatbot"}
+                id_message={item.role === "chatbot" && item.id_message}
               />
             )}
           />
@@ -384,6 +459,29 @@ function ChatContent() {
 }
 
 const styles = StyleSheet.create({
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f8d7da",
+    height: 20,
+    maxHeight: 100,
+  },
+  errorText: {
+    fontSize: 16,
+    color: "#721c24",
+    textAlign: "center",
+  },
+  retryButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 5,
+  },
+  retryText: {
+    fontSize: 16,
+    marginLeft: 5,
+    color: "#ff0000",
+  },
   container_frame_chat: {},
   container_action: {
     marginTop: 20,
