@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "SafeEdu",
-    "slug": "safeedu",
+    "slug": "safe-edu",
     "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,13 +12,11 @@
       "backgroundColor": "#ffffff"
     },
     "scheme": "SafeEdu",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "package": "com.edu.safeedu",
-      "bundleIdentifier": "com.edu.safeedu",
+      "package": "com.vn.safeedu",
+      "bundleIdentifier": "com.vn.safeedu",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
@@ -34,27 +32,22 @@
       "backgroundColor": "#ffffff",
       "image": "./assets/adaptive-icon.png",
       "imageWidth": 150,
-      "package": "com.edu.safeedu"
+      "package": "com.vn.safeedu"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-font"
-    ],
+    "plugins": ["expo-router", "expo-font"],
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "630c8166-49d0-426b-9dbe-1391effb91db"
+        "projectId": "432e5e10-6ae3-4045-a447-ff7f1d91d1e3"
       }
     },
     "owner": "safeedu",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/630c8166-49d0-426b-9dbe-1391effb91db"
     }

@@ -9,6 +9,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
+import { Home, Book, Bell } from "react-native-feather";
 
 const TabIcon = ({ IconComponent, color, name, focused }) => {
   return (
@@ -51,7 +52,7 @@ const TabLayout = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 IconComponent={() => (
-                  <AntDesign name="home" size={24} color={color} />
+                  <Home width={24} height={24} color={color} />
                 )}
                 color={color}
                 name="Trang chủ"
@@ -68,7 +69,7 @@ const TabLayout = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 IconComponent={() => (
-                  <Feather name="book" size={24} color={color} />
+                  <Book width={24} height={24} color={color} />
                 )}
                 color={color}
                 name="Thư viện"
@@ -106,11 +107,7 @@ const TabLayout = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 IconComponent={() => (
-                  <Ionicons
-                    name="notifications-outline"
-                    size={24}
-                    color={color}
-                  />
+                  <Bell width={24} height={24} color={color} />
                 )}
                 color={color}
                 name="thông báo"
