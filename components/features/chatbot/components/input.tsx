@@ -18,7 +18,6 @@ import file_upload from "@/assets/icons/file_upload.png";
 import mic from "@/assets/icons/mic.png";
 import delete_icon from "@/assets/icons/delete_icon.png";
 import submit from "@/assets/icons/submit.png";
-import * as ImagePicker from "expo-image-picker";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -51,25 +50,25 @@ function Input({ handleSubmit }: TypeInput) {
 
   const [error, setError] = useState(null);
 
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  // const pickImage = async () => {
+  //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (status !== "granted") {
-      Alert.alert(
-        "Permission Denied",
-        `Sorry, we need camera 
-               roll permission to upload images.`
-      );
-    } else {
-      const result = await ImagePicker.launchImageLibraryAsync();
+  //   if (status !== "granted") {
+  //     Alert.alert(
+  //       "Permission Denied",
+  //       `Sorry, we need camera
+  //              roll permission to upload images.`
+  //     );
+  //   } else {
+  //     const result = await ImagePicker.launchImageLibraryAsync();
 
-      if (!result.canceled) {
-        setFile([...files, { isLoading: true, uri: result.assets[0].uri }]);
+  //     if (!result.canceled) {
+  //       setFile([...files, { isLoading: true, uri: result.assets[0].uri }]);
 
-        setError(null);
-      }
-    }
-  };
+  //       setError(null);
+  //     }
+  //   }
+  // };
 
   return (
     <KeyboardAvoidingView
