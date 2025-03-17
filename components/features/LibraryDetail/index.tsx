@@ -235,6 +235,7 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingHorizontal: 20,
     display: "flex",
+    // alignItems: "center",
   },
   bgGreen: {
     backgroundColor: "#75A815",
@@ -248,9 +249,10 @@ const styles = StyleSheet.create({
   },
   title: {
     width: "100%",
-    fontWeight: "900",
-    fontSize: scaleFont(28),
-    lineHeight: 34,
+    fontWeight: "700",
+    fontSize: scaleFont(36),
+    // lineHeight: ,
+    maxWidth: "65%",
   },
   whiteTitle: {
     color: "#FFFFFF",
@@ -293,8 +295,8 @@ const styles = StyleSheet.create({
     width: windowWidth * 0.45,
     height: windowWidth * 0.38 * 1.2,
     position: "absolute",
-    top: windowHeight < 700 ? -30 : -110,
-    right: windowWidth > 400 ? -20 : -10,
+    top: windowHeight < 700 ? -30 : -150,
+    right: windowWidth > 400 ? 0 : -10,
   },
   imageHeader: {
     width: "100%",

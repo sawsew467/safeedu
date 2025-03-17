@@ -20,7 +20,6 @@ import news_background2 from "@/assets/images/news_image/news_background2.png";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { router } from "expo-router";
 import HeaderShown from "@/components/ui/HeaderShown";
-import React from "react";
 
 const windowWidth = Dimensions.get("window").width;
 

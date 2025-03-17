@@ -223,7 +223,7 @@ const CardList = () => {
             </Text>
           </View>
         }
-        style={styles.cardListContainer}
+        // style={styles.cardListContainer}
         contentContainerStyle={styles.cardListContainer}
         refreshControl={
           <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
