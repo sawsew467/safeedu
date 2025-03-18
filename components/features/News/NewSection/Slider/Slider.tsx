@@ -1,16 +1,31 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, StyleSheet, View, ViewToken } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  View,
+  ViewToken,
+} from "react-native";
 
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated";
 
-import SliderItem from "@/components/features/News/NewSection/Slider/SliderItem";
 import { TypeNews } from "@/healper/type/news.type";
 import Panigation from "./Panigation";
+import { Skeleton } from "moti/skeleton";
+import SliderItem from "@/components/features/News/NewSection/Slider/SliderItem";
+import { skeletonCommonProps } from "@/healper/type/type-common-skeleton";
+const { width } = Dimensions.get("screen");
 
-export function Slider({ data }: { data: TypeNews[] }) {
+export function Slider({
+  isFetching,
+  data,
+}: {
+  isFetching: boolean;
+  data: TypeNews[];
+}) {
   const flatListRef = useRef<View>(null);
   const scrollX = useSharedValue(0);
   const [slides, setSlides] = useState([]);
@@ -58,17 +73,25 @@ export function Slider({ data }: { data: TypeNews[] }) {
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
-        data={slides}
+        data={isFetching ? [{}] : slides}
         onScroll={onScrollHandler}
         keyExtractor={(item, index) => {
           return `${item._id} + ${index}`;
         }}
         renderItem={({ item, index }) => (
-          <SliderItem
-            item={item}
-            index={index % data?.length}
-            scrollX={scrollX}
-          />
+          <Skeleton
+            show={isFetching}
+            width={width - 32}
+            height={178}
+            radius={30}
+            {...skeletonCommonProps}
+          >
+            <SliderItem
+              item={item}
+              index={index % data?.length}
+              scrollX={scrollX}
+            />
+          </Skeleton>
         )}
         onEndReachedThreshold={0.5}
         scrollEventThrottle={16}

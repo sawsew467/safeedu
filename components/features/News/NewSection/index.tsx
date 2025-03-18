@@ -27,6 +27,9 @@ import nav_background from "@/assets/images/background_nav_home.png";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
 import { Button } from "@/components/ui/Button";
+import { MotiView } from "moti";
+import { Skeleton } from "moti/skeleton";
+import { skeletonCommonProps } from "@/healper/type/type-common-skeleton";
 
 const width = Dimensions.get("window").width;
 
@@ -64,42 +67,25 @@ export function NewSection() {
     setActiveTab(topicData[0]?._id);
   }, [isSuccess]);
 
-  const {
-    newsData,
-    newsSliderData,
-    isFetching,
-    refetch,
-    isSuccessNews,
-    error,
-    isError,
-  } = useGetAllNewsQuery(undefined, {
-    skip: !isSuccess,
-    selectFromResult: ({
-      data,
-      isFetching,
-      isSuccess: isSuccessNews,
-      error,
-      isError,
-    }) => {
-      const activeData =
-        data?.items?.filter((item: TypeNews) => item?.isActive) ?? [];
-      const slideData = activeData
-        ?.sort((item: TypeNews, other: TypeNews) =>
-          compareDatesStrict(other?.created_at, item?.created_at)
-        )
-        .slice(0, 5);
-      return {
-        newsData: activeData,
-        newsSliderData: slideData,
-        isFetching,
-        isSuccessNews,
-        error,
-        isError,
-      };
-    },
-  });
-  console.log("error", isSuccessNews);
-  console.log("isError", isError);
+  const { newsData, newsSliderData, isFetching, refetch, isSuccessNews } =
+    useGetAllNewsQuery(undefined, {
+      skip: !isSuccess,
+      selectFromResult: ({ data, isFetching, isSuccess: isSuccessNews }) => {
+        const activeData =
+          data?.items?.filter((item: TypeNews) => item?.isActive) ?? [];
+        const slideData = activeData
+          ?.sort((item: TypeNews, other: TypeNews) =>
+            compareDatesStrict(other?.created_at, item?.created_at)
+          )
+          .slice(0, 5);
+        return {
+          newsData: activeData,
+          newsSliderData: slideData,
+          isFetching,
+          isSuccessNews,
+        };
+      },
+    });
 
   const header = React.useMemo(
     () => (
@@ -112,7 +98,7 @@ export function NewSection() {
             resizeMode="cover"
           />
         </View>
-        <Slider data={newsSliderData} />
+        <Slider isFetching={isFetching} data={newsSliderData} />
         {/* <View className="flex-1 items-center justify-center mt-6 mb-8">
           <Image
             source={nav_background}
@@ -162,7 +148,7 @@ export function NewSection() {
         </ScrollView>
       </View>
     ),
-    [activeTab, newsSliderData]
+    [activeTab, newsSliderData, isFetching]
   );
 
   const onRefresh = () => {
@@ -179,9 +165,13 @@ export function NewSection() {
       }
       ListHeaderComponent={header}
       contentContainerStyle={styles.flatListContainer}
-      data={newsData?.filter(
-        (item: TypeNews) => item?.topic_id?._id === activeTab
-      )}
+      data={
+        isFetching
+          ? Array.from({ length: 5 })
+          : newsData?.filter(
+              (item: TypeNews) => item?.topic_id?._id === activeTab
+            )
+      }
       keyExtractor={(item) => item?._id}
       renderItem={({ item }) => (
         <TouchableOpacity
@@ -189,27 +179,62 @@ export function NewSection() {
             router.push(`/news/${item?._id}`);
           }}
         >
-          <View style={styles.listItem}>
-            <Image
-              source={{ uri: item?.image }}
-              style={styles.listImage as StyleProp<ImageStyle>}
-              resizeMode="cover"
-              alt={`image about ${item?.title}`}
-            />
+          <MotiView
+            transition={{
+              type: "timing",
+            }}
+            style={styles.listItem}
+          >
+            <Skeleton
+              show={isFetching}
+              width={100}
+              height={100}
+              radius={8}
+              {...skeletonCommonProps}
+            >
+              <Image
+                source={{ uri: item?.image }}
+                style={styles.listImage as StyleProp<ImageStyle>}
+                resizeMode="cover"
+                alt={`image about ${item?.title}`}
+              />
+            </Skeleton>
             <View style={styles.listTextContainer}>
-              <Text className="font-pmedium" style={styles.listTitle}>
-                {item?.title}
-              </Text>
-              <Text style={styles.listDate}>
-                {formatDate(item?.updated_at ?? item?.create_at)}
-              </Text>
-              <View style={styles.badge}>
-                <Text style={styles.text_badge}>
-                  {item?.topic_id?.topic_name}
-                </Text>
+              <View>
+                <Skeleton
+                  show={isFetching}
+                  width={"100%"}
+                  height={30}
+                  radius={8}
+                  {...skeletonCommonProps}
+                >
+                  <Text className="font-pmedium" style={styles.listTitle}>
+                    {item?.title}
+                  </Text>
+                </Skeleton>
               </View>
+              <View>
+                <Skeleton
+                  show={isFetching}
+                  width={"60%"}
+                  height={20}
+                  radius={8}
+                  {...skeletonCommonProps}
+                >
+                  <Text style={styles.listDate}>
+                    {formatDate(item?.updated_at ?? item?.create_at)}
+                  </Text>
+                </Skeleton>
+              </View>
+              {item && (
+                <View style={styles.badge}>
+                  <Text style={styles.text_badge}>
+                    {item?.topic_id?.topic_name}
+                  </Text>
+                </View>
+              )}
             </View>
-          </View>
+          </MotiView>
         </TouchableOpacity>
       )}
     />
@@ -217,6 +242,13 @@ export function NewSection() {
 }
 
 const styles = StyleSheet.create({
+  skeletonContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  skeletonPadded: {
+    padding: 16,
+  },
   tabContainer: {
     flexDirection: "row",
   },
@@ -335,13 +367,17 @@ const styles = StyleSheet.create({
   listTextContainer: {
     flex: 1,
     marginTop: 16,
+    display: "flex",
+    flexDirection: "column",
   },
   listTitle: {
     fontSize: 16,
+    minHeight: 20,
     fontWeight: "bold",
   },
   listDate: {
     fontSize: 12,
+    minHeight: 20,
     fontWeight: "bold",
     color: "#8F9F96",
   },

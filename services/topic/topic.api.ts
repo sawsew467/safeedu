@@ -13,7 +13,6 @@ export const topicAPI = baseApi.injectEndpoints({
         method: "GET",
         flashError: true,
       }),
-      providesTags: ["Topic"],
     }),
     getTopic: build.query<TypeNews, { id: string }>({
       query: ({ id }) => ({
@@ -21,7 +20,6 @@ export const topicAPI = baseApi.injectEndpoints({
         method: "GET",
         flashError: true,
       }),
-      providesTags: (result, error, { id }) => [{ type: "Topic", id }],
     }),
   }),
 });

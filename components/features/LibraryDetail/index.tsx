@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Animated,
+  DimensionValue,
   Dimensions,
   Image,
   StyleSheet,
@@ -11,20 +12,29 @@ import {
 import React, { useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import RenderHTML from "react-native-render-html";
-
-import Entypo from "@expo/vector-icons/Entypo";
+import { Skeleton } from "moti/skeleton";
+import { MotiView } from "moti";
 
 import HeaderShown from "@/components/ui/HeaderShown";
 
-import { LIBRARY_DATA } from "@/healper/data/library";
 import { useGetLibraryQuery } from "@/services/library/library.api";
 
 import { styles_mardown } from "@/healper/style/renderHtml";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import LoadingPage from "@/components/ui/LoadingPage";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 const externalPadingContent = 60;
+
+const skeletons: DimensionValue[] = [
+  "60%",
+  "80%",
+  "70%",
+  "90%",
+  "50%",
+  "30%",
+  "70%",
+];
 
 const scaleFont = (size: number) => (windowWidth / 400) * size;
 
@@ -32,23 +42,20 @@ const LibraryDetail = () => {
   const { libraryID, index }: { libraryID: string; index: string } =
     useLocalSearchParams();
 
-  const { libraryDetailData, isFetching, isSuccess, refetch } =
-    useGetLibraryQuery(
-      { id: libraryID },
-      {
-        selectFromResult: ({ data, isFetching, isSuccess }) => ({
-          libraryDetailData: data,
-          isSuccess: data?.isActive ? isSuccess : false,
-          isFetching,
-        }),
-      }
-    );
+  const { libraryDetailData, isFetching } = useGetLibraryQuery(
+    { id: libraryID },
+    {
+      selectFromResult: ({ data, isFetching, isError }) => ({
+        libraryDetailData: data,
+        isFetching,
+      }),
+    }
+  );
 
   const bgColor =
     JSON.parse(index) % 2 === 0 ? styles.bgGreen : styles.bgYellow;
   const colorTitle =
     JSON.parse(index) % 2 > -1 ? styles.whiteTitle : styles.blackTitle;
-  const textColor = JSON.parse(index) % 2 === 0 ? "#75A815" : "#F6CB1E";
 
   const handleBack = () => {
     router.replace("..");
@@ -79,109 +86,48 @@ const LibraryDetail = () => {
     img: CustomImageRenderer, // Gán component custom cho thẻ <img>
   };
 
-  if (!isSuccess && !isFetching)
-    return (
+  return (
+    <>
+      <LoadingPage isLoading={isFetching} />
       <HeaderShown
         title="Thông Tin Chi Tiết"
         HeaderComponent={() => (
           <View style={[styles.cardContainer, bgColor]}>
             <View style={styles.textContainer}>
               <Text style={[styles.title, colorTitle]}>
-                404 - Không tìm thấy trang
+                {libraryDetailData?.category_name}
               </Text>
             </View>
           </View>
         )}
+        // rightIcon={{
+        //   icon: () => (
+        //     <MaterialIcons name="leaderboard" size={24} color="black" />
+        //   ),
+        //   onPress: handleBack,
+        // }}
       >
         <View style={styles.detailContainer}>
-          <Text>
-            Có thể trang đã bị xóa hoặc không tồn tại hãy kiểm tra lại
-          </Text>
-        </View>
-      </HeaderShown>
-    );
-
-  return (
-    <HeaderShown
-      title="Thông Tin Chi Tiết"
-      HeaderComponent={() => (
-        <View style={[styles.cardContainer, bgColor]}>
-          <View style={styles.textContainer}>
-            <Text style={[styles.title, colorTitle]}>
-              {libraryDetailData?.category_name}
-            </Text>
+          <View style={styles.imageHeaderContainer}>
+            <Image
+              source={{ uri: libraryDetailData?.image }}
+              style={styles.imageHeader}
+              resizeMode="contain"
+            />
           </View>
-        </View>
-      )}
-      // rightIcon={{
-      //   icon: () => (
-      //     <MaterialIcons name="leaderboard" size={24} color="black" />
-      //   ),
-      //   onPress: handleBack,
-      // }}
-    >
-      <View style={styles.detailContainer}>
-        <View style={styles.imageHeaderContainer}>
-          <Image
-            source={{ uri: libraryDetailData?.image }}
-            style={styles.imageHeader}
-            resizeMode="contain"
-          />
-        </View>
-
-        {/* <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              selectedButton === "primary" ? bgColor : styles.secondaryButton,
-            ]}
-            onPress={() => setSelectedButton("primary")}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                selectedButton === "primary"
-                  ? styles.primaryText
-                  : [styles.secondaryText, { color: textColor }],
-              ]}
-            >
-              {detailLibrary.subtitle[0].title}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              selectedButton === "secondary" ? bgColor : styles.secondaryButton,
-            ]}
-            onPress={() => setSelectedButton("secondary")}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                selectedButton === "secondary"
-                  ? styles.primaryText
-                  : [styles.secondaryText, { color: textColor }],
-              ]}
-            >
-              {detailLibrary.subtitle[1].title}
-            </Text>
-          </TouchableOpacity>
-        </View> */}
-
-        <View>
-          <RenderHTML
-            contentWidth={windowWidth - externalPadingContent}
-            source={{
-              html: `${libraryDetailData?.description}`,
-            }}
-            enableExperimentalMarginCollapsing={true}
-            classesStyles={styles_mardown}
-            tagsStyles={styles_mardown}
-            renderers={renderers}
-          />
-        </View>
-
-        {/* <View style={styles.contentContainer}>
+          <View>
+            <RenderHTML
+              contentWidth={windowWidth - externalPadingContent}
+              source={{
+                html: `${libraryDetailData?.description}`,
+              }}
+              enableExperimentalMarginCollapsing={true}
+              classesStyles={styles_mardown}
+              tagsStyles={styles_mardown}
+              renderers={renderers}
+            />
+          </View>
+          {/* <View style={styles.contentContainer}>
           {selectedSubtitle?.content.map((content, index) => (
             <Text
               style={styles.contentText}
@@ -191,8 +137,7 @@ const LibraryDetail = () => {
             </Text>
           ))}
         </View> */}
-
-        {/* <View style={styles.sectionContainer}>
+          {/* <View style={styles.sectionContainer}>
           {selectedSubtitle?.image.map((img, imgIndex) => (
             <View
               style={styles.container}
@@ -207,14 +152,20 @@ const LibraryDetail = () => {
             </View>
           ))}
         </View> */}
-      </View>
-    </HeaderShown>
+        </View>
+      </HeaderShown>
+    </>
   );
 };
 
 export default LibraryDetail;
 
 const styles = StyleSheet.create({
+  skeletonContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20,
+  },
   btnIconLeft: {
     display: "flex",
     alignItems: "flex-start",

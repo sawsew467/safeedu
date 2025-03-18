@@ -13,20 +13,20 @@ import { useGetNewsQuery } from "@/services/news/news.api";
 import { formatDate } from "@/utils/format-date";
 import RenderHtml from "react-native-render-html";
 import { styles_mardown } from "@/healper/style/renderHtml";
+import LoadingPage from "@/components/ui/LoadingPage";
 const externalPadingContent = 60;
 
 export default function NewsDetail() {
   const { newsID }: { newsID: string } = useLocalSearchParams();
   const width = Dimensions.get("window").width;
 
-  const { newsDetailData, isFetching, isSuccess } = useGetNewsQuery(
+  const { newsDetailData, isFetching } = useGetNewsQuery(
     { id: newsID },
     {
-      selectFromResult: ({ data, isFetching, isSuccess }) => {
+      selectFromResult: ({ data, isFetching }) => {
         return {
           newsDetailData: data,
           isFetching,
-          isSuccess: data?.isActive ? isSuccess : false,
         };
       },
     }
@@ -54,15 +54,20 @@ export default function NewsDetail() {
     img: CustomImageRenderer, // Gán component custom cho thẻ <img>
   };
 
-  if (!isSuccess && !isFetching)
-    return (
+  return (
+    <>
+      <LoadingPage isLoading={isFetching} />
       <HeaderShown
         title="Thông Tin Chi Tiết"
         HeaderComponent={() => (
           <View style={styles.backgroundContainer}>
             <Image
               style={styles.background}
-              source={require("@/assets/images/news_image/newsDetail_background.jpg")}
+              source={
+                newsDetailData?.image
+                  ? { uri: newsDetailData?.image }
+                  : require("@/assets/images/news_image/newsDetail_background.jpg")
+              }
             />
           </View>
         )}
@@ -70,72 +75,46 @@ export default function NewsDetail() {
         <View style={styles.newsContainer}>
           <View style={styles.whiteBoard}>
             <View style={styles.newsDetailContainer}>
-              <Text style={styles.not_found}>Không tìm thấy trang</Text>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title} className="font-pbold">
+                  {newsDetailData?.title}
+                </Text>
+              </View>
+              <View style={styles.container_detailNews}>
+                <Text style={styles.newsDate} className="font-plight">
+                  {formatDate(
+                    newsDetailData?.updated_at ?? newsDetailData?.created_at,
+                    "DD MMMM ,YYYY - HH:mm"
+                  )}
+                </Text>
+                <View style={styles.badge}>
+                  <Text style={styles.text_badge} className="font-psemibold">
+                    {newsDetailData?.topic_id?.topic_name}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.imageContainer}>
+                <Image
+                  style={styles.image}
+                  source={{ uri: newsDetailData?.image }}
+                  alt={`image about ${newsDetailData?.title}`}
+                />
+              </View>
+              <RenderHtml
+                contentWidth={width - externalPadingContent}
+                source={{
+                  html: newsDetailData?.content,
+                }}
+                enableExperimentalMarginCollapsing={true}
+                classesStyles={styles_mardown}
+                tagsStyles={styles_mardown}
+                renderers={renderers}
+              />
             </View>
           </View>
         </View>
       </HeaderShown>
-    );
-  return (
-    <HeaderShown
-      title="Thông Tin Chi Tiết"
-      HeaderComponent={() => (
-        <View style={styles.backgroundContainer}>
-          <Image
-            style={styles.background}
-            source={
-              newsDetailData?.image
-                ? { uri: newsDetailData?.image }
-                : require("@/assets/images/news_image/newsDetail_background.jpg")
-            }
-          />
-        </View>
-      )}
-    >
-      <View style={styles.newsContainer}>
-        <View style={styles.whiteBoard}>
-          <View style={styles.newsDetailContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title} className="font-pbold">
-                {newsDetailData?.title}
-              </Text>
-            </View>
-            <View style={styles.container_detailNews}>
-              <Text style={styles.newsDate} className="font-plight">
-                {formatDate(
-                  newsDetailData?.updated_at ?? newsDetailData?.created_at,
-                  "DD MMMM ,YYYY - HH:mm"
-                )}
-              </Text>
-              <View style={styles.badge}>
-                <Text style={styles.text_badge} className="font-psemibold">
-                  {newsDetailData?.topic_id?.topic_name}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.imageContainer}>
-              <Image
-                style={styles.image}
-                source={{ uri: newsDetailData?.image }}
-                alt={`image about ${newsDetailData?.title}`}
-              />
-            </View>
-            <RenderHtml
-              contentWidth={width - externalPadingContent}
-              source={{
-                html:
-                  newsDetailData?.content ??
-                  "<p>Có vẻ có một số lỗi xảy ra với trang này</p>",
-              }}
-              enableExperimentalMarginCollapsing={true}
-              classesStyles={styles_mardown}
-              tagsStyles={styles_mardown}
-              renderers={renderers}
-            />
-          </View>
-        </View>
-      </View>
-    </HeaderShown>
+    </>
   );
 }
 

@@ -21,6 +21,8 @@ import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 import { useCallback, useEffect, useState } from "react";
 import { Topic } from "@/healper/type/topic.type";
 import { useGetAllTopicsQuery } from "@/services/topic/topic.api";
+import { Skeleton } from "moti/skeleton";
+import { skeletonCommonProps } from "@/healper/type/type-common-skeleton";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -75,10 +77,6 @@ const CardList = () => {
         return styles.textContainer_1;
       case 1:
         return styles.textContainer_2;
-      case 2:
-        return styles.textContainer_3;
-      case 3:
-        return styles.textContainer_4;
     }
   };
 
@@ -111,109 +109,127 @@ const CardList = () => {
         </ScrollView>
       </View>
       <FlatList
-        data={libraryData?.filter(
-          (library: TypeLibrary) => library?.topic_id === activeTab
-        )}
+        data={
+          isFetching
+            ? Array.from({ length: 5 })
+            : libraryData?.filter(
+                (library: TypeLibrary) => library?.topic_id === activeTab
+              )
+        }
         scrollEnabled={true}
-        keyExtractor={(item: TypeLibrary) => item._id}
+        keyExtractor={(item: TypeLibrary) => item?._id}
         ListHeaderComponent={() => <View style={styles.header_space} />}
         ListFooterComponent={() => <View style={styles.footer_space} />}
         renderItem={({ item, index }: { item: TypeLibrary; index: number }) => (
-          <TouchableOpacity
-            key={item?._id}
-            onPress={() => {
-              router.push({
-                pathname: `/library/${item?._id}`,
-                params: {
-                  index,
-                },
-              });
-            }}
+          <Skeleton
+            show={isFetching}
+            {...skeletonCommonProps}
+            width={"100%"}
+            height={windowWidth * 0.3 * 1.2}
+            radius={24}
           >
-            <Image
-              source={linear_gradient_1}
-              style={styles.linearBackground1}
-            />
-            <Image
-              source={linear_gradient_1}
-              style={styles.linearBackground2}
-            />
-            <Image
-              source={linear_gradient_2}
-              style={styles.linearBackground3}
-              resizeMode="contain"
-            />
-
-            <Image
-              source={linear_gradient_2}
-              style={styles.linearBackground4}
-              resizeMode="contain"
-            />
-            <Image
-              source={linear_gradient_1}
-              style={styles.linearBackground5}
-              resizeMode="contain"
-            />
-            <Image
-              source={linear_gradient_1}
-              style={styles.linearBackground6}
-              resizeMode="contain"
-            />
-
-            <View
+            <TouchableOpacity
+              key={item?._id}
               style={[
                 styles.cardContainer,
                 index % 2 === 0 ? styles.cardGreen : styles.cardYellow,
               ]}
+              onPress={() => {
+                router.push({
+                  pathname: `/library/${item?._id}`,
+                  params: {
+                    index,
+                  },
+                });
+              }}
             >
-              <View style={[getTextContainer(index)]}>
-                <Text
-                  style={[
-                    styles.title,
-                    index % 2 === 0 ? styles.whiteTitle : styles.blackTitle,
-                  ]}
-                  className="font-pmedium"
-                  numberOfLines={2}
-                >
-                  {item?.category_name}
-                </Text>
-                <View style={styles.infoRow}>
+              <Image
+                source={linear_gradient_1}
+                style={styles.linearBackground1}
+              />
+              <Image
+                source={linear_gradient_1}
+                style={styles.linearBackground2}
+              />
+              <Image
+                source={linear_gradient_2}
+                style={styles.linearBackground3}
+                resizeMode="contain"
+              />
+
+              <Image
+                source={linear_gradient_2}
+                style={styles.linearBackground4}
+                resizeMode="contain"
+              />
+              <Image
+                source={linear_gradient_1}
+                style={styles.linearBackground5}
+                resizeMode="contain"
+              />
+              <Image
+                source={linear_gradient_1}
+                style={styles.linearBackground6}
+                resizeMode="contain"
+              />
+
+              <View
+                style={[
+                  styles.contentCard,
+                  index % 2 === 0
+                    ? { flexDirection: "row" }
+                    : { flexDirection: "row-reverse" },
+                ]}
+              >
+                <View style={[getTextContainer(index % 2)]}>
                   <Text
                     style={[
-                      styles.readMoreText,
-                      index % 2 === 0
-                        ? styles.whiteReadMoreText
-                        : styles.blackReadMoreText,
+                      styles.title,
+                      index % 2 === 0 ? styles.whiteTitle : styles.blackTitle,
                     ]}
-                    className="font-pregular"
+                    className="font-pmedium"
+                    numberOfLines={2}
                   >
-                    Xem thông tin
+                    {item?.category_name}
                   </Text>
+                  <View style={styles.infoRow}>
+                    <Text
+                      style={[
+                        styles.readMoreText,
+                        index % 2 === 0
+                          ? styles.whiteReadMoreText
+                          : styles.blackReadMoreText,
+                      ]}
+                      className="font-pregular"
+                    >
+                      Xem thông tin
+                    </Text>
+                    <Image
+                      source={arrow_icon}
+                      style={[
+                        styles.arrow,
+                        index % 2 === 0 ? styles.whiteArrow : styles.blackArrow,
+                      ]}
+                      resizeMode="cover"
+                    />
+                  </View>
+                </View>
+                <View
+                  style={
+                    index % 2 === 0
+                      ? styles.imageContainerRight
+                      : styles.imageContainerLeft
+                  }
+                >
                   <Image
-                    source={arrow_icon}
-                    style={[
-                      styles.arrow,
-                      index % 2 === 0 ? styles.whiteArrow : styles.blackArrow,
-                    ]}
-                    resizeMode="cover"
+                    source={{ uri: item?.image }}
+                    style={styles.image}
+                    resizeMode="contain"
                   />
                 </View>
               </View>
-              <View
-                style={
-                  index % 2 === 0
-                    ? styles.imageContainerRight
-                    : styles.imageContainerLeft
-                }
-              >
-                <Image
-                  source={{ uri: item?.image }}
-                  style={styles.image}
-                  resizeMode="contain"
-                />
-              </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </Skeleton>
         )}
         ListEmptyComponent={
           <View style={styles.container_emptyData}>
@@ -236,6 +252,12 @@ const CardList = () => {
 export default CardList;
 
 const styles = StyleSheet.create({
+  contentCard: {
+    display: "flex",
+    position: "relative",
+    width: "100%",
+    pointerEvents: "none",
+  },
   title_emptyData: {
     fontSize: 20,
     fontWeight: "700",
@@ -347,9 +369,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     paddingVertical: 24,
     paddingHorizontal: 20,
-    display: "flex",
-    pointerEvents: "none",
-    position: "relative",
+    overflow: "hidden",
   },
   cardGreen: {
     backgroundColor: "#75A815",
