@@ -365,7 +365,8 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     width: "100%",
-    height: windowWidth * 0.3 * 1.2,
+    minHeight: windowWidth * 0.3 * 1.2,
+    height: "auto",
     borderRadius: 24,
     paddingVertical: 24,
     paddingHorizontal: 20,

@@ -86,11 +86,13 @@ export function Slider({
             radius={30}
             {...skeletonCommonProps}
           >
-            <SliderItem
-              item={item}
-              index={index % data?.length}
-              scrollX={scrollX}
-            />
+            {!isFetching && (
+              <SliderItem
+                item={item}
+                index={index % data?.length}
+                scrollX={scrollX}
+              />
+            )}
           </Skeleton>
         )}
         onEndReachedThreshold={0.5}
