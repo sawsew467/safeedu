@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6CB1E",
   },
   textContainer: {
-    width: windowWidth * 0.75,
+    width: windowWidth > 700 ? windowWidth : windowWidth * 0.75,
     flex: 1,
   },
   title: {
@@ -245,6 +245,8 @@ const styles = StyleSheet.create({
   imageHeaderContainer: {
     width: windowWidth * 0.45,
     height: windowWidth * 0.38 * 1.2,
+    maxWidth: 220,
+    maxHeight: 220,
     position: "absolute",
     top: windowHeight < 700 ? -30 : -150,
     right: windowWidth > 400 ? 0 : -10,
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   detailContainer: {
-    marginTop: 180,
+    marginTop: windowWidth > 700 ? 240 : 180,
     paddingTop: 60,
     minHeight: "100%",
     paddingBottom: 40,

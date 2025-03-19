@@ -77,6 +77,10 @@ const CardList = () => {
         return styles.textContainer_1;
       case 1:
         return styles.textContainer_2;
+      case 2:
+        return styles.textContainer_3;
+      case 3:
+        return styles.textContainer_4;
     }
   };
 
@@ -123,17 +127,13 @@ const CardList = () => {
         renderItem={({ item, index }: { item: TypeLibrary; index: number }) => (
           <Skeleton
             show={isFetching}
-            {...skeletonCommonProps}
             width={"100%"}
             height={windowWidth * 0.3 * 1.2}
             radius={24}
+            {...skeletonCommonProps}
           >
             <TouchableOpacity
               key={item?._id}
-              style={[
-                styles.cardContainer,
-                index % 2 === 0 ? styles.cardGreen : styles.cardYellow,
-              ]}
               onPress={() => {
                 router.push({
                   pathname: `/library/${item?._id}`,
@@ -175,13 +175,11 @@ const CardList = () => {
 
               <View
                 style={[
-                  styles.contentCard,
-                  index % 2 === 0
-                    ? { flexDirection: "row" }
-                    : { flexDirection: "row-reverse" },
+                  styles.cardContainer,
+                  index % 2 === 0 ? styles.cardGreen : styles.cardYellow,
                 ]}
               >
-                <View style={[getTextContainer(index % 2)]}>
+                <View style={[styles.contentCard, getTextContainer(index)]}>
                   <Text
                     style={[
                       styles.title,
@@ -254,9 +252,8 @@ export default CardList;
 const styles = StyleSheet.create({
   contentCard: {
     display: "flex",
-    position: "relative",
-    width: "100%",
-    pointerEvents: "none",
+    justifyContent: "space-between",
+    height: "100%",
   },
   title_emptyData: {
     fontSize: 20,
@@ -279,7 +276,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 10,
     position: "relative",
-    minWidth: windowWidth / 4,
+    minWidth: windowWidth / 3,
   },
   tabText: {
     fontSize: 16,
@@ -366,11 +363,13 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: "100%",
     minHeight: windowWidth * 0.3 * 1.2,
-    height: "auto",
+    flex: 1,
     borderRadius: 24,
     paddingVertical: 24,
     paddingHorizontal: 20,
-    overflow: "hidden",
+    display: "flex",
+    pointerEvents: "none",
+    position: "relative",
   },
   cardGreen: {
     backgroundColor: "#75A815",
@@ -397,7 +396,6 @@ const styles = StyleSheet.create({
     width: "100%",
     fontWeight: "900",
     fontSize: scaleFont(24),
-    lineHeight: 34,
   },
   whiteTitle: {
     color: "#FFFFFF",

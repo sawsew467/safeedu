@@ -82,7 +82,7 @@ export function Slider({
           <Skeleton
             show={isFetching}
             width={width - 32}
-            height={178}
+            height={200}
             radius={30}
             {...skeletonCommonProps}
           >

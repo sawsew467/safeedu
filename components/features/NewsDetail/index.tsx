@@ -15,7 +15,7 @@ import RenderHtml from "react-native-render-html";
 import { styles_mardown } from "@/healper/style/renderHtml";
 import LoadingPage from "@/components/ui/LoadingPage";
 const externalPadingContent = 60;
-
+const windowWidth = Dimensions.get("window").width;
 export default function NewsDetail() {
   const { newsID }: { newsID: string } = useLocalSearchParams();
   const width = Dimensions.get("window").width;
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     height: "100%",
     position: "relative",
     zIndex: 2,
-    paddingTop: 60,
+    paddingTop: windowWidth > 700 ? 120 : 60,
     paddingBottom: 12,
     paddingHorizontal: 15,
   },

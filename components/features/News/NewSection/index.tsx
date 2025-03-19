@@ -87,8 +87,9 @@ export function NewSection() {
       },
     });
 
-  const header = React.useMemo(
-    () => (
+  const header = React.useMemo(() => {
+    console.log("1", activeTab);
+    return (
       <View>
         <Text style={styles.newsText}>Tin mới</Text>
         <View style={styles.logoContainer}>
@@ -147,9 +148,8 @@ export function NewSection() {
           ))}
         </ScrollView>
       </View>
-    ),
-    [activeTab, newsSliderData, isFetching]
-  );
+    );
+  }, [activeTab, newsSliderData, topicData]);
 
   const onRefresh = () => {
     if (isSuccessNews) {
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 10,
     position: "relative",
-    minWidth: width / 4,
+    minWidth: width / 3,
   },
   tabText: {
     fontSize: 16,
