@@ -57,7 +57,8 @@ export function NewSection() {
   const { topicData, isSuccess } = useGetAllTopicsQuery(undefined, {
     selectFromResult: ({ data, isSuccess }) => {
       return {
-        topicData: data?.data?.filter((item: Topic) => item?.isActive) ?? [],
+        topicData:
+          data?.data?.data?.filter((item: Topic) => item?.isActive) ?? [],
         isSuccess,
       };
     },
@@ -72,7 +73,7 @@ export function NewSection() {
       skip: !isSuccess,
       selectFromResult: ({ data, isFetching, isSuccess: isSuccessNews }) => {
         const activeData =
-          data?.items?.filter((item: TypeNews) => item?.isActive) ?? [];
+          data?.data?.items?.filter((item: TypeNews) => item?.isActive) ?? [];
         const slideData = activeData
           ?.sort((item: TypeNews, other: TypeNews) =>
             compareDatesStrict(other?.created_at, item?.created_at)
@@ -88,7 +89,6 @@ export function NewSection() {
     });
 
   const header = React.useMemo(() => {
-    console.log("1", activeTab);
     return (
       <View>
         <Text style={styles.newsText}>Tin mới</Text>

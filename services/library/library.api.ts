@@ -14,7 +14,7 @@ export const newsAPI = baseApi.injectEndpoints({
         flashError: true,
       }),
     }),
-    getLibrary: build.query<TypeLibrary, { id: string }>({
+    getLibrary: build.query({
       query: ({ id }) => ({
         url: `/categories/${id}`,
         method: "GET",

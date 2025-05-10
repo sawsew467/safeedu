@@ -25,7 +25,7 @@ export default function NewsDetail() {
     {
       selectFromResult: ({ data, isFetching }) => {
         return {
-          newsDetailData: data,
+          newsDetailData: data?.data,
           isFetching,
         };
       },

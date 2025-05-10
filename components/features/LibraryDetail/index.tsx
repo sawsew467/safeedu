@@ -46,7 +46,7 @@ const LibraryDetail = () => {
     { id: libraryID },
     {
       selectFromResult: ({ data, isFetching, isError }) => ({
-        libraryDetailData: data,
+        libraryDetailData: data?.data,
         isFetching,
       }),
     }

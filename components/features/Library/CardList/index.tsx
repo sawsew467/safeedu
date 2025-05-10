@@ -42,11 +42,13 @@ const CardList = () => {
   const { topicData, isSuccess } = useGetAllTopicsQuery(undefined, {
     selectFromResult: ({ data, isSuccess }) => {
       return {
-        topicData: data?.data?.filter((item: Topic) => item?.isActive) ?? [],
+        topicData:
+          data?.data?.data?.filter((item: Topic) => item?.isActive) ?? [],
         isSuccess,
       };
     },
   });
+  console.log("data", topicData);
 
   useEffect(() => {
     setActiveTab(topicData[0]?._id);
@@ -59,7 +61,8 @@ const CardList = () => {
         isSuccess: isSuccessLibrary,
       }) => ({
         libraryData:
-          data?.items?.filter((item: TypeLibrary) => item?.isActive) ?? [],
+          data?.data?.items?.filter((item: TypeLibrary) => item?.isActive) ??
+          [],
         isFetching,
         isSuccessLibrary,
       }),
