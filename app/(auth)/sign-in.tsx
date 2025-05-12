@@ -71,7 +71,7 @@ const SignIn = () => {
       </ImageBackground>
       <View className="flex justify-center items-center top-2/3">
         <View className="w-[90%] p-5 rounded-[20px]">
-          <Text className="text-[16px] font-bold text-black mb-[8px]">Nhập email</Text>
+          <Text className="text-[16px] font-bold text-black mb-[8px]">Tên tài khoản</Text>
           <TextInput
             style={styles.input}
             placeholder="example@gmail.com"
@@ -80,7 +80,7 @@ const SignIn = () => {
           />
           {error.email ? <Text style={styles.errorText}>{error.email}</Text> : null}
 
-          <Text style={styles.label}>Nhập mật khẩu</Text>
+          <Text style={styles.label}>Mật khẩu</Text>
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.input}
@@ -128,8 +128,6 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 60,
-    // borderWidth: 1,
-    // borderColor: "#ccc",
     borderRadius: 16,
     boxShadow: "0 2 20 -10",
     paddingLeft: 16,

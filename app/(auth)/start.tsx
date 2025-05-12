@@ -6,7 +6,7 @@ const Start = () => {
   const router = useRouter();
 
   const handleNavigateToHome = () => {
-    router.push("/phone-verification");
+    router.push("/user-type-screen");
   };
 
   const handleGoBack = () => {
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
     color: "#989EA7",
-    textAlign: "left",
+    textAlign: "center",
     marginBottom: 20,
   },
   buttonContainer: {
