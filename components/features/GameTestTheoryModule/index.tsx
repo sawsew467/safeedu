@@ -101,7 +101,7 @@ const GameTestTheoryModule = () => {
         return THEORY_TEST_DATA[questionIndex].answer.sort(() => Math.random() - 0.5)
     }, [questionIndex])
 
-    console.log('THEORY_TEST_DATA', answers)
+    // console.log('THEORY_TEST_DATA', answers)
     const question = React.useMemo(() => {
         return THEORY_TEST_DATA[questionIndex].question
     }, [questionIndex])

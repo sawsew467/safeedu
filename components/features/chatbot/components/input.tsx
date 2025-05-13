@@ -1,71 +1,85 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Image, TextInput, Alert, TouchableHighlight, ActivityIndicator, FlatList, KeyboardAvoidingView, Platform, Keyboard, TouchableOpacity } from "react-native";
-import file_upload from "@/assets/icons/file_upload.png"
-import mic from "@/assets/icons/mic.png"
-import delete_icon from "@/assets/icons/delete_icon.png"
-import submit from "@/assets/icons/submit.png"
-import * as ImagePicker from "expo-image-picker";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Fontisto from '@expo/vector-icons/Fontisto';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  Alert,
+  TouchableHighlight,
+  ActivityIndicator,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableOpacity,
+} from "react-native";
+import file_upload from "@/assets/icons/file_upload.png";
+import mic from "@/assets/icons/mic.png";
+import delete_icon from "@/assets/icons/delete_icon.png";
+import submit from "@/assets/icons/submit.png";
+// import * as ImagePicker from "expo-image-picker";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Fontisto from "@expo/vector-icons/Fontisto";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 type TypeInput = {
-  handleSubmit: (content: string) => void
-}
+  handleSubmit: (content: string) => void;
+};
 function Input({ handleSubmit }: TypeInput) {
   const [value, setTestValue] = React.useState<string>("");
   const handleChange = (e: string) => {
-    setTestValue(e)
-  }
+    setTestValue(e);
+  };
 
   const handleDeleteImage = (index: number) => {
     const newFiles = files.toSpliced(index, 1);
     setFile(newFiles);
-  }
+  };
   const handleLoading = (index: number) => {
-    const newFiles = files.toSpliced(index, 1, { isLoading: false, uri: files[index]?.uri });
+    const newFiles = files.toSpliced(index, 1, {
+      isLoading: false,
+      uri: files[index]?.uri,
+    });
     setFile(newFiles);
-  }
+  };
   const handleClick = () => {
     handleSubmit(value.trim());
-  }
+  };
 
   const [files, setFile] = useState([]);
 
   const [error, setError] = useState(null);
 
-  const pickImage = async () => {
-    const { status } = await ImagePicker.
-      requestMediaLibraryPermissionsAsync();
+  // const pickImage = async () => {
+  //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (status !== "granted") {
+  //   if (status !== "granted") {
+  //     Alert.alert(
+  //       "Permission Denied",
+  //       `Sorry, we need camera
+  //              roll permission to upload images.`
+  //     );
+  //   } else {
+  //     const result = await ImagePicker.launchImageLibraryAsync();
 
-      Alert.alert(
-        "Permission Denied",
-        `Sorry, we need camera 
-               roll permission to upload images.`
-      );
-    } else {
-      const result =
-        await ImagePicker.launchImageLibraryAsync();
+  //     if (!result.canceled) {
+  //       setFile([...files, { isLoading: true, uri: result.assets[0].uri }]);
 
-      if (!result.canceled) {
-
-        setFile([...files, { isLoading: true, uri: result.assets[0].uri }]);
-
-        setError(null);
-      }
-    }
-  };
+  //       setError(null);
+  //     }
+  //   }
+  // };
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios'
+      {...(Platform.OS === "ios"
         ? {
-          behavior: 'position',
-          keyboardVerticalOffset: 20, // calculate height using onLayout callback method
-        }
-        : {})}>
+            behavior: "position",
+            keyboardVerticalOffset: 20, // calculate height using onLayout callback method
+          }
+        : {})}
+    >
       <View style={styles.container_input}>
         <View style={[files.length !== 0 && styles.container_input_image]}>
           {files.length !== 0 && (
@@ -76,48 +90,74 @@ function Input({ handleSubmit }: TypeInput) {
               keyExtractor={(file) => file?.uri}
               renderItem={({ item, index }) => (
                 <View key={item?.uri} style={styles.imageContainer}>
-                  {item?.isLoading &&
+                  {item?.isLoading && (
                     <View style={styles.container_loading_image}>
-                      <ActivityIndicator style={styles.loading_image} size="large" color="##75A815" />
+                      <ActivityIndicator
+                        style={styles.loading_image}
+                        size="large"
+                        color="##75A815"
+                      />
                     </View>
-                  }
+                  )}
                   <>
-                    <Image source={{ uri: item?.uri }}
+                    <Image
+                      source={{ uri: item?.uri }}
                       style={styles.image}
                       onLoad={() => handleLoading(index)}
                     />
-                    <TouchableOpacity onPress={() => handleDeleteImage(index)} style={styles.btn_delete_image}>
+                    <TouchableOpacity
+                      onPress={() => handleDeleteImage(index)}
+                      style={styles.btn_delete_image}
+                    >
                       <Image source={delete_icon} style={styles.delete_image} />
                     </TouchableOpacity>
                   </>
-                </View>)} />
+                </View>
+              )}
+            />
           )}
-          <View style={[styles.input, files.length !== 0 ? styles.has_image : styles.not_has_image]}>
+          <View
+            style={[
+              styles.input,
+              files.length !== 0 ? styles.has_image : styles.not_has_image,
+            ]}
+          >
             <View style={styles.control_input}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 disabled={files.some((file) => file.isLoading)}
                 style={styles.btn_upload}
-                onPress={pickImage}>
+                onPress={pickImage}
+              >
                 <MaterialIcons name="upload-file" size={28} color="#7E7E7EE5" />
-              </TouchableOpacity>
-              <View style={styles.conteiner_text_input} >
+              </TouchableOpacity> */}
+              <View style={styles.conteiner_text_input}>
                 <TextInput
                   blurOnSubmit={false}
                   multiline={true}
                   onChangeText={handleChange}
-                  placeholder="Nhập câu hỏi..." style={styles.text_input} />
+                  placeholder="Nhập câu hỏi..."
+                  style={styles.text_input}
+                />
               </View>
-              <TouchableOpacity style={styles.mic}>
+              {/* <TouchableOpacity style={styles.mic}>
                 <Fontisto name="mic" size={24} color="#757575" />
-              </TouchableOpacity>
-              <TouchableOpacity disabled={value.trim() === ""}
-                onPress={handleClick} >
-                <FontAwesome6 name="circle-arrow-up" size={30} color={value.trim() === "" ? "#7E7E7EE5" : "#2d2d2de3"} />
+              </TouchableOpacity> */}
+              <TouchableOpacity
+                disabled={value.trim() === ""}
+                onPress={handleClick}
+              >
+                <FontAwesome6
+                  name="circle-arrow-up"
+                  size={30}
+                  color={value.trim() === "" ? "#7E7E7EE5" : "#2d2d2de3"}
+                />
               </TouchableOpacity>
             </View>
           </View>
         </View>
-        <Text style={styles.comment} className="font-pregular">Trợ lý AI có thể nhầm lẫn, hãy cẩn thận nhé!</Text>
+        <Text style={styles.comment} className="font-pregular">
+          Trợ lý AI có thể nhầm lẫn, hãy cẩn thận nhé!
+        </Text>
       </View>
     </KeyboardAvoidingView>
   );
@@ -126,7 +166,7 @@ function Input({ handleSubmit }: TypeInput) {
 const styles = StyleSheet.create({
   conteiner_text_input: {
     display: "flex",
-    justifyContent: 'center',
+    justifyContent: "center",
     height: "100%",
     flex: 1,
   },
@@ -137,13 +177,11 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     display: "flex",
-    justifyContent: 'center',
+    justifyContent: "center",
     alignContent: "center",
-    zIndex: 999
+    zIndex: 999,
   },
-  loading_image: {
-
-  },
+  loading_image: {},
   file_container: {
     paddingHorizontal: 8,
     display: "flex",
@@ -151,7 +189,7 @@ const styles = StyleSheet.create({
     gap: 8,
     flexGrow: 0,
     overflow: "scroll",
-    paddingBottom: 8
+    paddingBottom: 8,
   },
   delete_image: {
     width: 25,
@@ -171,14 +209,14 @@ const styles = StyleSheet.create({
   has_image: {
     borderRadius: 0,
     borderWidth: 0,
-    borderTopWidth: 1
+    borderTopWidth: 1,
   },
   container_input_image: {
     display: "flex",
     borderWidth: 1,
     gap: 10,
     paddingTop: 8,
-    borderRadius: 16
+    borderRadius: 16,
   },
   image: {
     width: 80,
@@ -189,7 +227,7 @@ const styles = StyleSheet.create({
     position: "relative",
     width: 80,
     backgroundColor: "#0000004d",
-    borderRadius: 16
+    borderRadius: 16,
   },
   img: {
     position: "absolute",
@@ -205,17 +243,15 @@ const styles = StyleSheet.create({
     borderRadius: 999,
   },
   mic: {
-    width: 20
+    width: 20,
   },
-  text_input: {
-
-  },
+  text_input: {},
   btn_upload: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     width: 28,
-    height: 28
+    height: 28,
   },
   control_input: {
     display: "flex",
@@ -224,7 +260,7 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 12,
     alignItems: "center",
-    paddingLeft: 20
+    paddingLeft: 20,
   },
   container_input: {
     display: "flex",
@@ -234,7 +270,7 @@ const styles = StyleSheet.create({
     zIndex: 99,
     paddingTop: 20,
     paddingBottom: 8,
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   input: {
     borderWidth: 1,
@@ -245,14 +281,14 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     display: "flex",
     flexDirection: "row",
-    gap: 10
+    gap: 10,
   },
   comment: {
     textAlign: "center",
     color: "#161717",
     marginTop: 4,
-    fontSize: 14
-  }
-})
+    fontSize: 14,
+  },
+});
 
 export default Input;
