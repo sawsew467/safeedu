@@ -41,7 +41,7 @@ const Welcome = () => {
           </Text>
 
           <Button
-            onPress={() => router.push("/sign-in")}
+            onPress={() => router.replace("/home")}
             className="mt-4 w-full"
             variant="primary"
           >

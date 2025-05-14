@@ -1,3 +1,6 @@
 export const COMMON_QUESTIONS = [
-    "Các loại ma tuý thường gặp", "Những dấu hiệu của người nghiện", "Khung hình phạt liên quan đến ma túy", "Đầu số cơ quan phòng chống ma tuý"
-]
+  "Các đầu số cơ quan liên quan đến bình đẳng giới",
+  "Thế nào là bình đẳng giới",
+  "Tình trạng học đường hiện giờ",
+  "thế nào là bạo lực học đường",
+];

@@ -41,7 +41,6 @@ const SignIn = () => {
     router.push("/start");
   };
 
-
   const handleGoogleSignIn = async () => {
     if (request) {
       promptAsync();
