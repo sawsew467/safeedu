@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image, ImageBackground } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
@@ -10,8 +11,8 @@ const SignUp = () => {
   const [dob, setDob] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [city, setCity] = useState("");
-  const [school, setSchool] = useState("");
+  const [selectedCity, setSelectedCity] = useState();
+  const [selectedSchool, setSelectedSchool] = useState();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -64,11 +65,11 @@ const SignUp = () => {
       newErrors.dob = "Vui lòng chọn ngày sinh";
       hasError = true;
     }
-    if (userType === "student" && !city) {
+    if (userType === "student" && !selectedCity) {
       newErrors.city = "Vui lòng chọn thành phố";
       hasError = true;
     }
-    if (userType === "student" && !school) {
+    if (userType === "student" && !selectedSchool) {
       newErrors.school = "Vui lòng chọn trường";
       hasError = true;
     }
@@ -200,26 +201,28 @@ const SignUp = () => {
                 <Text className="font-semibold text-base text-[#959595] mt-5">
                   Tỉnh/Thành phố <Text className="text-red-500">*</Text>
                 </Text>
-                <TextInput
-                  placeholder="Đà Nẵng"
-                  placeholderTextColor="#C4C4C4"
-                  value={city}
-                  onChangeText={setCity}
-                  className="text-lg text-black pl-0 pb-0"
-                />
+                <Picker
+                  selectedValue={selectedCity}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedCity(itemValue)
+                  }>
+                  <Picker.Item label="Đà Nẵng" value="java" />
+                  <Picker.Item label="Hà Nội" value="js" />
+                </Picker>
                 <View className="w-full h-[1.5px] bg-black mt-2" />
                 {error.city ? <Text className="text-red-500 text-xs mt-2">{error.city}</Text> : null}
 
                 <Text className="font-semibold text-base text-[#959595] mt-5">
                   Trường <Text className="text-red-500">*</Text>
                 </Text>
-                <TextInput
-                  placeholder="THPT Ngũ Hành Sơn"
-                  placeholderTextColor="#C4C4C4"
-                  value={school}
-                  onChangeText={setSchool}
-                  className="text-lg text-black pl-0 pb-0"
-                />
+                <Picker
+                  selectedValue={selectedSchool}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedSchool(itemValue)
+                  }>
+                  <Picker.Item label="Đại học Đà Nẵng" value="java" />
+                  <Picker.Item label="Đại học FPT" value="js" />
+                </Picker>
                 <View className="w-full h-[1.5px] bg-black mt-2" />
                 {error.school ? <Text className="text-red-500 text-xs mt-2">{error.school}</Text> : null}
               </>
