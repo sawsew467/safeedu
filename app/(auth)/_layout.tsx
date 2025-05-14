@@ -18,11 +18,29 @@ const AuthLayout = () => {
           }}
         />
         <Stack.Screen
-        name="start"
-        options={{
-          headerShown: false,
-        }}
-      />
+          name="start"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="phone-verification"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="otp-verification"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="user-type-screen"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor="#161622" style="light" />

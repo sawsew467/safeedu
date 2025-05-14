@@ -16,9 +16,8 @@ const TabIcon = ({ IconComponent, color, name, focused }) => {
     <View className="flex items-center justify-center relative w-64">
       <IconComponent color={color} size={24} />
       <Text
-        className={`${
-          focused ? "font-psemibold" : "font-pregular"
-        } text-xs text-center mt-2 `}
+        className={`${focused ? "font-psemibold" : "font-pregular"
+          } text-xs text-center mt-2 `}
         style={{ color: color }}
       >
         {name}

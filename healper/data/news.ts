@@ -19,8 +19,7 @@ export const DATA: DataType[] = [
   },
   {
     id: "2",
-    title:
-      "Phát huy vai trò, góp phần giữ gìn an ninh, trật tự, bảo vệ cuộc sống bình yên",
+    title: "Phát huy vai trò, góp phần giữ gìn an ninh",
     date: "24/10/2024",
     image: congantinhlangson,
     content:
@@ -30,13 +29,21 @@ export const DATA: DataType[] = [
   },
   {
     id: "3",
-    title:
-      "Đại úy Công an xã giúp đỡ, cảm hóa thành công đối tượng cai nghiện ma túy",
+    title: "Phát huy vai trò, góp phần giữ gìn an ninh",
     date: "15/10/2024",
     image: news3_content_image,
     content:
       "Bài báo nêu về Đại úy Lê Trường An, Công an xã Tân Thành, huyện Lai Vung, tỉnh Đồng Tháp, người đã tích cực phòng chống tệ nạn ma túy tại địa phương. Với địa bàn phức tạp, giáp ranh khu công nghiệp và đông dân cư, Đại úy An đã điều tra, khám phá nhiều vụ án liên quan đến trộm cắp và ma túy. Anh cũng quản lý và giáo dục các đối tượng nghiện, giúp họ cai nghiện thành công. \nMột trong những phương pháp của Đại úy An là sử dụng tình cảm để khuyên nhủ và hỗ trợ tái hòa nhập. Điển hình là trường hợp anh T, người đã cai nghiện thành công nhờ sự động viên và hướng dẫn của anh. Ngoài ra, Đại úy An còn phối hợp tuyên truyền về tác hại của ma túy trong học đường, giúp các em nhận thức và tránh xa ma túy.",
     caption:
       "Đại úy Lê Trường An hỏi thăm gia đình, công việc làm ăn 01 đối tượng cai nghiện thành công.",
+  },
+  {
+    id: "4",
+    title: "Những tác hại và hệ luỵ của ma tuý",
+    date: "24/09/2022",
+    image: matuyanhhuongdentimmach,
+    content:
+      "Bài viết đã nêu lên những tác hại nặng nề của ma túy, không chỉ gây tổn hại cho sức khỏe và cuộc sống cá nhân của người nghiện mà còn ảnh hưởng đến toàn xã hội. Ma túy không phân biệt tuổi tác, dẫn dụ người dùng vào vòng xoáy nghiện ngập, gây nên những tổn thất sức khỏe nghiêm trọng và hệ lụy xã hội khác như tội phạm, mại dâm, và tai nạn giao thông.\nMa túy gây ra những căn bệnh nguy hiểm như ung thư phổi, AIDS, các vấn đề về hô hấp, nhiễm trùng máu… Người nghiện thường có thể trạng suy kiệt, trí não suy yếu, làm mất đi khả năng lao động và học tập, ảnh hưởng xấu đến tương lai và sự nghiệp. Không chỉ bản thân người nghiện chịu hậu quả, mà gia đình cũng rơi vào cảnh khổ đau, trở thành gánh nặng tài chính và tâm lý. Thêm vào đó, nghiện ma túy làm tăng tỷ lệ tội phạm, gây mất an ninh trật tự, làm cho xã hội trở nên bất ổn.\nCác cơ quan chức năng như Công an thành phố Thanh Hóa đã có những nỗ lực đáng kể trong việc đấu tranh, ngăn chặn, và giảm tác hại của ma túy. Thống kê cho thấy việc triệt phá các tụ điểm ma túy, bắt giữ và xử lý nhiều vụ vi phạm liên quan đến buôn bán và sử dụng trái phép ma túy là minh chứng cho quyết tâm đấu tranh với tệ nạn này.\nĐể ngăn chặn ma túy, mỗi người cần nâng cao ý thức phòng tránh, giáo dục người thân, và sống lành mạnh. Hơn nữa, cộng đồng cần hỗ trợ, giúp đỡ những người nghiện để họ có cơ hội cai nghiện, làm lại cuộc đời. Thế hệ trẻ cũng cần kiên quyết tránh xa ma túy, góp phần xây dựng xã hội trong sạch, an toàn hơn.",
+    caption: "Sự ảnh hưởng của ma túy đến hệ tim mạch",
   },
 ];
