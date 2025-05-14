@@ -1,9 +1,7 @@
 import Contest from "@/components/features/Contest";
-import { View } from "react-native";
 
 function ContestPage() {
-  return <View />;
-  // <Contest />;
+  return <Contest />;
 }
 
 export default ContestPage;

@@ -3,10 +3,7 @@ import React from "react";
 import { View } from "react-native";
 
 const LeaderBoard = () => {
-  return (
-    // <LeaderBoardModule />
-    <View />
-  );
+  return <LeaderBoardModule />;
 };
 
 export default LeaderBoard;

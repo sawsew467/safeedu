@@ -100,6 +100,23 @@ const TabLayout = () => {
           }}
         /> */}
         <Tabs.Screen
+          name="contest"
+          options={{
+            title: "Contest",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                IconComponent={() => (
+                  <AntDesign name="Trophy" size={24} color={color} />
+                )}
+                color={color}
+                name="Cuộc thi"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="notifications"
           options={{
             title: "thông báo",
@@ -118,23 +135,6 @@ const TabLayout = () => {
         />
 
         {/* <Tabs.Screen
-          name="contest"
-          options={{
-            title: "Contest",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                IconComponent={() => (
-                  <AntDesign name="Trophy" size={24} color={color} />
-                )}
-                color={color}
-                name="Cuộc thi"
-                focused={focused}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
           name="game"
           options={{
             title: "Game",
