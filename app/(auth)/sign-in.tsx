@@ -7,90 +7,86 @@ import {
   TouchableOpacity,
   StyleSheet,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router"; // Import router để chuyển trang
 import * as Google from "expo-auth-session/providers/google";
 import { useAuthRequest } from "expo-auth-session";
+import { useSignInMutation } from "@/services/auth/auth.api";
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState({ email: "", password: "" });
+  const [error, setError] = useState({ username: "", password: "" });
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const router = useRouter(); // Sử dụng router để điều hướng
-  // Tạo yêu cầu đăng nhập với Google
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: "YOUR_CLIENT_ID.apps.googleusercontent.com",
-  });
+  const router = useRouter();
+
+  const [signIn, { isLoading }] = useSignInMutation();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleSignIn = () => {
-    // Xóa thông báo lỗi cũ
-    setError({ email: "", password: "" });
-
-    // Kiểm tra thông tin đăng nhập
-    if (email === "user1" && password === "pass1") {
+  const handleSignIn = async () => {
+    setError({ username: "", password: "" });
+    try {
+      await signIn({ username, password }).unwrap();
       router.push("/home");
-    } else {
-      // Thiết lập thông báo lỗi
-      setError({
-        email: email !== "user1" ? "Không tìm thấy email" : "",
-        password: password !== "pass1" ? "Sai mật khẩu" : "",
-      });
+    } catch (error) {
+      const message: string =
+        (error as any)?.data?.error?.message || "Đã xảy ra lỗi!";
+      const details: string =
+        (error as any)?.data?.error?.details || "Đã xảy ra lỗi!";
+
+      console.log("first", message);
+      if (details.includes("Username")) {
+        setError({ username: message, password: "" });
+      } else if (details.includes("Password ")) {
+        setError({ username: "", password: message });
+      }
     }
   };
   const handleSignUp = () => {
     router.push("/start");
   };
 
-  // Xử lý khi nhấn vào Đăng nhập bằng Google
-  const handleGoogleSignIn = async () => {
-    if (request) {
-      promptAsync();
-    }
-  };
-
-  // Xử lý phản hồi từ API Google
-  React.useEffect(() => {
-    if (response?.type === "success") {
-      const { authentication } = response;
-      // Ở đây bạn có thể gọi API backend để xác thực token từ Google
-      // console.log("Google Auth Token:", authentication);
-      router.push("/home");
-    }
-  }, [response]);
-
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <KeyboardAvoidingView
+      behavior="padding"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+    >
       <ImageBackground
-        source={require("../../assets/images/background 2.png")}
-        style={styles.backgroundImage}
+        source={require("../../assets/images/sign-in-background.png")}
+        className="w-[100%] h-[85%] absolute"
         imageStyle={{ resizeMode: "cover" }}
-      >
-        <View style={styles.formContainer}>
-          <View style={styles.form}>
-            <Text style={styles.label}>Nhập email</Text>
+      ></ImageBackground>
+      <View className="flex justify-center items-center top-2/3">
+        <View className="w-[90%] p-5 rounded-[20px]">
+          <Text className="text-[16px] font-bold text-black mb-[8px]">
+            Tên tài khoản
+          </Text>
+          <View style={styles.input} className="px-4 flex justify-center">
             <TextInput
-              style={styles.input}
-              placeholder="example@gmail.com"
-              value={email}
-              onChangeText={setEmail}
+              placeholder="example"
+              value={username}
+              onChangeText={setUsername}
             />
-            {error.email ? (
-              <Text style={styles.errorText}>{error.email}</Text>
-            ) : (
-              <Text />
-            )}
+          </View>
+          {error.username ? (
+            <Text style={styles.errorText}>{error.username}</Text>
+          ) : null}
 
-            <Text style={styles.label}>Nhập mật khẩu</Text>
-            <View style={styles.passwordContainer}>
+          <Text style={styles.label}>Mật khẩu</Text>
+          <View style={styles.passwordContainer}>
+            <View
+              style={styles.input}
+              className="px-4 flex justify-center relative"
+            >
               <TextInput
-                style={styles.input}
                 placeholder="●●●●●●●"
                 secureTextEntry={!passwordVisible}
                 value={password}
@@ -98,7 +94,7 @@ const SignIn = () => {
               />
               <TouchableOpacity
                 onPress={togglePasswordVisibility}
-                style={styles.eyeIcon}
+                className="absolute right-4 top-1/2translate-y-[50px]"
               >
                 <Ionicons
                   name={passwordVisible ? "eye" : "eye-off"}
@@ -107,51 +103,30 @@ const SignIn = () => {
                 />
               </TouchableOpacity>
             </View>
-            {error.password ? (
-              <Text style={styles.errorText}>{error.password}</Text>
-            ) : (
-              <Text />
-            )}
+          </View>
+          {error.password ? (
+            <Text style={styles.errorText}>{error.password}</Text>
+          ) : null}
 
-            <TouchableOpacity style={styles.loginButton} onPress={handleSignIn}>
-              <Text style={styles.loginText}>Đăng nhập</Text>
+          <TouchableOpacity style={styles.loginButton} onPress={handleSignIn}>
+            <Text style={styles.loginText}>
+              {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.signUpContainer}>
+            <Text style={styles.signUpText}>Tạo tài khoản mới?</Text>
+            <TouchableOpacity onPress={handleSignUp}>
+              <Text style={styles.signUpLink}>Đăng kí</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity onPress={handleGoogleSignIn}>
-              <Text style={styles.googleLogin}>Đăng nhập bằng Google</Text>
-            </TouchableOpacity>
-
-            <View style={styles.signUpContainer}>
-              <Text style={styles.signUpText}>Tạo tài khoản mới?</Text>
-              <TouchableOpacity onPress={handleSignUp}>
-                <Text style={styles.signUpLink}>Đăng kí</Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </View>
-      </ImageBackground>
-    </SafeAreaView>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  backgroundImage: {
-    flex: 1,
-  },
-  formContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    marginBottom: 200,
-  },
-  form: {
-    width: "90%",
-    padding: 20,
-    borderRadius: 20,
-  },
   label: {
     fontSize: 16,
     fontWeight: "bold",
@@ -160,10 +135,9 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 60,
-    borderWidth: 1,
-    borderColor: "#ccc",
     borderRadius: 16,
-    paddingLeft: 10,
+    boxShadow: "0 2 20 -10",
+    paddingLeft: 16,
     paddingRight: 40,
     marginBottom: 15,
     backgroundColor: "#fff",
@@ -177,14 +151,8 @@ const styles = StyleSheet.create({
   passwordContainer: {
     position: "relative",
   },
-  eyeIcon: {
-    position: "absolute",
-    right: 10,
-    top: "40%",
-    transform: [{ translateY: -12 }],
-  },
   loginButton: {
-    marginTop: 16,
+    marginTop: 7,
     backgroundColor: "#75A815",
     paddingVertical: 12,
     borderRadius: 16,
@@ -200,7 +168,7 @@ const styles = StyleSheet.create({
   googleLogin: {
     textAlign: "center",
     color: "black",
-    marginTop: 15,
+    marginTop: 28,
     fontSize: 14,
   },
   signUpContainer: {

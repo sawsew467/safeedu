@@ -100,6 +100,24 @@ const TabLayout = () => {
           }}
         /> */}
         <Tabs.Screen
+          name="notifications"
+          options={{
+            title: "thông báo",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                IconComponent={() => (
+                  <Bell width={24} height={24} color={color} />
+                )}
+                color={color}
+                name="thông báo"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+
+        {/* <Tabs.Screen
           name="contest"
           options={{
             title: "Contest",

@@ -6,7 +6,7 @@ import { getToken } from "@/utils/token-storage";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: constants.API_SERVER,
-  prepareHeaders: async (headers, { getState }) => {
+  prepareHeaders: (headers, { getState }) => {
     const accessToken = getToken();
     console.log("acc", accessToken);
 
