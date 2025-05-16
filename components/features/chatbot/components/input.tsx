@@ -44,6 +44,8 @@ function Input({ handleSubmit }: TypeInput) {
     setFile(newFiles);
   };
   const handleClick = () => {
+    console.log("🚀 ~ handleClick ~ value:", value);
+
     handleSubmit(value.trim());
   };
 
@@ -155,9 +157,9 @@ function Input({ handleSubmit }: TypeInput) {
             </View>
           </View>
         </View>
-        <Text style={styles.comment} className="font-pregular">
+        {/* <Text style={styles.comment} className="font-pregular">
           Trợ lý AI có thể nhầm lẫn, hãy cẩn thận nhé!
-        </Text>
+        </Text> */}
       </View>
     </KeyboardAvoidingView>
   );
