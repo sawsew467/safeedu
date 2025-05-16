@@ -14,11 +14,8 @@ import {
 
 import { Slider } from "@/components/features/News/NewSection/Slider/Slider";
 
-import nav_background from "@/assets/images/background_nav_home.png";
 import logo from "@/assets/images/news_image/news_logo.png";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Feather from '@expo/vector-icons/Feather';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import { router } from "expo-router";
 import { compareDatesStrict, formatDate } from "@/utils/format-date";
@@ -174,8 +171,8 @@ export function NewSection() {
         isFetching
           ? Array.from({ length: 5 })
           : newsData?.filter(
-            (item: TypeNews) => item?.topic_id?._id === activeTab
-          )
+              (item: TypeNews) => item?.topic_id?._id === activeTab
+            )
       }
       keyExtractor={(item) => item?._id}
       renderItem={({ item }) => (
