@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback } from "react";
 import {
   View,
   Text,
@@ -8,15 +8,12 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  ActivityIndicator,
   RefreshControl,
 } from "react-native";
 import { KeyRound, UserPen, UserRound } from "lucide-react-native";
 
 import background from "@/assets/images/account/background.png";
 
-import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import QuizHistoryCard from "./quiz-history-card";
 import ResultAnalysisCard from "./result-analyst-card";
@@ -26,31 +23,45 @@ import {
   useGetStudentByUsernameQuery,
 } from "@/services/user/user.api";
 import ProfileSkeleton from "./profile-skeleton";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import LogOut from "./logout";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProfileScreen = () => {
   const router = useRouter();
-  const { profile } = useGetMeQuery(undefined, {
-    selectFromResult: ({ data }) => ({
+  const {
+    profile,
+    isError: isGetProfileError,
+    isFetching: isFetchingProfile,
+  } = useGetMeQuery(undefined, {
+    selectFromResult: ({ data, isError, isFetching }) => ({
       profile: data?.data,
+      isError,
+      isFetching,
     }),
+    refetchOnFocus: true, // khi quay lại app từ nền
+    refetchOnMountOrArgChange: true, // khi component mount lại
   });
 
-  const { data, isFetching, isSuccess, refetch } = useGetStudentByUsernameQuery(
+  const {
+    data,
+    isFetching: isFetchingProfileDetail,
+    isError: isGetProfileDetailError,
+    refetch,
+  } = useGetStudentByUsernameQuery(
     profile?.username ? { username: profile?.username } : skipToken,
     {
-      selectFromResult: ({ data, isFetching, isSuccess }) => {
+      selectFromResult: ({ data, isFetching, isError }) => {
         return {
           data: data?.data,
           isFetching,
-          isSuccess: isSuccess,
+          isError,
         };
       },
-      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true, // khi quay lại app từ nền
+      refetchOnMountOrArgChange: true, // khi component mount lại
     }
   );
-  console.log("data :>> ", data);
 
   const formatDate = (dateString, format = "DD tháng MM YYYY") => {
     if (!dateString) return "";
@@ -68,6 +79,11 @@ const ProfileScreen = () => {
 
     return `${day} tháng ${month} ${year}`;
   };
+
+  const isError = isGetProfileError || isGetProfileDetailError;
+  const isFetching = isFetchingProfile || isFetchingProfileDetail;
+
+  console.log("is :>> ", isFetching);
 
   // Tính điểm trung bình
   const calculateAverageScore = (results) => {
@@ -102,7 +118,7 @@ const ProfileScreen = () => {
     router.push("/account/change-password");
   };
 
-  if (!isSuccess && !isFetching && !data) {
+  if (isError && !isFetching) {
     return (
       <SafeAreaView
         style={styles.container}
@@ -113,7 +129,7 @@ const ProfileScreen = () => {
         </View>
         <View className="flex-1 flex items-center justify-center">
           <View className="h-auto flex items-center">
-            <UserRound size={100} strokeWidth={2} color="white" />
+            <UserRound size={100} strokeWidth={1} color="white" />
             <Text className="text-gray-200 text-lg font-plight mb-2">
               Đăng nhập vào tài khoản hiện có
             </Text>
@@ -121,9 +137,9 @@ const ProfileScreen = () => {
           <View className="flex justify-center items-center w-full gap-4 mb-2">
             <TouchableOpacity
               onPress={handleSignIn}
-              className="w-1/2 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
+              className="w-1/2 flex-row h-[60px] bg-primary rounded-2xl py-2 flex items-center justify-center"
             >
-              <Text className="text-white font-pbold ">Đăng nhập</Text>
+              <Text className="text-white font-pbold">Đăng nhập</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -131,7 +147,7 @@ const ProfileScreen = () => {
     );
   }
 
-  if (isFetching && !data) {
+  if (isFetching) {
     return (
       <View className="relative w-full h-full">
         <View className="absolute top-0 bottom-0 left-0 right-0 z-0">

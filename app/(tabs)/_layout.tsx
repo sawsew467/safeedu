@@ -70,7 +70,25 @@ const TabLayout = () => {
             ),
           }}
         />
-        {/* <Tabs.Screen
+
+        <Tabs.Screen
+          name="contest"
+          options={{
+            title: "Contest",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                IconComponent={() => (
+                  <AntDesign name="Trophy" size={24} color={color} />
+                )}
+                color={color}
+                name="Cuộc thi"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="chatbot"
           options={{
             title: "chatbot",
@@ -86,23 +104,6 @@ const TabLayout = () => {
                 )}
                 color={color}
                 name="Chat bot"
-                focused={focused}
-              />
-            ),
-          }}
-        /> */}
-        <Tabs.Screen
-          name="contest"
-          options={{
-            title: "Contest",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                IconComponent={() => (
-                  <AntDesign name="Trophy" size={24} color={color} />
-                )}
-                color={color}
-                name="Cuộc thi"
                 focused={focused}
               />
             ),

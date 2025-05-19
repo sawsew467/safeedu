@@ -1,10 +1,5 @@
-import {
-  StyleSheet,
-
-  View,
-  Image,
-
-} from "react-native";
+import { StyleSheet, View, Image } from "react-native";
+import React from "react";
 
 // import { useExampleQuery, useGetAllCoursesQuery } from "../queries";
 
@@ -15,16 +10,21 @@ import { useMemo } from "react";
 
 function Chatbot() {
   const background = useMemo(() => {
-    return <Image source={bg} defaultSource={bg} style={styles.bg_image} resizeMode="cover" />
-  }, [])
+    return (
+      <Image
+        source={bg}
+        defaultSource={bg}
+        style={styles.bg_image}
+        resizeMode="cover"
+      />
+    );
+  }, []);
   return (
     <>
       <View style={styles.container_content}>
         <ChatContent />
       </View>
-      <View style={styles.bg}>
-        {background}
-      </View>
+      <View style={styles.bg}>{background}</View>
     </>
   );
 }
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 1
+    zIndex: 1,
   },
   bg: {
     position: "absolute",
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 0
+    zIndex: 0,
   },
   bg_image: {
     width: "100%",

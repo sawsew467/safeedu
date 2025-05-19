@@ -1,21 +1,22 @@
 import { Button } from "@/components/ui/Button";
 import { useAppDispatch } from "@/hooks/redux";
-import { useRouter } from "expo-router";
-import { ArrowLeftRight, LogOut } from "lucide-react-native";
-import { View, Text, StyleSheet } from "react-native";
+import { useNavigation, useRouter } from "expo-router";
+import { ArrowLeftRight, LogOut, UserPen } from "lucide-react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { setAccessToken, setRefreshToken } from "../auth/slices";
 import { baseApi } from "@/store/baseQuery";
 
 const LogOutModule = () => {
   const router = useRouter();
+  const navigation = useNavigation();
 
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     dispatch(setAccessToken(""));
     dispatch(setRefreshToken(""));
-    router.replace("/account");
     dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
+    router.replace("/account");
   };
   const handleSwitchAccount = () => {
     dispatch(setAccessToken(""));
@@ -30,22 +31,20 @@ const LogOutModule = () => {
 
       <View>
         <View style={styles.categoriesContainer}>
-          <Button
-            className="flex flex-row justify-center items-center w-full"
-            style={{ gap: 10 }}
+          <TouchableOpacity
             onPress={handleSwitchAccount}
+            className="w-full flex-row h-[60px] bg-gray-200 rounded-2xl py-2 flex items-center m-0 justify-center"
           >
-            <View className="flex flex-row justify-center items-center w-full">
-              <ArrowLeftRight size={20} color="black" />
-              <Text className="text-lg ml-2">Chuyển đổi tài khoản</Text>
-            </View>
-          </Button>
-          <Button style={{ gap: 10 }} variant="primary" onPress={handleLogout}>
-            <View className="flex flex-row justify-center items-center  w-full">
-              <LogOut size={20} color="white" />
-              <Text className="text-lg text-white ml-2">Đăng xuất</Text>
-            </View>
-          </Button>
+            <ArrowLeftRight size={22} color="black" />
+            <Text className="text-lg ml-2">Chuyển đổi tài khoản</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleLogout}
+            className="w-full flex-row h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
+          >
+            <LogOut size={20} color="white" />
+            <Text className="text-lg text-white ml-2">Đăng xuất</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   categoriesContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     flexWrap: "wrap",
     justifyContent: "space-between",
     gap: 10,

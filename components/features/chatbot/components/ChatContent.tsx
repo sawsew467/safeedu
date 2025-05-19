@@ -35,6 +35,19 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
 import ReportDialog from "./report-dialog";
 
+interface Attachment {
+  name?: string;
+  contentType?: string;
+  url: string;
+}
+
+interface Message {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  images?: string[];
+}
+
 const ListCommonQuestion = ({
   text,
   handleClick,
@@ -54,7 +67,7 @@ const TabChat = ({ IconComponent, color, actions }) => (
     onPress={() => actions()}
     className="flex items-center justify-center relative"
   >
-    <IconComponent color={color} size={24} />
+    <IconComponent color={color} size={10} />
   </TouchableOpacity>
 );
 
@@ -93,7 +106,83 @@ function ChatContent() {
   const [chatData, setChatData] = useState<TypeChat[]>([]);
   const scrollViewRef = useRef(null);
 
-  // console.log("🚀 ~ Chatbot ~ chatData:", chatData);
+  const [input, setInput] = useState("");
+  const [images, setImages] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<Attachment[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  console.log("🚀 ~ ChatContent ~ messages:", messages);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSendMessageeee = async (userMessage: string) => {
+    console.log("🚀 ~ handleSendMessageeee ~ userMessage:", userMessage);
+    if (!userMessage.trim()) return;
+
+    const newUserMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: userMessage,
+      images: imageUrls.map((img) => img.url),
+    };
+
+    let tempMessages = [...messages, newUserMessage];
+
+    setMessages(tempMessages);
+    setIsLoading(true);
+
+    const chatHistory = [...messages, newUserMessage];
+    console.log("🚀 ~ handleSendMessageeee ~ chatHistory:", chatHistory);
+
+    setImageUrls([]);
+
+    fetch("https://www.safe-edu.site/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ messages: chatHistory, images: imageUrls }),
+    })
+      .then((res) => res.json())
+      .then(async (data) => {
+        console.log("🚀 ~ .then ~ data:", data);
+        const rawContent =
+          data?.choices?.[0]?.message?.content || data?.content || "";
+
+        const assistantMessage: Message = {
+          id: Date.now().toString() + "-assistant",
+          role: "assistant",
+          content: rawContent,
+        };
+
+        tempMessages = [...tempMessages, assistantMessage];
+
+        setMessages(tempMessages);
+      })
+      .catch((err) => {
+        console.log("🚀 ~ handleSendMessage ~ err:", err);
+        const errorMessage: Message = {
+          id: Date.now().toString() + "-error",
+          role: "assistant",
+          content:
+            "Có lỗi xảy ra, vui lòng thử lại sau hoặc tạo sự cố trực tiếp cho bộ phận hỗ trợ",
+        };
+
+        setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const handleSubmit = (input: string) => {
+    const userInput = input.trim();
+
+    if (userInput && !isLoading) {
+      console.log("🚀 ~ handleSubmit ~ userInput:", userInput);
+
+      handleSendMessageeee(userInput);
+      setInput("");
+    }
+  };
 
   const handleAddUserMessage = (content: string) => {
     setChatData((prevChatData) => [
@@ -110,16 +199,16 @@ function ChatContent() {
     {
       name: "like",
       IconComponent: (id: string) =>
-        statusLike[id]?.status !== "like" ? (
-          <AntDesign name="like2" size={24} />
+        statusLike?.[id]?.status !== "like" ? (
+          <AntDesign name="like2" size={16} />
         ) : (
-          <AntDesign name="like1" size={24} color="#75A815" />
+          <AntDesign name="like1" size={16} color="#75A815" />
         ),
       actions: (_, id: string) => {
         setStatusLike((prev) => ({
           ...prev,
           [id]: {
-            status: prev[id].status === "like" ? "none" : "like",
+            status: prev?.[id]?.status === "like" ? "none" : "like",
           },
         }));
       },
@@ -127,23 +216,23 @@ function ChatContent() {
     {
       name: "dislike",
       IconComponent: (id: string) =>
-        statusLike[id]?.status !== "dislike" ? (
-          <AntDesign name="dislike2" size={24} />
+        statusLike?.[id]?.status !== "dislike" ? (
+          <AntDesign name="dislike2" size={16} />
         ) : (
-          <AntDesign name="dislike1" size={24} color="#75A815" />
+          <AntDesign name="dislike1" size={16} color="#DD2222" />
         ),
       color: "black",
       actions: (_, id: string) =>
         setStatusLike((prev) => ({
           ...prev,
           [id]: {
-            status: prev[id].status === "dislike" ? "none" : "dislike",
+            status: prev?.[id]?.status === "dislike" ? "none" : "dislike",
           },
         })),
     },
     {
       name: "copy",
-      IconComponent: () => <Feather name="copy" size={24} color="black" />,
+      IconComponent: () => <Feather name="copy" size={16} color="black" />,
       color: "black",
       actions: (content: string) => {
         Clipboard.setString(content);
@@ -157,7 +246,7 @@ function ChatContent() {
     },
     {
       name: "report",
-      IconComponent: () => <Octicons name="report" size={24} />,
+      IconComponent: () => <Octicons name="report" size={16} />,
       color: "black",
       actions: () => {
         setActions((prev) => ({ ...prev, isReport: true }));
@@ -173,7 +262,9 @@ function ChatContent() {
     isEnd,
     id_message,
   }: TypeChat & { isLoading: boolean; isEnd: boolean; error: boolean }) => {
-    if (isEnd && isLoading && !error)
+    console.log("🚀 ~ FrameChat ~ isLoading:", isLoading);
+
+    if (isEnd && isLoading)
       return (
         <View
           style={[
@@ -181,7 +272,7 @@ function ChatContent() {
             { justifyContent: role === "user" ? "flex-end" : "flex-start" },
           ]}
         >
-          {role === "chatbot" && (
+          {role === "assistant" && (
             <>
               <Image source={avatar_chatbot} style={styles.avatar_chatbot} />
             </>
@@ -204,7 +295,7 @@ function ChatContent() {
             { justifyContent: role === "user" ? "flex-end" : "flex-start" },
           ]}
         >
-          {role === "chatbot" && (
+          {role === "assistant" && (
             <>
               <Image source={avatar_chatbot} style={styles.avatar_chatbot} />
             </>
@@ -213,7 +304,7 @@ function ChatContent() {
             style={[
               styles.frame_chat,
               role === "user" ? styles.user_style : styles.chatbot_style,
-              role === "chatbot" &&
+              role === "assistant" &&
                 error &&
                 isEnd && {
                   backgroundColor: "#f8a5a5",
@@ -223,7 +314,7 @@ function ChatContent() {
             ]}
           >
             <Text style={styles.text_frame_chat} className="font-pregular">
-              {role === "chatbot" ? (
+              {role === "assistant" ? (
                 <Markdown
                   style={{
                     body: {
@@ -243,7 +334,7 @@ function ChatContent() {
             </Text>
           </View>
         </View>
-        {role === "chatbot" && (
+        {role === "assistant" && (
           <View style={styles.container_action}>
             {tabActions?.map(
               ({ IconComponent, color, actions }, index: number) => (
@@ -283,7 +374,7 @@ function ChatContent() {
           ...data,
           {
             content: content,
-            role: "chatbot",
+            role: "assistant",
             id_message,
           },
         ];
@@ -299,7 +390,7 @@ function ChatContent() {
         ...prevData,
         {
           content: content,
-          role: "chatbot",
+          role: "assistant",
           id_message,
         },
       ]);
@@ -391,7 +482,7 @@ function ChatContent() {
               }}
             />
           ) : (
-            <Input handleSubmit={handleSendMessage} />
+            <Input handleSubmit={handleSubmit} />
           )
         }
         // rightIcon={{
@@ -402,7 +493,7 @@ function ChatContent() {
         <View style={styles.container_content}>
           <View style={styles.container_header}>
             <Image source={avatar_chatbot} />
-            {chatData.length === 0 && (
+            {messages.length === 0 && (
               <FlatList
                 scrollEnabled={false}
                 numColumns={2}
@@ -417,7 +508,7 @@ function ChatContent() {
                 keyExtractor={(item: string) => item}
                 renderItem={({ item }: { item: string }) => (
                   <ListCommonQuestion
-                    handleClick={handleSendMessage}
+                    handleClick={handleSendMessageeee}
                     text={item}
                   />
                 )}
@@ -427,24 +518,32 @@ function ChatContent() {
           <FlatList
             contentContainerStyle={styles.container_chat}
             scrollEnabled={false}
-            data={chatData}
-            keyExtractor={(item, index) => item.id_message}
-            renderItem={({
-              item,
-              index,
-            }: {
-              item: TypeChat;
-              index: number;
-            }) => (
+            data={messages}
+            keyExtractor={(item, index) => item.id}
+            renderItem={({ item, index }: { item: Message; index: number }) => (
               <FrameChat
                 {...item}
                 error={error}
-                isLoading={loading}
-                isEnd={index + 1 === chatData.length && item.role === "chatbot"}
-                id_message={item.role === "chatbot" && item.id_message}
+                isLoading={isLoading}
+                isEnd={
+                  index + 1 === messages.length && item.role === "assistant"
+                }
+                id_message={item.role === "assistant" && item.id}
               />
             )}
           />
+          {isLoading && (
+            <View style={styles.container_chat}>
+              <FrameChat
+                content={""}
+                error={error}
+                role={"assistant"}
+                isLoading={isLoading}
+                isEnd={true}
+                id_message={uuid.v4()}
+              />
+            </View>
+          )}
         </View>
       </HeaderShown>
       <ReportDialog
@@ -484,7 +583,7 @@ const styles = StyleSheet.create({
   },
   container_frame_chat: {},
   container_action: {
-    marginTop: 20,
+    marginTop: 8,
     paddingInline: 50,
     display: "flex",
     flexDirection: "row",
