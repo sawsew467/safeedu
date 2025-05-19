@@ -229,6 +229,7 @@ const SignUpModule = () => {
             }).unwrap();
             break;
         }
+        alert("Đăng ký thành công, vui lòng đăng nhập tài khoản của bạn!");
         router.push("/sign-in");
       } catch (error) {
         const message: string =
@@ -268,7 +269,7 @@ const SignUpModule = () => {
               placeholder="Nguyễn"
               placeholderTextColor="#C4C4C4"
               value={lastName}
-              onChangeText={setFirstName}
+              onChangeText={setLastName}
               className="text-lg text-black pl-0 pb-0"
             />
             <View className="w-full h-[1.5px] bg-black mt-2" />
@@ -285,7 +286,7 @@ const SignUpModule = () => {
               placeholder="Văn A"
               placeholderTextColor="#C4C4C4"
               value={firstName}
-              onChangeText={setLastName}
+              onChangeText={setFirstName}
               className="text-lg text-black pl-0 pb-0"
             />
             <View className="w-full h-[1.5px] bg-black mt-2" />

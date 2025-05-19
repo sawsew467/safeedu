@@ -16,6 +16,7 @@ import {
   useForgotPassWordMutation,
   useVerifyCodeMutation,
 } from "@/services/auth/auth.api";
+import HeaderShown from "@/components/ui/HeaderShown";
 
 type FormData = {
   code: string;
@@ -97,126 +98,131 @@ const VerifyCodeModule = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Xác minh Email</Text>
-        <Text style={styles.subtitle}>Nhập mã xác minh đã gửi đến</Text>
+    <HeaderShown title="Xác thực OTP" style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <Text style={styles.subtitle}>
+            Nhập mã xác minh đã gửi đến email của bạn
+          </Text>
 
-        <Text style={styles.label}>Mã xác minh</Text>
-        <Controller
-          control={control}
-          name="code"
-          rules={{
-            required: "Vui lòng nhập mã xác minh",
-            minLength: {
-              value: 6,
-              message: "Mã xác minh phải có 6 chữ số",
-            },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <View style={styles.codeContainer}>
-              <View style={styles.codeInputGroup}>
-                {[0, 1, 2].map((index) => (
-                  <TextInput
-                    key={`first-${index}`}
-                    style={styles.codeInput}
-                    maxLength={1}
-                    keyboardType="numeric"
-                    ref={(ref) => {
-                      inputRefs.current[index] = ref;
-                    }}
-                    onChange={({ nativeEvent }) => {
-                      if (nativeEvent.text === "" && index > 0) {
-                        inputRefs.current[index - 1]?.focus();
-                      }
-                    }}
-                    onChangeText={(text) => {
-                      const newCode = value.split("");
-                      newCode[index] = text;
-                      onChange(newCode.join(""));
+          <Text style={styles.label}>Mã xác minh</Text>
+          <Controller
+            control={control}
+            name="code"
+            rules={{
+              required: "Vui lòng nhập mã xác minh",
+              minLength: {
+                value: 6,
+                message: "Mã xác minh phải có 6 chữ số",
+              },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <View style={styles.codeContainer}>
+                <View style={styles.codeInputGroup}>
+                  {[0, 1, 2].map((index) => (
+                    <TextInput
+                      key={`first-${index}`}
+                      style={styles.codeInput}
+                      maxLength={1}
+                      keyboardType="numeric"
+                      ref={(ref) => {
+                        inputRefs.current[index] = ref;
+                      }}
+                      onChange={({ nativeEvent }) => {
+                        if (nativeEvent.text === "" && index > 0) {
+                          inputRefs.current[index - 1]?.focus();
+                        }
+                      }}
+                      onChangeText={(text) => {
+                        const newCode = value.split("");
+                        newCode[index] = text;
+                        onChange(newCode.join(""));
 
-                      if (text && index < 5) {
-                        inputRefs.current[index + 1]?.focus();
-                      }
-                    }}
-                    value={value[index] || ""}
-                  />
-                ))}
+                        if (text && index < 5) {
+                          inputRefs.current[index + 1]?.focus();
+                        }
+                      }}
+                      value={value[index] || ""}
+                    />
+                  ))}
+                </View>
+
+                <Text style={styles.separator}>—</Text>
+
+                <View style={styles.codeInputGroup}>
+                  {[3, 4, 5].map((index) => (
+                    <TextInput
+                      key={`second-${index}`}
+                      style={styles.codeInput}
+                      maxLength={1}
+                      keyboardType="numeric"
+                      ref={(ref) => {
+                        inputRefs.current[index] = ref;
+                      }}
+                      onChangeText={(text) => {
+                        const newCode = value.split("");
+                        newCode[index] = text;
+                        onChange(newCode.join(""));
+
+                        if (text && index < 5) {
+                          inputRefs.current[index + 1]?.focus();
+                        }
+                      }}
+                      onChange={({ nativeEvent }) => {
+                        if (nativeEvent.text === "" && index > 0) {
+                          inputRefs.current[index - 1]?.focus();
+                        }
+                      }}
+                      value={value[index] || ""}
+                    />
+                  ))}
+                </View>
               </View>
+            )}
+          />
 
-              <Text style={styles.separator}>—</Text>
-
-              <View style={styles.codeInputGroup}>
-                {[3, 4, 5].map((index) => (
-                  <TextInput
-                    key={`second-${index}`}
-                    style={styles.codeInput}
-                    maxLength={1}
-                    keyboardType="numeric"
-                    ref={(ref) => {
-                      inputRefs.current[index] = ref;
-                    }}
-                    onChangeText={(text) => {
-                      const newCode = value.split("");
-                      newCode[index] = text;
-                      onChange(newCode.join(""));
-
-                      if (text && index < 5) {
-                        inputRefs.current[index + 1]?.focus();
-                      }
-                    }}
-                    onChange={({ nativeEvent }) => {
-                      if (nativeEvent.text === "" && index > 0) {
-                        inputRefs.current[index - 1]?.focus();
-                      }
-                    }}
-                    value={value[index] || ""}
-                  />
-                ))}
-              </View>
-            </View>
+          {errors.code && (
+            <Text style={styles.errorText}>{errors.code.message}</Text>
           )}
-        />
 
-        {errors.code && (
-          <Text style={styles.errorText}>{errors.code.message}</Text>
-        )}
+          <Text style={styles.noteText}>
+            Kiểm tra hộp thư để lấy mã 6 chữ số.
+          </Text>
 
-        <Text style={styles.noteText}>
-          Kiểm tra hộp thư để lấy mã 6 chữ số.
-        </Text>
+          <FormButton
+            title="Xác minh mã"
+            onPress={handleSubmit(onSubmit)}
+            isLoading={isVerifying}
+            disabled={code?.length !== 6}
+          />
 
-        <FormButton
-          title="Xác minh mã"
-          onPress={handleSubmit(onSubmit)}
-          isLoading={isVerifying}
-          disabled={code?.length !== 6}
-        />
+          <View style={styles.footer}>
+            <TouchableOpacity
+              onPress={handleResendCode}
+              disabled={timer > 0 || isSendVerificationOtp}
+              style={styles.resendButton}
+            >
+              <Text
+                style={[styles.resendText, timer > 0 && styles.disabledText]}
+              >
+                {isSendVerificationOtp
+                  ? "...Đang gửi mã"
+                  : timer > 0
+                  ? `Không nhận được mã? Gửi lại (${timer}s)`
+                  : "Không nhận được mã? Gửi lại"}
+              </Text>
+            </TouchableOpacity>
 
-        <View style={styles.footer}>
-          <TouchableOpacity
-            onPress={handleResendCode}
-            disabled={timer > 0 || isSendVerificationOtp}
-            style={styles.resendButton}
-          >
-            <Text style={[styles.resendText, timer > 0 && styles.disabledText]}>
-              {isSendVerificationOtp
-                ? "...Đang gửi mã"
-                : timer > 0
-                ? `Không nhận được mã? Gửi lại (${timer}s)`
-                : "Không nhận được mã? Gửi lại"}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={handleUseAnotherEmail}
-            style={styles.anotherEmailButton}
-          >
-            <Text style={styles.anotherEmailText}>Dùng email khác</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleUseAnotherEmail}
+              style={styles.anotherEmailButton}
+            >
+              <Text style={styles.anotherEmailText}>Dùng email khác</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </HeaderShown>
   );
 };
 
