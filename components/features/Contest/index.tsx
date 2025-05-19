@@ -11,6 +11,7 @@ import {
   Dimensions,
   StatusBar,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 import GlobalStyles from "@/components/ui/SafeViewAndroid";
 import bg_1 from "@/assets/images/contest/bg_1.png";
@@ -25,6 +26,7 @@ import {
 import { Competitions } from "@/healper/type/Contest";
 import { Skeleton } from "moti/skeleton";
 import { skeletonCommonProps } from "@/healper/type/type-common-skeleton";
+import { router } from "expo-router";
 const styles = StyleSheet.create({
   scrollViewContent: {
     marginTop: 20,
@@ -141,7 +143,12 @@ function Contest() {
     if (isSuccess) refetch();
   };
 
-  console.log("first", competitions);
+  const handleSignIn = () => {
+    router.push("/sign-in");
+  };
+  const handleSignUp = () => {
+    router.push("/user-type-screen");
+  };
 
   return (
     <SafeAreaView style={GlobalStyles.AndroidSafeArea} className="bg-white">
@@ -186,7 +193,26 @@ function Contest() {
             },
           ]}
         >
-          <FlatList
+          <View className="pt-4 px-4 bg-white rounded-[24px_24px_0_0] min-h-[500px]">
+            <Text className="font-medium text-lg text-center mt-20 mb-4">
+              Vui lòng đăng nhập để xem thông tin cuộc thi
+            </Text>
+            <View className="flex flex-row justify-center items-center w-full gap-4 mb-2 px-8">
+              <TouchableOpacity
+                onPress={handleSignIn}
+                className="w-1/2 flex-row h-[60px] bg-white rounded-2xl py-2 flex items-center justify-center border-2 border-primary"
+              >
+                <Text className="text-primary font-medium">Đăng nhập</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleSignUp}
+                className="w-1/2 flex-row h-[60px] bg-primary rounded-2xl py-2 flex items-center justify-center"
+              >
+                <Text className="text-white font-medium">Đăng ký</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* <FlatList
             scrollEnabled={false}
             className="pt-4 px-4 bg-white rounded-[24px_24px_0_0]"
             data={isFetching ? Array.from({ length: 3 }) : competitions}
@@ -202,7 +228,7 @@ function Contest() {
               paddingVertical: 16,
               overflow: "visible",
             }}
-          />
+          /> */}
         </Animated.View>
       </ScrollView>
       <Animated.View
