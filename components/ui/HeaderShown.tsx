@@ -114,8 +114,6 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
                     </TouchableOpacity>
                   </Animated.View>
                 )
-              : headerLeft
-              ? headerLeft
               : null,
             headerRight: rightIcon
               ? () => (
