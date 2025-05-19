@@ -27,26 +27,13 @@ const LogOutModule = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Đăng xuất</Text>
-
-      <View>
-        <View style={styles.categoriesContainer}>
-          <TouchableOpacity
-            onPress={handleSwitchAccount}
-            className="w-full flex-row h-[60px] bg-gray-200 rounded-2xl py-2 flex items-center m-0 justify-center"
-          >
-            <ArrowLeftRight size={22} color="black" />
-            <Text className="text-lg ml-2">Chuyển đổi tài khoản</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleLogout}
-            className="w-full flex-row h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
-          >
-            <LogOut size={20} color="white" />
-            <Text className="text-lg text-white ml-2">Đăng xuất</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <TouchableOpacity
+        onPress={handleLogout}
+        className="w-full flex-row h-[60px] bg-red-700 rounded-2xl py-2 flex items-center m-0 justify-center"
+      >
+        <LogOut size={20} color="white" />
+        <Text className="text-lg text-white ml-2">Đăng xuất</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -55,8 +42,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
     borderRadius: 16,
-    padding: 15,
-    margin: 10,
+    marginLeft: 10,
+    marginRight: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

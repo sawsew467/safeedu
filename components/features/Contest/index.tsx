@@ -99,6 +99,8 @@ function Contest() {
     useGetAllCompetitionsUserQuery(undefined, {
       selectFromResult: ({ data, isFetching, isSuccess }) => {
         const competitions = data?.data;
+        console.log("🚀 ~ Contest ~ competitions:", competitions);
+
         return {
           competitions: [
             {

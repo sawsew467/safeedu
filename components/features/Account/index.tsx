@@ -114,6 +114,9 @@ const ProfileScreen = () => {
   const handleSignIn = () => {
     router.push("/sign-in");
   };
+  const handleSignUp = () => {
+    router.push("/user-type-screen");
+  };
   const handleChangePassword = () => {
     router.push("/account/change-password");
   };
@@ -128,18 +131,28 @@ const ProfileScreen = () => {
           <Image source={background} className="w-full h-full" />
         </View>
         <View className="flex-1 flex items-center justify-center">
-          <View className="h-auto flex items-center">
-            <UserRound size={100} strokeWidth={1} color="white" />
-            <Text className="text-gray-200 text-lg font-plight mb-2">
-              Đăng nhập vào tài khoản hiện có
+          <View className="h-auto flex items-center mb-4">
+            <Image
+              source={require("@/assets/images/safeedu.png")}
+              className="h-64 w-56"
+            />
+            {/* <UserRound size={100} strokeWidth={1} color="white" /> */}
+            <Text className="text-gray-200 text-xl font-medium mb-2 mt-4">
+              Vui lòng đăng nhập để tiếp tục
             </Text>
           </View>
-          <View className="flex justify-center items-center w-full gap-4 mb-2">
+          <View className="flex flex-row justify-center items-center w-full gap-4 mb-2 px-8">
             <TouchableOpacity
               onPress={handleSignIn}
+              className="w-1/2 flex-row h-[60px] bg-white rounded-2xl py-2 flex items-center justify-center border-2 border-primary"
+            >
+              <Text className="text-primary font-medium">Đăng nhập</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleSignUp}
               className="w-1/2 flex-row h-[60px] bg-primary rounded-2xl py-2 flex items-center justify-center"
             >
-              <Text className="text-white font-pbold">Đăng nhập</Text>
+              <Text className="text-white font-medium">Đăng ký</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -212,20 +225,24 @@ const ProfileScreen = () => {
             </View>
           </View>
 
-          <View className="flex flex-row justify-center w-full px-4 gap-4 mb-2">
+          <View className="flex flex-row justify-center w-full  gap-4 mb-2">
             <TouchableOpacity
               onPress={handleChangeProfile}
-              className="w-1/2 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
+              className="flex-1 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
             >
-              <UserPen color="white" size={22} className="mb-2" />
-              <Text className="text-white font-pbold ">Thay đổi hồ sơ</Text>
+              <UserPen color="white" size={22} className="mb-2 mr-2" />
+              <Text className="text-white font-pbold mr-2 mb-2">
+                Thay đổi hồ sơ
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleChangePassword}
-              className="w-1/2 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
+              className="flex-1 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
             >
-              <KeyRound color="white" size={22} className="mb-2" />
-              <Text className="text-white font-pbold">Đổi mật khẩu</Text>
+              <KeyRound color="white" size={22} className="mb-2 mr-2" />
+              <Text className="text-white font-pbold mr-2 mb-2">
+                Đổi mật khẩu
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

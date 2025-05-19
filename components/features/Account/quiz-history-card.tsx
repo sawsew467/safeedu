@@ -7,7 +7,13 @@ const QuizHistoryCard = ({ quizResults, formatDate }) => {
       <Text style={styles.subtitle}>
         Kết quả các bài kiểm tra đã hoàn thành
       </Text>
-
+      {quizResults?.length === 0 && (
+        <View className="flex justify-center items-center">
+          <Text className="text-gray-500 text-center">
+            Chưa ghi nhận kết quả bài kiểm tra nào
+          </Text>
+        </View>
+      )}
       <View style={styles.resultsList}>
         {quizResults?.map((result, index) => (
           <View key={index} style={styles.resultItem}>

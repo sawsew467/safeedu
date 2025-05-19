@@ -9,8 +9,14 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
-import { Home, Book, Bell } from "react-native-feather";
 import { useAppSelector } from "@/hooks/redux";
+import {
+  BookIcon,
+  BotMessageSquareIcon,
+  HomeIcon,
+  TrophyIcon,
+  UserIcon,
+} from "lucide-react-native";
 
 const TabIcon = ({ IconComponent, color, name, focused }) => {
   return (
@@ -61,7 +67,7 @@ const TabLayout = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 IconComponent={() => (
-                  <Home width={24} height={24} color={color} />
+                  <HomeIcon width={24} height={24} color={color} />
                 )}
                 color={color}
                 name="Trang chủ"
@@ -70,7 +76,23 @@ const TabLayout = () => {
             ),
           }}
         />
-
+        <Tabs.Screen
+          name="library"
+          options={{
+            title: "Thư viện",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                IconComponent={() => (
+                  <BookIcon width={24} height={24} color={color} />
+                )}
+                color={color}
+                name="Thư viện"
+                focused={focused}
+              />
+            ),
+          }}
+        />
         <Tabs.Screen
           name="contest"
           options={{
@@ -79,7 +101,7 @@ const TabLayout = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 IconComponent={() => (
-                  <AntDesign name="Trophy" size={24} color={color} />
+                  <TrophyIcon width={24} height={24} color={color} />
                 )}
                 color={color}
                 name="Cuộc thi"
@@ -96,31 +118,10 @@ const TabLayout = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 IconComponent={() => (
-                  <Ionicons
-                    name="chatbox-ellipses-outline"
-                    size={24}
-                    color={color}
-                  />
+                  <BotMessageSquareIcon width={24} height={24} color={color} />
                 )}
                 color={color}
                 name="Chat bot"
-                focused={focused}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="notifications"
-          options={{
-            title: "thông báo",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                IconComponent={() => (
-                  <Bell width={24} height={24} color={color} />
-                )}
-                color={color}
-                name="thông báo"
                 focused={focused}
               />
             ),
@@ -175,11 +176,7 @@ const TabLayout = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 IconComponent={() => (
-                  <MaterialCommunityIcons
-                    name="account-circle-outline"
-                    size={24}
-                    color={color}
-                  />
+                  <UserIcon width={24} height={24} color={color} />
                 )}
                 color={color}
                 name="Tài khoản"

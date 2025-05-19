@@ -27,6 +27,7 @@ const style = StyleSheet.create({
 });
 
 const ContestItem = ({ item }: { item: Competitions }) => {
+  console.log("🚀 ~ ContestItem ~ item:", item);
   return (
     <TouchableOpacity onPress={() => router.push(`/contest/${item?.slug}`)}>
       <View className="flex w-60 h-72 flex-col" style={style.shadow}>
@@ -47,12 +48,12 @@ const ContestItem = ({ item }: { item: Competitions }) => {
           >
             {item?.title}
           </Text>
-          <Text
+          {/* <Text
             numberOfLines={1}
             className="text-sm font-normal text-[#7E7E7E]"
           >
             {item?.number_join} người tham gia
-          </Text>
+          </Text> */}
         </View>
       </View>
     </TouchableOpacity>

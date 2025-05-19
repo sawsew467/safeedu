@@ -41,7 +41,7 @@ const SignInModule = () => {
     try {
       const res = await signIn({ username, password }).unwrap();
       console.log("res", res);
-      router.push("/home");
+      router.push("/account");
     } catch (error) {
       const message: string =
         (error as any)?.data?.error?.message || "Đã xảy ra lỗi!";
@@ -56,7 +56,7 @@ const SignInModule = () => {
     }
   };
   const handleSignUp = () => {
-    router.push("/start");
+    router.push("/user-type-screen");
   };
 
   const handleForgotPassword = () => {
@@ -75,12 +75,12 @@ const SignInModule = () => {
       ></ImageBackground>
       <View className="flex justify-center items-center top-2/3">
         <View className="w-[90%] p-5 rounded-[20px]">
-          <Text className="text-[16px] font-bold text-black mb-[8px]">
+          <Text className="text-[16px] font-medium text-black mb-[8px]">
             Tên tài khoản
           </Text>
           <View style={styles.input} className="px-4 flex justify-center">
             <TextInput
-              placeholder="example"
+              placeholder="Nhập tên tài khoản"
               value={username}
               onChangeText={setUsername}
             />
@@ -89,10 +89,10 @@ const SignInModule = () => {
             <Text style={styles.errorText}>{error.username}</Text>
           ) : null}
 
-          <View className="flex flex-row w-full justify-between">
+          <View className="flex flex-row w-full justify-between mt-2">
             <Text style={styles.label}>Mật khẩu</Text>
             <TouchableOpacity onPress={handleForgotPassword}>
-              <Text className="text-primary font-psemibold underline underline-offset-4">
+              <Text className="text-primary font-medium underline underline-offset-4">
                 Quên mật khẩu
               </Text>
             </TouchableOpacity>
@@ -103,7 +103,7 @@ const SignInModule = () => {
               className="px-4 flex justify-center relative"
             >
               <TextInput
-                placeholder="●●●●●●●"
+                placeholder="Nhập mật khẩu"
                 secureTextEntry={!passwordVisible}
                 value={password}
                 onChangeText={setPassword}
@@ -137,7 +137,12 @@ const SignInModule = () => {
           <View style={styles.signUpContainer}>
             <Text style={styles.signUpText}>Tạo tài khoản mới?</Text>
             <TouchableOpacity onPress={handleSignUp}>
-              <Text style={styles.signUpLink}>Đăng kí</Text>
+              <Text
+                style={styles.signUpLink}
+                className="text-primary font-medium"
+              >
+                Đăng kí
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -201,8 +206,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   signUpLink: {
-    color: "#4CAF50",
-    fontWeight: "bold",
     marginLeft: 5,
     fontSize: 14,
   },

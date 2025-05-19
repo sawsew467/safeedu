@@ -58,7 +58,6 @@ const ForgotPasswordScreen = () => {
           <Image source={frog} />
         </View>
 
-        <Text style={styles.title}>Quên mật khẩu</Text>
         <Text style={styles.subtitle}>
           Nhập địa chỉ email của bạn, chúng tôi sẽ gửi mã xác minh để đặt lại
           mật khẩu
@@ -122,6 +121,7 @@ const styles = StyleSheet.create({
     color: "#666666",
     textAlign: "center",
     marginBottom: 30,
+    marginTop: 20,
   },
   noteText: {
     fontSize: 14,

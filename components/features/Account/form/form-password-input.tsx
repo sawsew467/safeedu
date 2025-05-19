@@ -43,7 +43,7 @@ function FormPasswordInput<T extends FieldValues>({
   return (
     <View style={styles.container}>
       <View style={styles.labelContainer}>
-        {icon && <Ionicons name={icon} size={20} color="#fff" />}
+        {/* {icon && <Ionicons name={icon} size={20} color="#fff" />} */}
         <Text className="font-psemibold text-base text-white ml-2">
           {label}
         </Text>
@@ -63,7 +63,7 @@ function FormPasswordInput<T extends FieldValues>({
                 onBlur={onBlur}
                 onChangeText={onChange}
                 secureTextEntry={!passwordVisible}
-                className="text-lg text-black pl-0 pb-0 pr-10"
+                className=" text-black pl-0 pb-0 pr-10 text-[16px]"
               />
             </View>
             <TouchableOpacity
@@ -104,6 +104,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
     borderWidth: 1,
     borderColor: "#CCCCCC",
     borderRadius: 8,
@@ -112,10 +116,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   inputError: {
-    borderColor: "#FF3B30",
+    borderColor: "#d2362e",
   },
   errorText: {
-    color: "#FF3B30",
+    color: "#d2362e",
     fontSize: 14,
     marginTop: 4,
   },
