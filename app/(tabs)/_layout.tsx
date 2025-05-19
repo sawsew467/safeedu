@@ -11,10 +11,15 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
 import { Home, Book, Bell } from "react-native-feather";
 
-const TabIcon = ({ IconComponent, color, name, focused }) => {
+const TabIcon = ({ icon, color, name, focused }) => {
   return (
     <View className="flex items-center justify-center relative w-64">
-      <IconComponent color={color} size={24} />
+      <Image
+        source={icon}
+        tintColor={focused ? "#75A815" : "#666876"}
+        resizeMode="contain"
+        className="size-6"
+      />
       <Text
         className={`${
           focused ? "font-psemibold" : "font-pregular"
@@ -51,9 +56,7 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                IconComponent={() => (
-                  <Home width={24} height={24} color={color} />
-                )}
+                icon={<Home width={24} height={24} color={color} />}
                 color={color}
                 name="Trang chủ"
                 focused={focused}
@@ -68,9 +71,7 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                IconComponent={() => (
-                  <Book width={24} height={24} color={color} />
-                )}
+                icon={<Book width={24} height={24} color={color} />}
                 color={color}
                 name="Thư viện"
                 focused={focused}
@@ -85,13 +86,13 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                IconComponent={() => (
+                icon={
                   <Ionicons
                     name="chatbox-ellipses-outline"
                     size={24}
                     color={color}
                   />
-                )}
+                }
                 color={color}
                 name="Chat bot"
                 focused={focused}
@@ -106,9 +107,7 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                IconComponent={() => (
-                  <Bell width={24} height={24} color={color} />
-                )}
+                icon={<Bell width={24} height={24} color={color} />}
                 color={color}
                 name="thông báo"
                 focused={focused}
