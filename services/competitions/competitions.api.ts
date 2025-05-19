@@ -78,6 +78,32 @@ export const competitionsAPI = baseApi.injectEndpoints({
       },
       providesTags: ["comment"],
     }),
+    isDoQuizz: build.query({
+      query: ({ id }) => {
+        return {
+          url: `/quiz-result/is-submit/${id}`,
+          method: "GET",
+          flashError: true,
+        };
+      },
+      providesTags: ["quizResult"],
+    }),
+    getMyPicture: build.query({
+      query: ({ id }) => ({
+        url: `/picture/my-picture/${id}`,
+        method: "GET",
+        flashError: true,
+      }),
+    }),
+    addNewPicture: build.mutation({
+      query: (data) => ({
+        url: "/picture/submited",
+        method: "POST",
+        body: data,
+        flashError: true,
+      }),
+      invalidatesTags: ["picture", "quizResult"],
+    }),
   }),
 });
 
@@ -91,4 +117,7 @@ export const {
   useCommentPictureMutation,
   useGetAllCommentByPictureIdQuery,
   useGetLeaderBoardQuery,
+  useIsDoQuizzQuery,
+  useGetMyPictureQuery,
+  useAddNewPictureMutation,
 } = competitionsAPI;

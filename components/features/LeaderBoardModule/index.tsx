@@ -1,14 +1,19 @@
 import HeaderShown from "@/components/ui/HeaderShown";
-import { View, Image, StyleSheet, Text, FlatList } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import bg_leaderboard from "@/assets/images/contest/details/bg_leaderboard.png";
 import ranking from "@/assets/icons/ranking.png";
 import frame_ranking_1 from "@/assets/icons/frame_ranking_1.png";
 import frame_ranking_2 from "@/assets/icons/frame_ranking_2.png";
 import bg_ranking from "@/assets/images/contest/bg_ranking.png";
-import { DATA, LEADERBOARD_DATA } from "@/healper/data/contest";
-import { useLocalSearchParams } from "expo-router";
-import { DataType, ContentType } from "../Contest";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useGetLeaderBoardQuery } from "@/services/competitions/competitions.api";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { getToken, saveTokenToStorage } from "@/utils/token-storage";
@@ -37,24 +42,35 @@ const ListItem = ({
   score,
   index,
 }: TypeLeaderBoard & { index: number }) => {
+  const router = useRouter();
   return (
     <View style={styles.container_board}>
       <View style={styles.board}>
         <View style={styles.infor_board}>
-          <Image source={{ uri: user?.avatar }} style={styles.image_board} />
+          <TouchableOpacity
+            onPress={() => {
+              router.push(`/account/${user?.username}`);
+            }}
+          >
+            <Image source={{ uri: user?.avatar }} style={styles.image_board} />
+          </TouchableOpacity>
           <View>
-            <Text
-              style={styles.name_board}
-              className="font-pmedium text-primary max-w-[200px] break-all break-words"
-            >
-              {user?.first_name} {user?.last_name}
-            </Text>
-            <Text
-              style={styles.name_board}
-              className="font-pmedium text-gray-500"
-            >
-              @{user?.username}
-            </Text>
+            <Link href={`/account/${user?.username}`}>
+              <Text
+                style={styles.name_board}
+                className="font-pmedium text-primary max-w-[200px] break-all break-words"
+              >
+                {user?.first_name} {user?.last_name}
+              </Text>
+            </Link>
+            <Link href={`/account/${user?.username}`}>
+              <Text
+                style={styles.name_board}
+                className="font-pmedium text-gray-500"
+              >
+                @{user?.username}
+              </Text>
+            </Link>
           </View>
         </View>
         <Text style={styles.point_board} className="font-psemibold">
@@ -67,6 +83,7 @@ const ListItem = ({
 
 const LeaderBoardModule = () => {
   const { contestID } = useLocalSearchParams();
+  const router = useRouter();
 
   const handle = async () => {
     await saveTokenToStorage({
@@ -114,16 +131,25 @@ const LeaderBoardModule = () => {
         </View>
         <View style={styles.top3_leaderboard}>
           <View style={styles.top1_ranking}>
-            <View style={[styles.avatar_container_1, styles.container_ranking]}>
-              <Image
-                source={frame_ranking_1}
-                style={styles.frame_avatar_1}
-              ></Image>
-              <Image
-                source={{ uri: leaderBoard?.[0]?.user?.avatar }}
-                style={[styles.avatar]}
-              />
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                router.push(`/account/${leaderBoard?.[0]?.user?.username}`);
+              }}
+            >
+              <View
+                style={[styles.avatar_container_1, styles.container_ranking]}
+              >
+                <Image
+                  source={frame_ranking_1}
+                  style={styles.frame_avatar_1}
+                ></Image>
+
+                <Image
+                  source={{ uri: leaderBoard?.[0]?.user?.avatar }}
+                  style={[styles.avatar]}
+                />
+              </View>
+            </TouchableOpacity>
             <View style={styles.container_content}>
               <Text style={styles.name}>
                 {leaderBoard?.[0]?.user?.username}
@@ -134,16 +160,25 @@ const LeaderBoardModule = () => {
             </View>
           </View>
           <View style={styles.top2_ranking}>
-            <View style={[styles.avatar_container_2, styles.container_ranking]}>
-              <Image
-                source={frame_ranking_2}
-                style={styles.frame_avatar_2}
-              ></Image>
-              <Image
-                source={{ uri: leaderBoard?.[1]?.user?.avatar }}
-                style={styles.avatar}
-              />
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                router.push(`/account/${leaderBoard?.[1]?.user?.username}`);
+              }}
+            >
+              <View
+                style={[styles.avatar_container_2, styles.container_ranking]}
+              >
+                <Image
+                  source={frame_ranking_2}
+                  style={styles.frame_avatar_2}
+                ></Image>
+
+                <Image
+                  source={{ uri: leaderBoard?.[1]?.user?.avatar }}
+                  style={styles.avatar}
+                />
+              </View>
+            </TouchableOpacity>
             <View style={styles.container_content}>
               <Text style={styles.name}>
                 {leaderBoard?.[1]?.user?.username}
@@ -154,16 +189,24 @@ const LeaderBoardModule = () => {
             </View>
           </View>
           <View style={styles.top3_ranking}>
-            <View style={[styles.avatar_container_2, styles.container_ranking]}>
-              <Image
-                source={frame_ranking_2}
-                style={styles.frame_avatar_2}
-              ></Image>
-              <Image
-                source={{ uri: leaderBoard?.[2]?.user?.avatar }}
-                style={styles.avatar}
-              />
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                router.push(`/account/${leaderBoard?.[2]?.user?.username}`);
+              }}
+            >
+              <View
+                style={[styles.avatar_container_2, styles.container_ranking]}
+              >
+                <Image
+                  source={frame_ranking_2}
+                  style={styles.frame_avatar_2}
+                ></Image>
+                <Image
+                  source={{ uri: leaderBoard?.[2]?.user?.avatar }}
+                  style={styles.avatar}
+                />
+              </View>
+            </TouchableOpacity>
             <View style={styles.container_content}>
               <Text style={styles.name}>
                 {leaderBoard?.[2]?.user?.username}

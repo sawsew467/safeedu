@@ -76,13 +76,9 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     }
   }, [selectedValue]);
 
-  console.log("dob", selectedValue || new Date());
-
   useEffect(() => {
     let timer;
     if (visible) {
-      console.log("dob2", selectedValue);
-
       const curentSelectDate = selectedValue || new Date();
 
       setSelectedDate(curentSelectDate);

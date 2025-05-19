@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/Button";
 import { CommentType, Picture } from "@/healper/type/Contest";
 import { cn } from "@/utils/cn";
 import { formatDate } from "@/utils/format-date";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import moment from "moment";
 import React from "react";
 import {
@@ -21,6 +21,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { useCommentPictureMutation } from "@/services/competitions/competitions.api";
 import { MotiView } from "moti";
 import { skeletonCommonProps } from "@/healper/type/type-common-skeleton";
+import { useGetMeQuery } from "@/services/user/user.api";
 
 const width = Dimensions.get("window").width;
 
@@ -42,13 +43,29 @@ const ModalViewPicture = ({
   setPictureDetail: (picture: Picture | null) => void;
 }) => {
   const [inputValue, setInputValue] = React.useState<string>("");
+  const router = useRouter();
   const [createComment] = useCommentPictureMutation();
   const handleSubmitComment = async () => {
     if (inputValue.length === 0) return;
     try {
-      await createComment(inputValue).unwrap();
-    } catch {}
+      await createComment({
+        picture_id: picture?._id,
+        content: inputValue,
+      }).unwrap();
+      setInputValue("");
+    } catch (err) {
+      console.log("err :>> ", err);
+    }
   };
+
+  const { myseft } = useGetMeQuery(undefined, {
+    selectFromResult: ({ data }) => {
+      return {
+        myseft: data?.data,
+      };
+    },
+  });
+
   return (
     <SafeAreaView>
       <Modal
@@ -64,8 +81,8 @@ const ModalViewPicture = ({
         {isFetching ? (
           <ModalViewPictureSkeleton />
         ) : (
-          <View>
-            <View className="flex p-4 bg-white flex-row items-center gap-2">
+          <View className="bg-white h-full">
+            <View className="flex p-4 flex-row items-center gap-2">
               <TouchableOpacity
                 onPress={() => {
                   setPictureDetail(null);
@@ -77,18 +94,25 @@ const ModalViewPicture = ({
                   className="text-primary"
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push(`/account/${picture?.user_id?.username}`);
+                }}
+              >
                 <Image
                   source={{ uri: picture?.user_id?.avatar }}
                   className="w-12 h-12 rounded-full"
                 />
               </TouchableOpacity>
               <View>
-                <Link href="" className="flex flex-row ">
+                <Link
+                  href={`/account/${picture?.user_id?.username}`}
+                  className="flex flex-row "
+                >
                   <Text className="font-pmedium">
-                    {picture?.user_id?.first_name} {picture?.user_id?.last_name}
+                    {picture?.user_id?.first_name} {picture?.user_id?.last_name}{" "}
                   </Text>
-                  <Text className="font-psemibold ml-2 underline">
+                  <Text className="font-psemibold ml-4 underline">
                     @{picture?.user_id?.username}
                   </Text>
                 </Link>
@@ -101,7 +125,7 @@ const ModalViewPicture = ({
               </View>
             </View>
             <ScrollView overScrollMode="never">
-              <View className="flex w-full h-full min-h-screen bg-white">
+              <View className="flex flex-1 w-full h-[90%] bg-white">
                 <View className="flex">
                   <View
                     style={{
@@ -150,12 +174,12 @@ const ModalViewPicture = ({
                           />
                         </View>
                         <View className="flex justify-start">
-                          <Link href="" className="flex flex-row ">
-                            <Text className="font-pmedium">
+                          <Link href="" className="flex flex-row gap-2">
+                            <Text className="font-pmedium mr-2">
                               {comment?.user_id?.first_name}{" "}
-                              {comment?.user_id?.last_name}
+                              {comment?.user_id?.last_name}{" "}
                             </Text>
-                            <Text className="font-psemibold ml-2 underline">
+                            <Text className="font-psemibold underline pl-4">
                               @{comment?.user_id?.username}
                             </Text>
                           </Link>
@@ -172,8 +196,14 @@ const ModalViewPicture = ({
                 </View>
               </View>
             </ScrollView>
-            <View className="bg-white border-t-[1px] border-gray-500">
-              <View className="m-2 flex flex-row">
+            <View className="bg-white pb-4 border-t-[1px] border-gray-500">
+              <View className="m-2 flex flex-row items-center">
+                <TouchableOpacity>
+                  <Image
+                    source={{ uri: myseft?.avatar }}
+                    className="w-10 h-10 rounded-full"
+                  />
+                </TouchableOpacity>
                 <TextInput
                   multiline={true}
                   numberOfLines={4}

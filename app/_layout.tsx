@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import "react-native-url-polyfill/auto";
-import { Redirect, SplashScreen, Stack } from "expo-router";
+import { Redirect, SplashScreen, Stack, useRouter } from "expo-router";
 import Providers from "@/providers";
 import { View } from "react-native";
+import { useAppSelector } from "@/hooks/redux";
+import React from "react";
 
 SplashScreen.preventAutoHideAsync();
 

@@ -240,7 +240,6 @@ const styles = StyleSheet.create({
 
 const ListItem = ({ item, index, id }: ItemProps) => {
   const handleClickBtn = (item: Quizz) => {
-    console.log("item", item);
     switch (item?.type) {
       case QuizzType.SingleChoice:
         router.push(`/contest/${id}/quiz/${item?._id}`);
@@ -276,9 +275,6 @@ function Contest() {
         isSuccess,
       }),
     });
-
-  console.log("quizs", quizs);
-  console.log("competition", competition);
 
   const scrollY = new Animated.Value(0);
   const stickyTopViewContent = scrollY.interpolate({

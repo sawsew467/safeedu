@@ -12,9 +12,23 @@ export const QuestionApi = baseApi.injectEndpoints({
         flashError: true,
       }),
     }),
+    getQuizz: build.query({
+      query: ({ id }) => ({
+        url: `/quiz/${id}`,
+        method: "GET",
+        flashError: true,
+      }),
+    }),
     getQuestion: build.query({
       query: ({ id }) => ({
         url: `/questions/${id}`,
+        method: "GET",
+        flashError: true,
+      }),
+    }),
+    getQuizResult: build.query({
+      query: ({ id }) => ({
+        url: `/quiz-result/${id}`,
         method: "GET",
         flashError: true,
       }),
@@ -44,4 +58,6 @@ export const {
   useGetQuestionQuery,
   useGetQuestionByQuizzIdQuery,
   useSubmissionQuestionMutation,
+  useGetQuizResultQuery,
+  useGetQuizzQuery,
 } = QuestionApi;

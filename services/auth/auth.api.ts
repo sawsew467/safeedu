@@ -2,7 +2,7 @@
 
 import { baseApi } from "@/store/baseQuery";
 
-export const competitionsAPI = baseApi.injectEndpoints({
+export const authAPI = baseApi.injectEndpoints({
   endpoints: (build) => ({
     signIn: build.mutation({
       query: (data) => ({
@@ -13,7 +13,7 @@ export const competitionsAPI = baseApi.injectEndpoints({
     }),
     getProvinces: build.query({
       query: () => ({
-        url: "/provinces/provinces",
+        url: "/provinces/all",
         method: "GET",
       }),
     }),
@@ -28,7 +28,6 @@ export const competitionsAPI = baseApi.injectEndpoints({
         if (!data?.phone_number) delete data.phone_number;
         if (!data?.email) delete data.email;
 
-        console.log("data", data);
         return {
           url: "/auth/sign-up-with-citizen",
           method: "POST",
@@ -47,6 +46,27 @@ export const competitionsAPI = baseApi.injectEndpoints({
         };
       },
     }),
+    forgotPassWord: build.mutation({
+      query: (data) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    verifyCode: build.mutation({
+      query: (data) => ({
+        url: "/auth/verify-otp-forgot-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resetPassword: build.mutation({
+      query: (data) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -56,4 +76,7 @@ export const {
   useCreateCitizenAccountMutation,
   useCreateStudentAccountMutation,
   useSignInMutation,
-} = competitionsAPI;
+  useForgotPassWordMutation,
+  useVerifyCodeMutation,
+  useResetPasswordMutation,
+} = authAPI;

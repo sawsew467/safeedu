@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import bg_game_1 from "@/assets/images/game_images/gamePage_background.png";
 import CountdownTimer from "./count_down";
-import { THEORY_TEST_DATA } from "@/healper/data/theory_test";
 import { router, useLocalSearchParams } from "expo-router";
 import HeaderShown from "@/components/ui/HeaderShown";
 import {
@@ -21,6 +20,7 @@ import {
 } from "@/services/quiz/quiz.api";
 import { skipToken } from "@reduxjs/toolkit/query";
 import TimerProgress from "./TimerProgress";
+import LoadingPage from "@/components/ui/LoadingPage";
 
 const { height } = Dimensions.get("window");
 
@@ -91,7 +91,8 @@ const RenderItemAnswer = ({
 };
 const { width } = Dimensions.get("window");
 const QuizModule = () => {
-  const { quizID }: { quizID } = useLocalSearchParams();
+  const { quizID, contestID }: { quizID: string; contestID: string } =
+    useLocalSearchParams();
 
   const [choiceIndex, setChoiceIndex] = React.useState(null);
   const [timer, setTime] = React.useState(0);
@@ -105,28 +106,29 @@ const QuizModule = () => {
     listQuizz: [],
   });
 
-  const { questions, isFetching } = useGetQuestionByQuizzIdQuery(
+  const { questions, isFetching, isError } = useGetQuestionByQuizzIdQuery(
     quizID ? { id: quizID } : skipToken,
     {
-      selectFromResult: ({ data, isFetching }) => ({
-        questions: data?.data,
+      selectFromResult: ({ data, isFetching, isError }) => ({
+        questions: data?.data?.data?.filter((item) => item?.isActive),
         isFetching,
+        isError,
       }),
     }
   );
 
   const answers = React.useMemo(() => {
-    return THEORY_TEST_DATA?.[questionIndex]?.answer;
-  }, [questionIndex]);
+    return questions?.[questionIndex]?.answer;
+  }, [questionIndex, questions?.length]);
 
-  // console.log('THEORY_TEST_DATA', answers)
+  // console.log('questions', answers)
   const question = React.useMemo(() => {
-    return THEORY_TEST_DATA?.[questionIndex]?.question;
-  }, [questionIndex]);
+    return questions?.[questionIndex]?.question;
+  }, [questionIndex, questions?.length]);
 
   const timeLimit = React.useMemo(() => {
-    return THEORY_TEST_DATA?.[questionIndex]?.time_limit ?? 15;
-  }, [questionIndex]);
+    return questions?.[questionIndex]?.time_limit ?? 15;
+  }, [questionIndex, questions?.length]);
 
   React.useEffect(() => {
     if (questionIndex > 0) {
@@ -142,7 +144,7 @@ const QuizModule = () => {
   React.useEffect(() => {
     if (timer >= timeLimit) {
       setTimeout(() => {
-        if (questionIndex >= THEORY_TEST_DATA?.length) handleEndQuizz();
+        if (questionIndex >= questions?.length - 1) handleEndQuizz();
         else setQuestionIndex(questionIndex + 1);
       }, 1000);
     }
@@ -150,7 +152,7 @@ const QuizModule = () => {
 
   const handleChoice = (index: number) => {
     setChoiceIndex(index);
-    if (questionIndex >= THEORY_TEST_DATA?.length) handleEndQuizz();
+    if (questionIndex >= questions?.length - 1) handleEndQuizz();
     else {
       setQuestionIndex(questionIndex + 1);
     }
@@ -163,28 +165,15 @@ const QuizModule = () => {
   };
 
   const handleEndQuizz = () => {
-    if (questionIndex + 1 < THEORY_TEST_DATA.length) {
-      setTimeout(() => {
-        resetQuestion();
-      }, 5000);
-    } else {
-      const item = JSON.stringify({
-        ...listAnswer,
-        totalQuizz: THEORY_TEST_DATA.length,
-      });
-      router.replace({
-        pathname: "leaderboard_game/1",
-        params: {
-          item,
-        },
-      });
-    }
+    router.replace(`/contest/${contestID}/quiz/${quizID}/result`);
   };
-
-  console.log("timer", timer);
+  if (isError && !isFetching) {
+    handleEndQuizz();
+  }
 
   return (
     <HeaderShown title="Cuộc thi Lý thuyết" isBack>
+      <LoadingPage isLoading={isFetching} />
       <ImageBackground
         source={bg_game_1}
         defaultSource={bg_game_1}
@@ -198,7 +187,7 @@ const QuizModule = () => {
         <View style={{ flex: 1, display: "flex", justifyContent: "center" }}>
           <View style={styles.container_question}>
             <Text style={styles.number_questions} className="font-pregular">
-              Câu {questionIndex + 1} trên {THEORY_TEST_DATA.length}
+              Câu {questionIndex + 1} trên {questions?.length}
             </Text>
           </View>
           <View style={styles.question}>

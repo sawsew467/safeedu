@@ -96,7 +96,7 @@ function Contest() {
   });
 
   const { competitions, isFetching, isSuccess, refetch } =
-    useGetAllCompetitionsQuery(undefined, {
+    useGetAllCompetitionsUserQuery(undefined, {
       selectFromResult: ({ data, isFetching, isSuccess }) => {
         const competitions = data?.data;
         return {
@@ -107,7 +107,7 @@ function Contest() {
                 competitions?.filter(
                   (item: Competitions) =>
                     item?.isActive &&
-                    new Date(item.endDate).getTime() > Date.now()
+                    new Date(item?.endDate).getTime() > Date.now()
                 ) ?? [],
             },
             {
@@ -117,7 +117,7 @@ function Contest() {
                   (item: Competitions) =>
                     item?.status === "doing" &&
                     item?.isActive &&
-                    new Date(item.endDate).getTime() > Date.now()
+                    new Date(item?.endDate).getTime() > Date.now()
                 ) ?? [],
             },
             {

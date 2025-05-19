@@ -9,5 +9,6 @@ export type TypeLibrary = {
   isActive: boolean;
   topic_id: string;
   updated_at: Date;
+  view: number;
   created_at: Date;
 };

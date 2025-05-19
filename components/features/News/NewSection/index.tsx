@@ -15,7 +15,6 @@ import {
 import { Slider } from "@/components/features/News/NewSection/Slider/Slider";
 
 import logo from "@/assets/images/news_image/news_logo.png";
-import { router } from "expo-router";
 import { compareDatesStrict, formatDate } from "@/utils/format-date";
 import { useGetAllNewsQuery } from "@/services/news/news.api";
 import { useGetAllTopicsQuery } from "@/services/topic/topic.api";
@@ -30,6 +29,12 @@ import { Button } from "@/components/ui/Button";
 import { MotiView } from "moti";
 import { Skeleton } from "moti/skeleton";
 import { skeletonCommonProps } from "@/healper/type/type-common-skeleton";
+import { useGetAllLibraryQuery } from "@/services/library/library.api";
+import { LibraryDataType } from "@/healper/type/library-type";
+import { TypeLibrary } from "@/healper/type/library.type";
+import { useRouter } from "expo-router";
+import LibraryCard from "../../Library/CardList/library-card";
+import { ChevronRight } from "lucide-react-native";
 
 const width = Dimensions.get("window").width;
 
@@ -53,6 +58,7 @@ const buttons = [
 ];
 
 export function NewSection() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("");
   const { topicData, isSuccess } = useGetAllTopicsQuery(undefined, {
     selectFromResult: ({ data, isSuccess }) => {
@@ -62,6 +68,23 @@ export function NewSection() {
         isSuccess,
       };
     },
+  });
+
+  const {
+    librarys,
+    isFetchingLibrary,
+    isSuccessLibrary,
+    refetch: refetchLibrary,
+  } = useGetAllLibraryQuery(undefined, {
+    selectFromResult: ({ data, isFetching, isSuccess }) => ({
+      librarys:
+        data?.data?.items
+          ?.filter((item: TypeLibrary) => item?.isActive)
+          .sort((a: TypeLibrary, b: TypeLibrary) => b?.view - a?.view)
+          .slice(0, 2) ?? [],
+      isFetchingLibrary: isFetching,
+      isSuccessLibrary: isSuccess,
+    }),
   });
 
   useEffect(() => {
@@ -100,29 +123,29 @@ export function NewSection() {
           />
         </View>
         <Slider isFetching={isFetching} data={newsSliderData} />
-        {/* <View className="flex-1 items-center justify-center mt-6 mb-8">
-          <Image
-            source={nav_background}
-            resizeMode="contain"
-            className="w-[110%] absolute"
-          />
-          <View className="flex flex-row justify-center items-center">
-            {buttons.map((button) => (
-              <Button
-                onPress={() => {
-                  router.push(button.route);
-                }}
-                key={button.id}
-                className={`flex-1 h-[120%] mx-1.5 ${button.bgColor} rounded-2xl`}
-              >
-                <View className="flex flex-col justify-center items-center">
-                  {button.icon()}
-                  <Text className="text-[#75A815]">{button.text}</Text>
-                </View>
-              </Button>
+        <View className="mt-6 mb-2">
+          <View style={{ gap: 20 }}>
+            {librarys.map((library: TypeLibrary, index: number) => (
+              <LibraryCard
+                isFetching={isFetchingLibrary}
+                item={library}
+                key={library?._id}
+                index={index}
+              />
             ))}
           </View>
-        </View> */}
+          <View className="h-10 mt-4">
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/library");
+              }}
+              className="flex flex-row justify-center items-center gap-2"
+            >
+              <Text className="text-lg text-primary">Xem thêm</Text>
+              <ChevronRight size={24} className="text-primary -mb-1" />
+            </TouchableOpacity>
+          </View>
+        </View>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -152,8 +175,9 @@ export function NewSection() {
   }, [activeTab, newsSliderData, topicData]);
 
   const onRefresh = () => {
-    if (isSuccessNews) {
+    if (isSuccessNews && isSuccessLibrary) {
       refetch();
+      refetchLibrary();
     }
   };
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -10,6 +10,7 @@ import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
 import { Home, Book, Bell } from "react-native-feather";
+import { useAppSelector } from "@/hooks/redux";
 
 const TabIcon = ({ IconComponent, color, name, focused }) => {
   return (
@@ -28,6 +29,14 @@ const TabIcon = ({ IconComponent, color, name, focused }) => {
 };
 
 const TabLayout = () => {
+  // const { access_token } = useAppSelector((state) => state.auth);
+  // const router = useRouter();
+  // React.useEffect(() => {
+  //   if (!access_token) {
+  //     router.replace("/sign-in");
+  //   }
+  // }, [access_token]);
+
   return (
     <>
       <Tabs
@@ -61,23 +70,6 @@ const TabLayout = () => {
             ),
           }}
         />
-        <Tabs.Screen
-          name="library"
-          options={{
-            title: "Library",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                IconComponent={() => (
-                  <Book width={24} height={24} color={color} />
-                )}
-                color={color}
-                name="Thư viện"
-                focused={focused}
-              />
-            ),
-          }}
-        />
         {/* <Tabs.Screen
           name="chatbot"
           options={{
@@ -100,6 +92,23 @@ const TabLayout = () => {
           }}
         /> */}
         <Tabs.Screen
+          name="contest"
+          options={{
+            title: "Contest",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                IconComponent={() => (
+                  <AntDesign name="Trophy" size={24} color={color} />
+                )}
+                color={color}
+                name="Cuộc thi"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="notifications"
           options={{
             title: "thông báo",
@@ -117,23 +126,7 @@ const TabLayout = () => {
           }}
         />
 
-        {/* <Tabs.Screen
-          name="contest"
-          options={{
-            title: "Contest",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                IconComponent={() => (
-                  <AntDesign name="Trophy" size={24} color={color} />
-                )}
-                color={color}
-                name="Cuộc thi"
-                focused={focused}
-              />
-            ),
-          }}
-        />
+        {/*
         <Tabs.Screen
           name="notifications"
           options={{
@@ -172,7 +165,7 @@ const TabLayout = () => {
               />
             ),
           }}
-        />
+        />*/}
         <Tabs.Screen
           name="account"
           options={{
@@ -193,7 +186,7 @@ const TabLayout = () => {
               />
             ),
           }}
-        /> */}
+        />
       </Tabs>
 
       <StatusBar backgroundColor="#161622" style="dark" />
