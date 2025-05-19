@@ -27,6 +27,8 @@ import {
 } from "@/services/competitions/competitions.api";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { Quizz, QuizzType } from "@/healper/type/Contest";
+import { useGetMeQuery } from "@/services/user/user.api";
+import { Button } from "@/components/ui/Button";
 type ItemProps = {
   item: Quizz;
   index: number;
@@ -266,6 +268,12 @@ function Contest() {
   const { contestID }: { contestID: string } = useLocalSearchParams();
   const [isExpanded, setIsExpanded] = React.useState(false);
 
+  const { isError } = useGetMeQuery(undefined, {
+    selectFromResult: ({ isError, isFetching }) => ({
+      isError: isError && !isFetching,
+    }),
+  });
+
   const { quizs, competition, isFetching, isSuccess, refetch } =
     useGetQuizzBySlugQuery(contestID ? { id: contestID } : skipToken, {
       selectFromResult: ({ data, isFetching, isSuccess }) => ({
@@ -285,6 +293,14 @@ function Contest() {
 
   const handleClickRankingBtn = () => {
     router.push(`contest/${contestID}/leaderboard`);
+  };
+
+  const handleSignIn = () => {
+    router.push("/sign-in");
+  };
+
+  const handleSignUp = () => {
+    router.push("/sign-up");
   };
 
   const toggleExpanded = () => {
@@ -352,11 +368,32 @@ function Contest() {
         <FlatList
           scrollEnabled={false}
           style={styles.flatListContainer}
-          data={quizs}
+          data={isError ? [] : isFetching ? [] : quizs}
           renderItem={({ item, index }: { item: Quizz; index: number }) => (
             <ListItem item={item} index={index} id={contestID} />
           )}
           keyExtractor={(item: Quizz) => item.slug}
+          ListEmptyComponent={() => (
+            <View className="flex flex-1 items-center justify-center h-full">
+              <Text className="text-xl font-pmedium">
+                Vui lòng đăng nhập để tham gia cuộc thi này
+              </Text>
+              <View className="flex flex-row justify-center items-center gap-2 mt-4">
+                <TouchableOpacity
+                  onPress={handleSignIn}
+                  className="w-44 flex items-center border-2  rounded-xl py-4 border-primary"
+                >
+                  <Text className="text-primary text-lg">Đăng nhập</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleSignUp}
+                  className="w-44 border-2 flex items-center px-8 rounded-xl py-4 border-primary bg-primary"
+                >
+                  <Text className="text-white text-lg">Đăng kí</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
           ListHeaderComponent={() => (
             <View style={styles.flatListHeaderContainer}>
               <View style={styles.flatListHeaderContent}>

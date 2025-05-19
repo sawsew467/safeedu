@@ -25,6 +25,8 @@ import {
 import { Competitions } from "@/healper/type/Contest";
 import { Skeleton } from "moti/skeleton";
 import { skeletonCommonProps } from "@/healper/type/type-common-skeleton";
+import { skipToken } from "@reduxjs/toolkit/query";
+import { undefined } from "zod";
 const styles = StyleSheet.create({
   scrollViewContent: {
     marginTop: 20,
@@ -95,45 +97,86 @@ function Contest() {
     extrapolate: "clamp",
   });
 
-  const { competitions, isFetching, isSuccess, refetch } =
-    useGetAllCompetitionsUserQuery(undefined, {
-      selectFromResult: ({ data, isFetching, isSuccess }) => {
-        const competitions = data?.data;
-        return {
-          competitions: [
-            {
-              title: "Cuộc thi mới nhất",
-              competitions:
-                competitions?.filter(
-                  (item: Competitions) =>
-                    item?.isActive &&
-                    new Date(item?.endDate).getTime() > Date.now()
-                ) ?? [],
-            },
-            {
-              title: "Cuộc thi đang tham gia",
-              competitions:
-                competitions?.filter(
-                  (item: Competitions) =>
-                    item?.status === "doing" &&
-                    item?.isActive &&
-                    new Date(item?.endDate).getTime() > Date.now()
-                ) ?? [],
-            },
-            {
-              title: "Cuộc thi đã hoàn thành",
-              competitions:
-                competitions?.filter(
-                  (item: Competitions) =>
-                    item?.status === "done" && item?.isActive
-                ) ?? [],
-            },
-          ],
-          isFetching,
-          isSuccess,
-        };
-      },
-    });
+  const {
+    competitions: competitionsForUser,
+    isFetching: isFetchingForUser,
+    isSuccess: isSuccessForUser,
+    refetch,
+  } = useGetAllCompetitionsUserQuery(undefined, {
+    selectFromResult: ({ data, isFetching, isSuccess }) => {
+      const competitions = data?.data;
+      return {
+        competitions: [
+          {
+            title: "Cuộc thi mới nhất",
+            competitions:
+              competitions?.filter(
+                (item: Competitions) =>
+                  item?.isActive &&
+                  new Date(item?.endDate).getTime() > Date.now()
+              ) ?? [],
+          },
+          {
+            title: "Cuộc thi đang tham gia",
+            competitions:
+              competitions?.filter(
+                (item: Competitions) =>
+                  item?.status === "doing" &&
+                  item?.isActive &&
+                  new Date(item?.endDate).getTime() > Date.now()
+              ) ?? [],
+          },
+          {
+            title: "Cuộc thi đã hoàn thành",
+            competitions:
+              competitions?.filter(
+                (item: Competitions) =>
+                  item?.status === "done" && item?.isActive
+              ) ?? [],
+          },
+        ],
+        isFetching,
+        isSuccess,
+      };
+    },
+  });
+
+  const {
+    competitions: competitionsForAuth,
+    isFetching: isFetchingForAuth,
+    isSuccess: isSuccessForAuth,
+    refetch: refetchForAuth,
+  } = useGetAllCompetitionsQuery(isSuccessForUser ? skipToken : undefined, {
+    selectFromResult: ({ data, isFetching, isSuccess }) => {
+      const competitions = data?.data;
+      return {
+        competitions: [
+          {
+            title: "Cuộc thi mới nhất",
+            competitions:
+              competitions?.filter(
+                (item: Competitions) =>
+                  item?.isActive &&
+                  new Date(item?.endDate).getTime() > Date.now()
+              ) ?? [],
+          },
+        ],
+        isFetching,
+        isSuccess,
+      };
+    },
+  });
+
+  const competitions = isSuccessForUser
+    ? competitionsForUser
+    : isSuccessForAuth
+    ? competitionsForAuth
+    : [];
+
+  const isFetching = isFetchingForUser || isFetchingForAuth;
+  const isSuccess = isSuccessForUser || isSuccessForAuth;
+
+  console.log("competitions :>> ", competitions);
 
   const onRefresh = () => {
     if (isSuccess) refetch();

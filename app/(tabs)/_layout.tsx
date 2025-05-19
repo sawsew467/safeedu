@@ -109,7 +109,7 @@ const TabLayout = () => {
             ),
           }}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="notifications"
           options={{
             title: "thông báo",
@@ -125,7 +125,7 @@ const TabLayout = () => {
               />
             ),
           }}
-        />
+        /> */}
 
         {/*
         <Tabs.Screen
