@@ -20,16 +20,16 @@ import {
 
 const TabIcon = ({ IconComponent, color, name, focused }) => {
   return (
-    <View className="flex items-center justify-center relative w-64">
+    <View className="flex items-center justify-center flex-1">
       <IconComponent color={color} size={24} />
-      <Text
+      {/* <Text
         className={`${
           focused ? "font-psemibold" : "font-pregular"
         } text-xs text-center mt-2 `}
         style={{ color: color }}
       >
         {name}
-      </Text>
+      </Text> */}
     </View>
   );
 };

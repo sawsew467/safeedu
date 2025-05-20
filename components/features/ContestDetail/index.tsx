@@ -374,8 +374,8 @@ function Contest() {
           )}
           keyExtractor={(item: Quizz) => item.slug}
           ListEmptyComponent={() => (
-            <View className="flex flex-1 items-center justify-center h-full">
-              <Text className="text-xl font-pmedium">
+            <View className="flex flex-1 items-center justify-center h-full px-4">
+              <Text className="text-xl font-pmedium text-center">
                 Vui lòng đăng nhập để tham gia cuộc thi này
               </Text>
               <View className="flex flex-row justify-center items-center gap-2 mt-4">
