@@ -61,31 +61,6 @@ const LibraryDetail = () => {
     router.replace("..");
   };
 
-  const CustomImageRenderer = ({ tnode }) => {
-    const uri = tnode.attributes.src;
-
-    return (
-      <View style={styles.imageContainer}>
-        {uri ? (
-          <Image
-            source={{ uri }}
-            style={[
-              styles.image,
-              { width: windowWidth - externalPadingContent },
-            ]}
-            resizeMode="contain"
-          />
-        ) : (
-          <ActivityIndicator size="large" color="gray" />
-        )}
-      </View>
-    );
-  };
-
-  const renderers = {
-    img: CustomImageRenderer, // Gán component custom cho thẻ <img>
-  };
-
   return (
     <>
       <LoadingPage isLoading={isFetching} />
@@ -107,27 +82,27 @@ const LibraryDetail = () => {
         //   onPress: handleBack,
         // }}
       >
-        <View style={styles.detailContainer}>
-          <View style={styles.imageHeaderContainer}>
-            <Image
-              source={{ uri: libraryDetailData?.image }}
-              style={styles.imageHeader}
-              resizeMode="contain"
-            />
-          </View>
-          <View>
-            <RenderHTML
-              contentWidth={windowWidth - externalPadingContent}
-              source={{
-                html: `${libraryDetailData?.description}`,
-              }}
-              enableExperimentalMarginCollapsing={true}
-              classesStyles={styles_mardown}
-              tagsStyles={styles_mardown}
-              renderers={renderers}
-            />
-          </View>
-          {/* <View style={styles.contentContainer}>
+        {!isFetching && libraryDetailData && (
+          <View style={styles.detailContainer}>
+            <View style={styles.imageHeaderContainer}>
+              <Image
+                source={{ uri: libraryDetailData?.image }}
+                style={styles.imageHeader}
+                resizeMode="contain"
+              />
+            </View>
+            <View>
+              <RenderHTML
+                contentWidth={windowWidth - externalPadingContent}
+                source={{
+                  html: `${libraryDetailData?.description}`,
+                }}
+                enableExperimentalMarginCollapsing={true}
+                classesStyles={styles_mardown}
+                tagsStyles={styles_mardown}
+              />
+            </View>
+            {/* <View style={styles.contentContainer}>
           {selectedSubtitle?.content.map((content, index) => (
             <Text
               style={styles.contentText}
@@ -137,7 +112,7 @@ const LibraryDetail = () => {
             </Text>
           ))}
         </View> */}
-          {/* <View style={styles.sectionContainer}>
+            {/* <View style={styles.sectionContainer}>
           {selectedSubtitle?.image.map((img, imgIndex) => (
             <View
               style={styles.container}
@@ -152,7 +127,8 @@ const LibraryDetail = () => {
             </View>
           ))}
         </View> */}
-        </View>
+          </View>
+        )}
       </HeaderShown>
     </>
   );
@@ -203,7 +179,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: scaleFont(36),
     // lineHeight: ,
-    maxWidth: "65%",
+    maxWidth: "90%",
   },
   whiteTitle: {
     color: "#FFFFFF",

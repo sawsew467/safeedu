@@ -23,6 +23,7 @@ import { Topic } from "@/healper/type/topic.type";
 import { useGetAllTopicsQuery } from "@/services/topic/topic.api";
 import { Skeleton } from "moti/skeleton";
 import { skeletonCommonProps } from "@/healper/type/type-common-skeleton";
+import LibraryCard from "./library-card";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -48,7 +49,6 @@ const CardList = () => {
       };
     },
   });
-  console.log("data", topicData);
 
   useEffect(() => {
     setActiveTab(topicData[0]?._id);
@@ -128,109 +128,7 @@ const CardList = () => {
         ListHeaderComponent={() => <View style={styles.header_space} />}
         ListFooterComponent={() => <View style={styles.footer_space} />}
         renderItem={({ item, index }: { item: TypeLibrary; index: number }) => (
-          <Skeleton
-            show={isFetching}
-            width={"100%"}
-            height={windowWidth * 0.3 * 1.2}
-            radius={24}
-            {...skeletonCommonProps}
-          >
-            <TouchableOpacity
-              key={item?._id}
-              onPress={() => {
-                router.push({
-                  pathname: `/library/${item?._id}`,
-                  params: {
-                    index,
-                  },
-                });
-              }}
-            >
-              <Image
-                source={linear_gradient_1}
-                style={styles.linearBackground1}
-              />
-              <Image
-                source={linear_gradient_1}
-                style={styles.linearBackground2}
-              />
-              <Image
-                source={linear_gradient_2}
-                style={styles.linearBackground3}
-                resizeMode="contain"
-              />
-
-              <Image
-                source={linear_gradient_2}
-                style={styles.linearBackground4}
-                resizeMode="contain"
-              />
-              <Image
-                source={linear_gradient_1}
-                style={styles.linearBackground5}
-                resizeMode="contain"
-              />
-              <Image
-                source={linear_gradient_1}
-                style={styles.linearBackground6}
-                resizeMode="contain"
-              />
-
-              <View
-                style={[
-                  styles.cardContainer,
-                  index % 2 === 0 ? styles.cardGreen : styles.cardYellow,
-                ]}
-              >
-                <View style={[styles.contentCard, getTextContainer(index)]}>
-                  <Text
-                    style={[
-                      styles.title,
-                      index % 2 === 0 ? styles.whiteTitle : styles.blackTitle,
-                    ]}
-                    className="font-pmedium"
-                    numberOfLines={2}
-                  >
-                    {item?.category_name}
-                  </Text>
-                  <View style={styles.infoRow}>
-                    <Text
-                      style={[
-                        styles.readMoreText,
-                        index % 2 === 0
-                          ? styles.whiteReadMoreText
-                          : styles.blackReadMoreText,
-                      ]}
-                      className="font-pregular"
-                    >
-                      Xem thông tin
-                    </Text>
-                    <Image
-                      source={arrow_icon}
-                      style={[
-                        styles.arrow,
-                        index % 2 === 0 ? styles.whiteArrow : styles.blackArrow,
-                      ]}
-                      resizeMode="cover"
-                    />
-                  </View>
-                </View>
-                <View
-                  style={
-                    index % 2 === 0
-                      ? styles.imageContainerRight
-                      : styles.imageContainerLeft
-                  }
-                >
-                  <Image
-                    source={{ uri: item?.image }}
-                    style={styles.image}
-                    resizeMode="contain"
-                  />
-                </View>
-              </View>
-            </TouchableOpacity>
-          </Skeleton>
+          <LibraryCard isFetching={isFetching} item={item} index={index} />
         )}
         ListEmptyComponent={
           <View style={styles.container_emptyData}>

@@ -1,11 +1,7 @@
-import DetailDrawPictureModule from "@/components/features/DetailDrawPictureModule";
-import { View } from "react-native";
+import DrawPictureContest from "@/components/features/DrawPictureContest";
 
 const DetailDrawPicture = () => {
-  return (
-    // <DetailDrawPictureModule />
-    <View />
-  );
+  return <DrawPictureContest />;
 };
 
 export default DetailDrawPicture;

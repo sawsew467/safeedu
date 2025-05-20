@@ -9,7 +9,7 @@ const initialState: AuthState = {
 };
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: "chatbot",
   initialState,
   reducers: {},
 });
