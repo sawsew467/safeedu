@@ -137,7 +137,7 @@ const ProfileScreen = () => {
               className="h-64 w-56"
             />
             {/* <UserRound size={100} strokeWidth={1} color="white" /> */}
-            <Text className="text-gray-200 text-xl font-medium mb-2 mt-4">
+            <Text className="text-gray-200 text-xl font-pmedium mb-2 mt-4">
               Vui lòng đăng nhập để tiếp tục
             </Text>
           </View>
@@ -146,13 +146,13 @@ const ProfileScreen = () => {
               onPress={handleSignIn}
               className="w-1/2 flex-row h-[60px] bg-white rounded-2xl py-2 flex items-center justify-center border-2 border-primary"
             >
-              <Text className="text-primary font-medium">Đăng nhập</Text>
+              <Text className="text-primary font-pmedium">Đăng nhập</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleSignUp}
               className="w-1/2 flex-row h-[60px] bg-primary rounded-2xl py-2 flex items-center justify-center"
             >
-              <Text className="text-white font-medium">Đăng ký</Text>
+              <Text className="text-white font-pmedium">Đăng ký</Text>
             </TouchableOpacity>
           </View>
         </View>

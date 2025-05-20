@@ -1,33 +1,12 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 
-import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
-import { Button } from "@/components/ui/Button";
 import CardList from "@/components/features/Library/CardList";
 import HeaderShown from "@/components/ui/HeaderShown";
 
-import Ionicons from "@expo/vector-icons/Ionicons";
-import chatIcon from "@/assets/icons/menuIcon/chatIcon.png";
 import news_background1 from "@/assets/images/news_image/news_background1.png";
 import news_background2 from "@/assets/images/news_image/news_background2.png";
 
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { router } from "expo-router";
-import { useState } from "react";
-
-const windowWidth = Dimensions.get("window").width;
-
 function Library() {
-  const [selectedId, setSelectedId] = useState("1");
   return (
     <HeaderShown title="Thư viện" isScroll={false}>
       <View style={styles.libraryContainer}>
@@ -47,7 +26,6 @@ const styles = StyleSheet.create({
   },
   libraryContainer: {
     flex: 1,
-    paddingBottom: 50,
     zIndex: 2,
   },
   newsBackground1: {

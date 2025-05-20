@@ -92,7 +92,7 @@ const SignInModule = () => {
           <View className="flex flex-row w-full justify-between mt-2">
             <Text style={styles.label}>Mật khẩu</Text>
             <TouchableOpacity onPress={handleForgotPassword}>
-              <Text className="text-primary font-medium underline underline-offset-4">
+              <Text className="text-primary font-pmedium underline underline-offset-4">
                 Quên mật khẩu
               </Text>
             </TouchableOpacity>
