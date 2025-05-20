@@ -16,15 +16,20 @@ import {
 import { router, Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Entypo from "@expo/vector-icons/Entypo";
+import { FooterComponent } from "react-native-screens/lib/typescript/components/ScreenFooter";
+import { boolean, any } from "zod";
 interface AnimatedHeaderScreenProps extends ScrollViewProps {
   children: ReactNode;
-  title?: string;
+  title?:
+    | string
+    | ((props: { children: string; tintColor?: string }) => React.ReactNode);
   isScroll?: boolean;
   isBack?: boolean;
   rightIcon?: {
     icon: any;
     onPress: () => void;
   };
+  headerLeft?: () => ReactNode;
   HeaderComponent?: () => ReactNode;
   FooterComponent?: () => ReactNode;
   ref: React.MutableRefObject<ScrollView | null>;
@@ -49,6 +54,7 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
       FooterComponent,
       isScroll = true,
       isBack = true,
+      headerLeft,
       ...props
     },
     ref

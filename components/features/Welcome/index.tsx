@@ -11,8 +11,13 @@ import {
 
 import logo from "@/assets/images/logo_new.png";
 import { Button } from "@/components/ui/Button";
+import { useAppSelector } from "@/hooks/redux";
 
 const Welcome = () => {
+  const handleRedirect = () => {
+    router.push("/home");
+  };
+
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView
@@ -41,7 +46,7 @@ const Welcome = () => {
           </Text>
 
           <Button
-            onPress={() => router.replace("/home")}
+            onPress={handleRedirect}
             className="mt-4 w-full"
             variant="primary"
           >

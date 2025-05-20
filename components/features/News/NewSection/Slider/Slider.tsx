@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   ViewToken,
+  useWindowDimensions,
 } from "react-native";
 
 import Animated, {
@@ -17,7 +18,6 @@ import Panigation from "./Panigation";
 import { Skeleton } from "moti/skeleton";
 import SliderItem from "@/components/features/News/NewSection/Slider/SliderItem";
 import { skeletonCommonProps } from "@/healper/type/type-common-skeleton";
-const { width } = Dimensions.get("screen");
 
 export function Slider({
   isFetching,
@@ -26,6 +26,8 @@ export function Slider({
   isFetching: boolean;
   data: TypeNews[];
 }) {
+  const { width } = useWindowDimensions();
+
   const flatListRef = useRef<View>(null);
   const scrollX = useSharedValue(0);
   const [slides, setSlides] = useState([]);
@@ -36,7 +38,6 @@ export function Slider({
 
   const onScrollHandler = useAnimatedScrollHandler({
     onScroll: (e) => {
-      const width = e.layoutMeasurement.width;
       scrollX.value = e.contentOffset.x % (width * data?.length);
     },
   });
@@ -73,6 +74,8 @@ export function Slider({
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
+        snapToInterval={width - 24}
+        decelerationRate={0.8}
         data={isFetching ? [{}] : slides}
         onScroll={onScrollHandler}
         keyExtractor={(item, index) => {

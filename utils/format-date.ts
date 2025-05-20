@@ -4,7 +4,10 @@ import "moment/locale/vi";
 // Set the locale to Vietnamese
 moment.locale("vi");
 
-export function formatDate(dateString: Date, format = "DD MMMM YYYY"): string {
+export function formatDate(
+  dateString: string,
+  format = "DD MMMM YYYY"
+): string {
   return moment(dateString).format(format);
 }
 

@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from "react-native";
 import Animated, {
   Extrapolation,
@@ -21,9 +22,9 @@ type SliderItemProps = {
   scrollX: Animated.SharedValue<number>;
 };
 
-const { width } = Dimensions.get("screen");
-
 const SliderItem = ({ item, index, scrollX }: SliderItemProps) => {
+  const { width } = useWindowDimensions();
+
   const rnAnimatedStyle = useAnimatedStyle(() => {
     const scale = interpolate(
       scrollX.value,
@@ -43,7 +44,9 @@ const SliderItem = ({ item, index, scrollX }: SliderItemProps) => {
         router.push(`/news/${item?._id}`);
       }}
     >
-      <Animated.View style={[styles.itemContainer, rnAnimatedStyle]}>
+      <Animated.View
+        style={[styles.itemContainer, rnAnimatedStyle, { width: width - 32 }]}
+      >
         <Animated.Image
           source={{ uri: item.image }}
           style={[styles.itemImage]}
@@ -90,7 +93,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 20,
-    width: width - 32,
     aspectRatio: 16 / 9,
     position: "relative",
     overflow: "hidden",

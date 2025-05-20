@@ -1,6 +1,6 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -9,30 +9,40 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
-import { Home, Book, Bell } from "react-native-feather";
+import { useAppSelector } from "@/hooks/redux";
+import {
+  BookIcon,
+  BotMessageSquareIcon,
+  HomeIcon,
+  TrophyIcon,
+  UserIcon,
+} from "lucide-react-native";
 
-const TabIcon = ({ icon, color, name, focused }) => {
+const TabIcon = ({ IconComponent, color, name, focused }) => {
   return (
-    <View className="flex items-center justify-center relative w-64">
-      <Image
-        source={icon}
-        tintColor={focused ? "#75A815" : "#666876"}
-        resizeMode="contain"
-        className="size-6"
-      />
-      <Text
+    <View className="flex items-center justify-center flex-1">
+      <IconComponent color={color} size={24} />
+      {/* <Text
         className={`${
           focused ? "font-psemibold" : "font-pregular"
         } text-xs text-center mt-2 `}
         style={{ color: color }}
       >
         {name}
-      </Text>
+      </Text> */}
     </View>
   );
 };
 
 const TabLayout = () => {
+  // const { access_token } = useAppSelector((state) => state.auth);
+  // const router = useRouter();
+  // React.useEffect(() => {
+  //   if (!access_token) {
+  //     router.replace("/sign-in");
+  //   }
+  // }, [access_token]);
+
   return (
     <>
       <Tabs
@@ -56,7 +66,9 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={<Home width={24} height={24} color={color} />}
+                IconComponent={() => (
+                  <HomeIcon width={24} height={24} color={color} />
+                )}
                 color={color}
                 name="Trang chủ"
                 focused={focused}
@@ -67,13 +79,32 @@ const TabLayout = () => {
         <Tabs.Screen
           name="library"
           options={{
-            title: "Library",
+            title: "Thư viện",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={<Book width={24} height={24} color={color} />}
+                IconComponent={() => (
+                  <BookIcon width={24} height={24} color={color} />
+                )}
                 color={color}
                 name="Thư viện"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="contest"
+          options={{
+            title: "Contest",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                IconComponent={() => (
+                  <TrophyIcon width={24} height={24} color={color} />
+                )}
+                color={color}
+                name="Cuộc thi"
                 focused={focused}
               />
             ),
@@ -86,13 +117,9 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={
-                  <Ionicons
-                    name="chatbox-ellipses-outline"
-                    size={24}
-                    color={color}
-                  />
-                }
+                IconComponent={() => (
+                  <BotMessageSquareIcon width={24} height={24} color={color} />
+                )}
                 color={color}
                 name="Chat bot"
                 focused={focused}
@@ -100,6 +127,8 @@ const TabLayout = () => {
             ),
           }}
         />
+
+        {/*
         <Tabs.Screen
           name="notifications"
           options={{
@@ -107,7 +136,9 @@ const TabLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={<Bell width={24} height={24} color={color} />}
+                IconComponent={() => (
+                  <Bell width={24} height={24} color={color} />
+                )}
                 color={color}
                 name="thông báo"
                 focused={focused}
@@ -117,23 +148,6 @@ const TabLayout = () => {
         />
 
         {/* <Tabs.Screen
-          name="contest"
-          options={{
-            title: "Contest",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                IconComponent={() => (
-                  <AntDesign name="Trophy" size={24} color={color} />
-                )}
-                color={color}
-                name="Cuộc thi"
-                focused={focused}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
           name="game"
           options={{
             title: "Game",
@@ -153,7 +167,7 @@ const TabLayout = () => {
               />
             ),
           }}
-        />
+        />*/}
         <Tabs.Screen
           name="account"
           options={{
@@ -162,11 +176,7 @@ const TabLayout = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 IconComponent={() => (
-                  <MaterialCommunityIcons
-                    name="account-circle-outline"
-                    size={24}
-                    color={color}
-                  />
+                  <UserIcon width={24} height={24} color={color} />
                 )}
                 color={color}
                 name="Tài khoản"
@@ -174,7 +184,7 @@ const TabLayout = () => {
               />
             ),
           }}
-        /> */}
+        />
       </Tabs>
 
       <StatusBar backgroundColor="#161622" style="dark" />

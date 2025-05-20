@@ -12,13 +12,18 @@
       "backgroundColor": "#ffffff"
     },
     "scheme": "SafeEdu",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "package": "com.vn.safeedu",
       "bundleIdentifier": "com.vn.safeedu",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
+      },
+      "config": {
+        "usesNonExemptEncryption": false
       },
       "backgroundColor": "#ffffff",
       "image": "./assets/adaptive-icon.png",
@@ -37,7 +42,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-router", "expo-font"],
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-secure-store"
+    ],
     "extra": {
       "router": {
         "origin": false
