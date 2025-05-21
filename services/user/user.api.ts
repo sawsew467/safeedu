@@ -1,5 +1,6 @@
 "use client";
 
+import DeleteAccount from "@/app/account/delete-account";
 import { baseApi } from "@/store/baseQuery";
 
 export const UserAPI = baseApi.injectEndpoints({
@@ -41,6 +42,13 @@ export const UserAPI = baseApi.injectEndpoints({
         flashError: true,
       }),
     }),
+    deleteAccount: build.mutation({
+      query: () => ({
+        url: "/students/delete",
+        method: "DELETE",
+        flashError: true,
+      }),
+    }),
   }),
 });
 
@@ -49,4 +57,5 @@ export const {
   useGetStudentByUsernameQuery,
   useUpdateProfileMutation,
   useChangePasswordMutation,
+  useDeleteAccountMutation,
 } = UserAPI;

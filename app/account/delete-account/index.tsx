@@ -9,12 +9,26 @@ import {
 import androidStyles from "@/components/ui/SafeViewAndroid";
 import { Stack, useRouter } from "expo-router";
 import background from "@/assets/images/account/background.png";
+import { useDeleteAccountMutation } from "@/services/user/user.api";
+import {
+  setAccessToken,
+  setRefreshToken,
+} from "@/components/features/auth/slices";
+import { baseApi } from "@/store/baseQuery";
+import { useAppDispatch } from "@/hooks/redux";
 
 const DeleteAccount = () => {
   const router = useRouter();
 
-  const handleDeleteAccount = () => {
-    console.log("Account deleted");
+  const [deleteAccount, { isLoading }] = useDeleteAccountMutation();
+  const dispatch = useAppDispatch();
+
+  const handleDeleteAccount = async () => {
+    await deleteAccount(undefined).unwrap();
+    dispatch(setAccessToken(""));
+    dispatch(setRefreshToken(""));
+    dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
+    router.push("/account");
   };
 
   const handleCancel = () => {
@@ -31,12 +45,12 @@ const DeleteAccount = () => {
           options={{
             headerShown: false,
           }}
-        ></Stack.Screen>
+        />
 
         <View className="flex-1 flex justify-center items-center">
           <View>
             <Text className="text-center text-2xl font-pbold">
-              xóa tài khoản vĩnh viễn?
+              Xóa tài khoản vĩnh viễn?
             </Text>
             <Text className="text-center text-lg font-pregular">
               Tài khoản và nội dung của bạn sẽ bị xóa vĩnh viễn. Bạn có chắc
@@ -54,7 +68,9 @@ const DeleteAccount = () => {
               onPress={handleDeleteAccount}
               className="flex-1 flex-row h-[60px] bg-red-500 text-white rounded-2xl py-2 flex items-center m-0 justify-center"
             >
-              <Text className="text-white text-lg font-pbold">Xóa</Text>
+              <Text className="text-white text-lg font-pbold">
+                {isLoading ? "Đang xóa..." : "Xóa tài khoản"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

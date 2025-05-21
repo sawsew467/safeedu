@@ -9,6 +9,9 @@ import {
   ImageBackground,
   ActivityIndicator,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import {
   useCreateChatMutation,
@@ -35,6 +38,8 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
 import ReportDialog from "./report-dialog";
 
+import stylesAndroid from "@/components/ui/SafeViewAndroid";
+import { Stack } from "expo-router";
 interface Attachment {
   name?: string;
   contentType?: string;
@@ -460,36 +465,11 @@ function ChatContent() {
     } catch {}
   };
   return (
-    <>
-      <HeaderShown
-        isBack={false}
-        title="Trợ lí tư vấn"
-        ref={scrollViewRef}
-        style={{ paddingBottom: 120, flexGrow: 1 }}
-        onContentSizeChange={(contentWidth, contentHeight) => {
-          scrollViewRef?.current?.scrollTo({
-            x: 0,
-            y: contentHeight,
-            animated: true,
-          });
-        }}
-        FooterComponent={() =>
-          error ? (
-            <ErrorScreen
-              onRetry={() => {
-                setChatData([]);
-                setError(false);
-              }}
-            />
-          ) : (
-            <Input handleSubmit={handleSubmit} />
-          )
-        }
-        // rightIcon={{
-        //     icon: () => <Feather name="more-horizontal" size={24} color="black" />,
-        //     onPress: handleClickMoreInfor,
-        // }}
-      >
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={[styles.container, stylesAndroid.AndroidSafeArea]}
+    >
+      <ScrollView style={{ flex: 1 }}>
         <View style={styles.container_content}>
           <View style={styles.container_header}>
             <Image source={avatar_chatbot} />
@@ -545,7 +525,18 @@ function ChatContent() {
             </View>
           )}
         </View>
-      </HeaderShown>
+      </ScrollView>
+
+      {error ? (
+        <ErrorScreen
+          onRetry={() => {
+            setChatData([]);
+            setError(false);
+          }}
+        />
+      ) : (
+        <Input handleSubmit={handleSubmit} />
+      )}
       <ReportDialog
         visible={isReport}
         handleDialog={handleDialog}
@@ -553,11 +544,15 @@ function ChatContent() {
         selectedOption={selectedOption}
       />
       <Toast />
-    </>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   errorContainer: {
     flex: 1,
     justifyContent: "center",

@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import {
-  SafeAreaView,
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
-  Image,
   ImageBackground,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Image,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
-import background from "@/assets/images/phone-verification-background.png";
+import background from "@/assets/images/account/background.png";
+
 import {
   useCreateCitizenAccountMutation,
   useCreateStudentAccountMutation,
@@ -26,6 +25,8 @@ import { Province, Organization } from "@/healper/type/Organization";
 import { ModalPicker } from "@/components/ui/modal-picker";
 import { DateTimePicker } from "@/components/ui/datetime-input";
 import { formatDate } from "@/utils/format-date";
+
+import stylesAndroid from "@/components/ui/SafeViewAndroid";
 
 type OrganizationOptions = {
   label: string;
@@ -203,6 +204,7 @@ const SignUpModule = () => {
     setError(newErrors);
 
     if (!hasError) {
+      console.log("userType :>> ", userType);
       try {
         switch (userType) {
           case "student":
@@ -234,6 +236,7 @@ const SignUpModule = () => {
       } catch (error) {
         const message: string =
           (error as any)?.data?.error?.message || "Đã xảy ra lỗi!";
+        console.log("error :>> ", error);
         Alert.alert(message);
       }
     }
@@ -246,13 +249,15 @@ const SignUpModule = () => {
   const [isAgreed, setIsAgreed] = useState(false);
 
   return (
-    <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={[{ flex: 1, position: "relative" }, stylesAndroid.AndroidSafeArea]}
+    >
       <ImageBackground
         source={background}
-        className="absolute top-0 bottom-0 left-0 right-0"
-        resizeMode="cover"
+        className="absolute top-0 h-[110%] left-0 w-screen z-0"
       />
-      <View className="px-4 pt-[90px]">
+      <View className="px-4 h-full pt-[90px]">
         <View className="bg-white w-full h-[100%] rounded-t-[40px] px-6 py-4">
           <Text className="text-center font-semibold text-2xl text-primary mb-5">
             {userType === "student"
@@ -261,6 +266,7 @@ const SignUpModule = () => {
               ? "Đăng ký Người dân"
               : null}
           </Text>
+
           <ScrollView showsVerticalScrollIndicator={false}>
             <Text className="font-semibold text-base text-[#959595]">
               Họ <Text className="text-red-500">*</Text>
@@ -570,7 +576,7 @@ const SignUpModule = () => {
           </ScrollView>
         </View>
       </View>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 
