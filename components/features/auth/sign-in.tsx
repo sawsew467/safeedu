@@ -146,14 +146,12 @@ const SignInModule = () => {
                 style={styles.signUpLink}
                 className="text-primary font-medium"
               >
-                Đăng kí
+                Đăng kí tại đây
               </Text>
             </TouchableOpacity>
           </View>
           <View style={styles.signUpContainer}>
-            <Text style={styles.signUpText}>
-              Hoặc đăng nhập với tư cách khách
-            </Text>
+            <Text style={styles.signUpText}>Quay lại</Text>
             <TouchableOpacity onPress={handleGoHome}>
               <Text
                 style={styles.signUpLink}
