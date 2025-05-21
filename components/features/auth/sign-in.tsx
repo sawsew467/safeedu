@@ -80,6 +80,7 @@ const SignInModule = () => {
           </Text>
           <View style={styles.input} className="px-4 flex justify-center">
             <TextInput
+              style={{ includeFontPadding: false }}
               placeholder="Nhập tên tài khoản"
               value={username}
               onChangeText={setUsername}

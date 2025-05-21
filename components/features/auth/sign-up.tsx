@@ -322,7 +322,11 @@ const SignUpModule = () => {
             <View className="w-full h-[1.5px] bg-black mt-2" />
             {error.dob ? (
               <Text className="text-red-500 text-xs mt-2">{error.dob}</Text>
-            ) : null}
+            ) : (
+              <Text className="text-gray-500 text-xs mt-2">
+                Vui lòng nhập ngày sinh để xác minh độ tuổi của bạn.
+              </Text>
+            )}
 
             <Text className="font-semibold text-base text-[#959595] mt-5">
               Số điện thoại
@@ -391,7 +395,11 @@ const SignUpModule = () => {
                   <Text className="text-red-500 text-xs mt-2">
                     {error.city}
                   </Text>
-                ) : null}
+                ) : (
+                  <Text className="text-gray-500 text-xs mt-2">
+                    Chọn tỉnh để hiển thị danh sách trường học.
+                  </Text>
+                )}
 
                 <Text className="font-semibold text-base text-[#959595] mt-5">
                   Trường <Text className="text-red-500">*</Text>
@@ -428,7 +436,11 @@ const SignUpModule = () => {
                   <Text className="text-red-500 text-xs mt-2">
                     {error.school}
                   </Text>
-                ) : null}
+                ) : (
+                  <Text className="text-gray-500 text-xs mt-2">
+                    Học sinh cần cung cấp thông tin về trường.
+                  </Text>
+                )}
               </>
             )}
 

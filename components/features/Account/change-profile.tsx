@@ -4,13 +4,12 @@ import React, { useState } from "react";
 import {
   View,
   StyleSheet,
-  SafeAreaView,
-  ScrollView,
   Text,
   TouchableOpacity,
   ImageBackground,
   Image,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 
@@ -19,7 +18,6 @@ import background from "@/assets/images/account/background.png";
 import FormButton from "@/components/ui/form-button";
 import { DateTimePicker } from "@/components/ui/datetime-input";
 import FormTextInput from "./form/form-text-input";
-import FormDropdown from "./form/form-dropdown";
 import FormPhoneInput from "./form/form-phonenumber-input";
 import HeaderShown from "@/components/ui/HeaderShown";
 import { formatDate } from "@/utils/format-date";
@@ -38,7 +36,6 @@ import {
   useUpdateProfileMutation,
 } from "@/services/user/user.api";
 import { useUploadImageMutation } from "@/services/upload/api.upload";
-import uploadImage from "@/components/ui/uploadImage";
 import { useRouter } from "expo-router";
 import { Building2, School } from "lucide-react-native";
 
@@ -73,11 +70,14 @@ const ProfileFormScreen = () => {
   const [uploadImage, { isLoading: isUploadLoading }] =
     useUploadImageMutation();
 
-  const { profile } = useGetMeQuery(undefined, {
+  const { profile, role } = useGetMeQuery(undefined, {
     selectFromResult: ({ data }) => ({
       profile: data?.data,
+      role: data?.data?.role,
     }),
   });
+
+  console.log("profile :>> ", profile);
 
   const { provinces }: { provinces: Array<{ label: string; value: string }> } =
     useGetProvincesQuery(
@@ -180,7 +180,11 @@ const ProfileFormScreen = () => {
   const handleUploadAvatar = async (onChange: (value: string) => void) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      alert("Cần quyền truy cập thư viện ảnh để tiếp tục!");
+      Alert.alert(
+        "Yêu cầu quyền truy cập ảnh",
+        "Ứng dụng cần quyền truy cập ảnh để bạn có thể chọn ảnh đại diện cho hồ sơ.",
+        [{ text: "Đã hiểu" }]
+      );
       return;
     }
     try {
@@ -359,127 +363,134 @@ const ProfileFormScreen = () => {
           helperText="Email liên hệ của bạn"
         />
 
-        {/* {userType === "student" && ( */}
         <View>
-          <View className="flex flex-row gap-2 mb-2">
-            <Building2 size={20} color="#fff" />
-            <Text className="font-semibold text-base text-white">
-              Tỉnh/Thành phố <Text className="text-red-500">*</Text>
-            </Text>
-          </View>
-
-          <Controller
-            control={control}
-            name={"provinceId"}
-            rules={{
-              required: "Vui lòng chọn tỉnh/thành phố",
-            }}
-            render={({ field: { onChange, value } }) => (
-              <View>
-                <TouchableOpacity
-                  style={[
-                    styles.dropdownButton,
-                    errors.provinceId?.message
-                      ? styles.dropdownButtonError
-                      : null,
-                  ]}
-                  onPress={() => setTypeModalProvinceVisible(true)}
-                >
-                  <Text
-                    style={[
-                      value ? styles.selectedText : styles.placeholderText,
-                    ]}
-                  >
-                    {value
-                      ? provinces?.find((province) => province.value === value)
-                          ?.label
-                      : "Chọn tỉnh/thành phố"}
-                  </Text>
-                  <Ionicons name="chevron-down" size={20} color={"#666"} />
-                </TouchableOpacity>
-                <ModalPicker
-                  visible={typeModalProvinceVisible}
-                  onClose={() => {
-                    setTypeModalProvinceVisible(false);
-                  }}
-                  title="Chọn tỉnh/thành phố"
-                  options={provinces}
-                  selectedValue={value}
-                  onSelect={(value) => {
-                    onChange(value);
-                  }}
-                />
+          {role === "Student" && (
+            <>
+              <View className="flex flex-row gap-2 mb-2">
+                <Building2 size={20} color="#fff" />
+                <Text className="font-semibold text-base text-white">
+                  Tỉnh/Thành phố <Text className="text-red-500">*</Text>
+                </Text>
               </View>
-            )}
-          />
-          {errors?.provinceId?.message ? (
-            <Text className="text-red-500 text-xs mt-2">
-              {errors?.provinceId?.message}
-            </Text>
-          ) : (
-            <Text style={styles.helperText}>{"Tỉnh/Thành phố của bạn"}</Text>
-          )}
-          <View className="flex flex-row gap-2 mb-2 mt-2">
-            <School size={20} color="#fff" />
-            <Text className="font-semibold text-base text-white mt-5">
-              Trường <Text className="text-red-500">*</Text>
-            </Text>
-          </View>
-          <Controller
-            control={control}
-            name="organizationId"
-            rules={{
-              required: "Vui lòng chọn Trường",
-            }}
-            render={({ field: { onChange, value } }) => (
-              <View>
-                <TouchableOpacity
-                  style={[
-                    styles.dropdownButton,
-                    errors.organizationId?.message
-                      ? styles.dropdownButtonError
-                      : null,
-                  ]}
-                  onPress={() => setTypeModalOrgVisible(true)}
-                >
-                  <Text
-                    style={[
-                      value ? styles.selectedText : styles.placeholderText,
-                    ]}
-                  >
-                    {organizationsByProvince?.some((org) => org.value === value)
-                      ? organizationsByProvince?.find(
+
+              <Controller
+                control={control}
+                name={"provinceId"}
+                rules={{
+                  required: "Vui lòng chọn tỉnh/thành phố",
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <View>
+                    <TouchableOpacity
+                      style={[
+                        styles.dropdownButton,
+                        errors.provinceId?.message
+                          ? styles.dropdownButtonError
+                          : null,
+                      ]}
+                      onPress={() => setTypeModalProvinceVisible(true)}
+                    >
+                      <Text
+                        style={[
+                          value ? styles.selectedText : styles.placeholderText,
+                        ]}
+                      >
+                        {value
+                          ? provinces?.find(
+                              (province) => province.value === value
+                            )?.label
+                          : "Chọn tỉnh/thành phố"}
+                      </Text>
+                      <Ionicons name="chevron-down" size={20} color={"#666"} />
+                    </TouchableOpacity>
+                    <ModalPicker
+                      visible={typeModalProvinceVisible}
+                      onClose={() => {
+                        setTypeModalProvinceVisible(false);
+                      }}
+                      title="Chọn tỉnh/thành phố"
+                      options={provinces}
+                      selectedValue={value}
+                      onSelect={(value) => {
+                        onChange(value);
+                      }}
+                    />
+                  </View>
+                )}
+              />
+              {errors?.provinceId?.message ? (
+                <Text className="text-red-500 text-xs mt-2">
+                  {errors?.provinceId?.message}
+                </Text>
+              ) : (
+                <Text style={styles.helperText}>
+                  {"Tỉnh/Thành phố của bạn"}
+                </Text>
+              )}
+              <View className="flex flex-row gap-2 mb-2 mt-2">
+                <School size={20} color="#fff" />
+                <Text className="font-semibold text-base text-white mt-5">
+                  Trường <Text className="text-red-500">*</Text>
+                </Text>
+              </View>
+              <Controller
+                control={control}
+                name="organizationId"
+                rules={{
+                  required: "Vui lòng chọn Trường",
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <View>
+                    <TouchableOpacity
+                      style={[
+                        styles.dropdownButton,
+                        errors.organizationId?.message
+                          ? styles.dropdownButtonError
+                          : null,
+                      ]}
+                      onPress={() => setTypeModalOrgVisible(true)}
+                    >
+                      <Text
+                        style={[
+                          value ? styles.selectedText : styles.placeholderText,
+                        ]}
+                      >
+                        {organizationsByProvince?.some(
                           (org) => org.value === value
-                        )?.label
-                      : "Chọn trường"}
-                  </Text>
-                  <Ionicons name="chevron-down" size={20} color={"#fff"} />
-                </TouchableOpacity>
-                <ModalPicker
-                  visible={typeModalOrgVisible}
-                  onClose={() => {
-                    setTypeModalOrgVisible(false);
-                  }}
-                  title="Chọn trường"
-                  options={organizationsByProvince}
-                  selectedValue={value}
-                  onSelect={(value) => {
-                    onChange(value);
-                  }}
-                />
-              </View>
-            )}
-          />
+                        )
+                          ? organizationsByProvince?.find(
+                              (org) => org.value === value
+                            )?.label
+                          : "Chọn trường"}
+                      </Text>
+                      <Ionicons name="chevron-down" size={20} color={"#fff"} />
+                    </TouchableOpacity>
+                    <ModalPicker
+                      visible={typeModalOrgVisible}
+                      onClose={() => {
+                        setTypeModalOrgVisible(false);
+                      }}
+                      title="Chọn trường"
+                      options={organizationsByProvince}
+                      selectedValue={value}
+                      onSelect={(value) => {
+                        onChange(value);
+                      }}
+                    />
+                  </View>
+                )}
+              />
 
-          {errors.organizationId?.message ? (
-            <Text className="text-red-500 text-xs mt-2">
-              {errors.organizationId?.message}
-            </Text>
-          ) : (
-            <Text style={styles.helperText}>{"Trường học của bạn"}</Text>
+              {errors.organizationId?.message ? (
+                <Text className="text-red-500 text-xs mt-2">
+                  {errors.organizationId?.message}
+                </Text>
+              ) : (
+                <Text style={styles.helperText}>{"Trường học của bạn"}</Text>
+              )}
+              <View />
+            </>
           )}
-          <View />
-          {/* )} */}
 
           <View style={styles.buttonContainer}>
             <FormButton
