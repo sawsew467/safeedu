@@ -47,14 +47,14 @@ const DeleteAccount = () => {
           }}
         />
 
-        <View className="flex-1 flex justify-center items-center">
+        <View className="flex-1 flex justify-center items-center px-4">
           <View>
             <Text className="text-center text-2xl font-pbold">
               Xóa tài khoản vĩnh viễn?
             </Text>
             <Text className="text-center text-lg font-pregular">
-              Tài khoản và nội dung của bạn sẽ bị xóa vĩnh viễn. Bạn có chắc
-              chắn muốn xóa tài khoản này?
+              Tài khoản và nội dung của bạn sẽ bị xóa vĩnh viễn. Bạn có chắn
+              chắn muốn xóa tài khoản? Thao tác này không thể hoàn tác.
             </Text>
           </View>
           <View className="px-4 mt-4 flex flex-row" style={{ gap: 10 }}>
@@ -62,7 +62,7 @@ const DeleteAccount = () => {
               onPress={handleCancel}
               className="flex-1 flex-row h-[60px] bg-gray-200 rounded-2xl py-2 flex items-center m-0 justify-center"
             >
-              <Text className="text-black  text-lg font-pbold">hủy</Text>
+              <Text className="text-black  text-lg font-pbold">Hủy bỏ</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleDeleteAccount}
