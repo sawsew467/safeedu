@@ -33,7 +33,7 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import { content } from "@/tailwind.config";
 import { Picture } from "@/healper/type/Contest";
 import { formatDate } from "@/utils/format-date";
-import ModalViewPicture from "./ModalViewPicture";
+import ModalViewPicture from "./ViewPicture";
 import { Button } from "@/components/ui/Button";
 import { deleteClientCookie } from "@/lib/jsCookies";
 import constants from "@/settings/constants";
@@ -69,8 +69,7 @@ const styles = StyleSheet.create({
   },
   frog_draw: {
     position: "absolute",
-    right: 1.5,
-
+    right: 2,
     zIndex: 10,
   },
   animatedHeader: {
@@ -158,14 +157,13 @@ const ListItem = ({ image, slug, handleClickBtn }: ItemProps) => {
 function DrawPictureContest() {
   const { drawPictureID }: { drawPictureID: string } = useLocalSearchParams();
   const [isExpanded, setIsExpanded] = React.useState(false);
-  const [pictureId, setPictureDetail] = React.useState(null);
   const [isOpenUploadNewPicture, setOpenUploadNewPicture] =
     React.useState(false);
   const [isOpenViewScore, setOpenViewScore] = React.useState(false);
 
   const dispatch = useAppDispatch();
 
-  const { pictures, isFetching, refetch } = useGetAllPictureByQuizIdQuery(
+  const { pictures, isFetching } = useGetAllPictureByQuizIdQuery(
     drawPictureID ? { id: drawPictureID } : skipToken,
     {
       selectFromResult: ({ data, isFetching }) => ({
@@ -186,38 +184,17 @@ function DrawPictureContest() {
     }
   );
 
-  const {
-    detailPicture,
-    isFetchingPicture,
-  }: { detailPicture: Picture; isFetchingPicture: boolean } =
-    useGetPictureQuery(pictureId ? { id: pictureId } : skipToken, {
-      selectFromResult: ({ data, isFetching }) => ({
-        detailPicture: data?.data,
-        isFetchingPicture: isFetching,
-      }),
-    });
-
-  const { comments, isFetchingComment } = useGetAllCommentByPictureIdQuery(
-    pictureId ? { id: pictureId } : skipToken,
-    {
-      selectFromResult: ({ data, isFetching }) => ({
-        comments: data?.data,
-        isFetchingComment: isFetching,
-      }),
-    }
-  );
-
-  const { isSubmited } = useIsDoQuizzQuery(
+  const { status, refetch } = useIsDoQuizzQuery(
     drawPictureID ? { id: drawPictureID } : skipToken,
     {
       selectFromResult: ({ data }) => ({
-        isSubmited: data?.data?.isSubmit,
+        status: data?.data?.status,
       }),
     }
   );
 
   const { myPicture }: { myPicture: Picture } = useGetMyPictureQuery(
-    isSubmited ? { id: drawPictureID } : skipToken,
+    status === "done" ? { id: drawPictureID } : skipToken,
     {
       selectFromResult: ({ data }) => ({
         myPicture: data?.data,
@@ -257,7 +234,7 @@ function DrawPictureContest() {
   };
 
   const handleClickPicture = (id: string) => {
-    setPictureDetail(id);
+    router.push(`/contest/${drawPictureID}/drawPicture/${drawPictureID}/${id}`);
   };
 
   return (
@@ -267,87 +244,84 @@ function DrawPictureContest() {
         <RefreshControl onRefresh={handleRefresh} refreshing={isFetching} />
       }
     >
-      {isSubmited === false && statusCompetition === "Ongoing" ? (
-        <View className="flex flex-1 gap-2 mt-5 px-4">
-          <Button
-            variant="primary"
-            onPress={() => {
-              if (isSubmited === false) setOpenUploadNewPicture(true);
-              else if (isSubmited === undefined) {
-                dispatch(setAccessToken(null));
-                dispatch(setRefreshToken(null));
-              }
-            }}
-          >
-            Nộp tranh
-          </Button>
-        </View>
-      ) : (
-        isSubmited === true && (
-          <View className="flex flex-row">
-            <View className="flex flex-1 gap-2 mt-5 px-4">
-              <Button
-                variant="outline"
-                onPress={() => {
-                  setOpenViewScore(true);
-                }}
-              >
-                Xem điểm của bài thi
-              </Button>
-              <Button
-                variant="primary"
-                onPress={() => {
-                  setPictureDetail(myPicture?._id);
-                }}
-              >
-                Xem bài thi của mình
-              </Button>
-            </View>
+      <View>
+        {status === "not-started" && statusCompetition === "Ongoing" ? (
+          <View className="flex flex-1 gap-2 mt-5 px-4">
+            <Button
+              variant="primary"
+              onPress={() => {
+                if (status === "not-started") setOpenUploadNewPicture(true);
+                else if (status === undefined) {
+                  dispatch(setAccessToken(null));
+                  dispatch(setRefreshToken(null));
+                }
+              }}
+            >
+              Nộp tranh
+            </Button>
           </View>
-        )
-      )}
-      <ModalViewPicture
-        open={!!pictureId}
-        setPictureDetail={setPictureDetail}
-        picture={detailPicture}
-        comments={comments}
-        isFetching={isFetchingComment || isFetchingPicture}
-      />
-      <ModalScorePicture
-        visible={isOpenViewScore}
-        onClose={() => setOpenViewScore(false)}
-        quiz_id={drawPictureID}
-      />
-      <UploadMyPicture
-        isVisible={isOpenUploadNewPicture}
-        setVisible={() => setOpenUploadNewPicture(false)}
-        quiz_id={drawPictureID}
-      />
-      <View style={[styles.frog_draw, { top: isSubmited ? 167.5 : 111 }]}>
-        <Image source={frog_draw} />
-      </View>
-      <FlatList
-        scrollEnabled={false}
-        data={pictures}
-        numColumns={2}
-        columnWrapperStyle={{ gap: 20 }}
-        key={"key"}
-        renderItem={({ item }: { item: Picture }) => (
-          <ListItem
-            image={item?.picture}
-            slug={item?._id}
-            handleClickBtn={handleClickPicture}
-          />
+        ) : (
+          status === "done" && (
+            <View className="flex flex-row">
+              <View className="flex flex-1 gap-2 mt-5 px-4">
+                <Button
+                  variant="outline"
+                  onPress={() => {
+                    setOpenViewScore(true);
+                  }}
+                >
+                  Xem điểm của bài thi
+                </Button>
+                <Button
+                  variant="primary"
+                  onPress={() => {
+                    handleClickPicture(myPicture?._id);
+                  }}
+                >
+                  Xem bài thi của mình
+                </Button>
+              </View>
+            </View>
+          )
         )}
-        keyExtractor={(item: Picture) => item?._id}
-        contentContainerStyle={{
-          gap: 20,
-          paddingHorizontal: 16,
-          marginTop: 100,
-          width: "100%",
-          paddingBottom: 100,
-        }}
-      />
+        <ModalScorePicture
+          visible={isOpenViewScore}
+          onClose={() => setOpenViewScore(false)}
+          quiz_id={drawPictureID}
+        />
+        <UploadMyPicture
+          isVisible={isOpenUploadNewPicture}
+          setVisible={() => setOpenUploadNewPicture(false)}
+          quiz_id={drawPictureID}
+        />
+        <View className="relative ">
+          <View style={[styles.frog_draw, { top: 36.2 }]}>
+            <Image source={frog_draw} />
+          </View>
+          <FlatList
+            scrollEnabled={false}
+            data={pictures}
+            numColumns={2}
+            columnWrapperStyle={{ gap: 20 }}
+            key={"key"}
+            renderItem={({ item }: { item: Picture }) => (
+              <ListItem
+                image={item?.picture}
+                slug={item?._id}
+                handleClickBtn={handleClickPicture}
+              />
+            )}
+            keyExtractor={(item: Picture) => item?._id}
+            contentContainerStyle={{
+              gap: 20,
+              paddingHorizontal: 16,
+              marginTop: 100,
+              width: "100%",
+              paddingBottom: 100,
+            }}
+          />
+        </View>
+      </View>
     </HeaderShown>
   );
 }

@@ -40,6 +40,7 @@ export const competitionsAPI = baseApi.injectEndpoints({
         method: "GET",
         flashError: true,
       }),
+      providesTags: ["picture"],
     }),
     getPicture: build.query({
       query: ({ id }) => ({
@@ -86,7 +87,7 @@ export const competitionsAPI = baseApi.injectEndpoints({
           flashError: true,
         };
       },
-      providesTags: ["quizResult"],
+      providesTags: ["quizResult", "picture"],
     }),
     getMyPicture: build.query({
       query: ({ id }) => ({

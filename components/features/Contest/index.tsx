@@ -12,6 +12,7 @@ import {
   StatusBar,
   RefreshControl,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import GlobalStyles from "@/components/ui/SafeViewAndroid";
 import bg_1 from "@/assets/images/contest/bg_1.png";
@@ -197,7 +198,6 @@ function Contest() {
           <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
         }
         overScrollMode="never"
-        bounces={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           {
@@ -210,7 +210,7 @@ function Contest() {
         scrollEventThrottle={16}
       >
         <View className=" h-[400px] left-0 right-0">
-          <Image
+          <ImageBackground
             source={bg_1}
             resizeMode="cover"
             className="flex h-[400px] justify-center absolute right-0 left-0 w-full"

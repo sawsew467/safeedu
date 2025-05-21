@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,6 +16,7 @@ import { z } from "zod";
 import Toast from "react-native-toast-message";
 import UploadImage from "@/components/ui/uploadImage";
 import { useAddNewPictureMutation } from "@/services/competitions/competitions.api";
+import stylesAndroid from "@/components/ui/SafeViewAndroid";
 
 // Assuming you have a similar API hook for React Native
 
@@ -79,104 +81,107 @@ const UploadMyPicture = ({
   };
 
   return (
-    <Modal
-      visible={isVisible}
-      animationType="slide"
-      transparent={true}
-      onRequestClose={handleClose}
-    >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text style={styles.modalTitle}>Thêm tranh vẽ</Text>
+    <SafeAreaView style={stylesAndroid.AndroidSafeArea} className="flex-1">
+      <Modal
+        visible={isVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={handleClose}
+        className="h-full"
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>Thêm tranh vẽ</Text>
 
-          <ScrollView style={styles.formContainer}>
-            <View style={styles.formField}>
-              <Text style={styles.label}>Tên bức tranh</Text>
-              <Controller
-                control={control}
-                name="name"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Nhập tiêu đề"
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                  />
+            <ScrollView style={styles.formContainer}>
+              <View style={styles.formField}>
+                <Text style={styles.label}>Tên bức tranh</Text>
+                <Controller
+                  control={control}
+                  name="name"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Nhập tiêu đề"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
+                  )}
+                />
+                {errors.name && (
+                  <Text style={styles.errorText}>{errors.name.message}</Text>
                 )}
-              />
-              {errors.name && (
-                <Text style={styles.errorText}>{errors.name.message}</Text>
-              )}
-            </View>
+              </View>
 
-            <View style={styles.formField}>
-              <Text style={styles.label}>Mô tả</Text>
-              <Controller
-                control={control}
-                name="description"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={[styles.input, styles.textArea]}
-                    placeholder="Nhập mô tả"
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    multiline
-                    numberOfLines={3}
-                  />
+              <View style={styles.formField}>
+                <Text style={styles.label}>Mô tả</Text>
+                <Controller
+                  control={control}
+                  name="description"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={[styles.input, styles.textArea]}
+                      placeholder="Nhập mô tả"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      multiline
+                      numberOfLines={3}
+                    />
+                  )}
+                />
+                {errors.description && (
+                  <Text style={styles.errorText}>
+                    {errors.description.message}
+                  </Text>
                 )}
-              />
-              {errors.description && (
-                <Text style={styles.errorText}>
-                  {errors.description.message}
-                </Text>
-              )}
-            </View>
+              </View>
 
-            <View style={styles.formField}>
-              <Text style={styles.label}>Tranh vẽ</Text>
-              <Controller
-                control={control}
-                name="picture"
-                render={({ field: { onChange, value } }) => (
-                  <UploadImage
-                    value={value}
-                    onChange={onChange}
-                    maxHeight={150}
-                  />
+              <View style={styles.formField}>
+                <Text style={styles.label}>Tranh vẽ</Text>
+                <Controller
+                  control={control}
+                  name="picture"
+                  render={({ field: { onChange, value } }) => (
+                    <UploadImage
+                      value={value}
+                      onChange={onChange}
+                      maxHeight={150}
+                    />
+                  )}
+                />
+                {errors.picture && (
+                  <Text style={styles.errorText}>{errors.picture.message}</Text>
                 )}
-              />
-              {errors.picture && (
-                <Text style={styles.errorText}>{errors.picture.message}</Text>
-              )}
+              </View>
+            </ScrollView>
+
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonCancel]}
+                onPress={handleClose}
+                disabled={isLoading}
+              >
+                <Text style={styles.buttonText}>Hủy</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.button, styles.buttonSubmit]}
+                onPress={handleSubmit(onSubmit)}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <Text style={styles.buttonText}>Nộp tranh</Text>
+                )}
+              </TouchableOpacity>
             </View>
-          </ScrollView>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonCancel]}
-              onPress={handleClose}
-              disabled={isLoading}
-            >
-              <Text style={styles.buttonText}>Hủy</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.button, styles.buttonSubmit]}
-              onPress={handleSubmit(onSubmit)}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <ActivityIndicator color="#fff" size="small" />
-              ) : (
-                <Text style={styles.buttonText}>Nộp tranh</Text>
-              )}
-            </TouchableOpacity>
           </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </SafeAreaView>
   );
 };
 
