@@ -58,6 +58,9 @@ const SignInModule = () => {
   const handleSignUp = () => {
     router.push("/user-type-screen");
   };
+  const handleGoHome = () => {
+    router.push("/home");
+  };
 
   const handleForgotPassword = () => {
     router.push("/forgot-password");
@@ -83,6 +86,7 @@ const SignInModule = () => {
               placeholder="Nhập tên tài khoản"
               value={username}
               onChangeText={setUsername}
+              style={{ flex: 1 }}
             />
           </View>
           {error.username ? (
@@ -106,6 +110,7 @@ const SignInModule = () => {
                 placeholder="Nhập mật khẩu"
                 secureTextEntry={!passwordVisible}
                 value={password}
+                style={{ flex: 1 }}
                 onChangeText={setPassword}
               />
               <TouchableOpacity
@@ -142,6 +147,19 @@ const SignInModule = () => {
                 className="text-primary font-medium"
               >
                 Đăng kí
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.signUpContainer}>
+            <Text style={styles.signUpText}>
+              Hoặc đăng nhập với tư cách khách
+            </Text>
+            <TouchableOpacity onPress={handleGoHome}>
+              <Text
+                style={styles.signUpLink}
+                className="text-primary font-medium"
+              >
+                Trang chủ
               </Text>
             </TouchableOpacity>
           </View>

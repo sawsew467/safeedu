@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/Button";
 import { useAppDispatch } from "@/hooks/redux";
 import { useNavigation, useRouter } from "expo-router";
-import { ArrowLeftRight, LogOut, UserPen } from "lucide-react-native";
+import {
+  ArrowLeftRight,
+  LogOut,
+  UserPen,
+  UserRoundX,
+} from "lucide-react-native";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { setAccessToken, setRefreshToken } from "../auth/slices";
 import { baseApi } from "@/store/baseQuery";
@@ -19,14 +24,25 @@ const LogOutModule = () => {
     router.replace("/account");
   };
 
+  const handleDeleteAccount = () => {
+    router.replace("/account/delete-account");
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         onPress={handleLogout}
+        className="w-full flex-row h-[60px] bg-gray-300 rounded-2xl py-2 flex items-center m-0 justify-center"
+      >
+        <LogOut size={20} color="black" />
+        <Text className="text-lg text-black ml-2">Đăng xuất</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={handleDeleteAccount}
         className="w-full flex-row h-[60px] bg-red-700 rounded-2xl py-2 flex items-center m-0 justify-center"
       >
-        <LogOut size={20} color="white" />
-        <Text className="text-lg text-white ml-2">Đăng xuất</Text>
+        <UserRoundX size={20} color="white" />
+        <Text className="text-lg text-white ml-2">xóa tài khoản</Text>
       </TouchableOpacity>
     </View>
   );
@@ -34,16 +50,10 @@ const LogOutModule = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
     marginBottom: 20,
     marginLeft: 10,
     marginRight: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    gap: 20,
   },
   title: {
     fontSize: 18,

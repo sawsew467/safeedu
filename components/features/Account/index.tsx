@@ -25,7 +25,7 @@ import {
   useGetStudentByUsernameQuery,
 } from "@/services/user/user.api";
 import ProfileSkeleton from "./profile-skeleton";
-import { useFocusEffect, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import LogOut from "./logout";
 
 const ProfileScreen = () => {
