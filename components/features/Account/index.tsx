@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   Image,
   RefreshControl,
+  ImageBackground,
+  SafeAreaView,
 } from "react-native";
 import { KeyRound, UserPen, UserRound } from "lucide-react-native";
 
@@ -25,7 +27,6 @@ import {
 import ProfileSkeleton from "./profile-skeleton";
 import { useFocusEffect, useRouter } from "expo-router";
 import LogOut from "./logout";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProfileScreen = () => {
   const router = useRouter();
@@ -128,7 +129,7 @@ const ProfileScreen = () => {
         className="bg-none h-full relative"
       >
         <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-          <Image source={background} className="w-full h-full" />
+          <ImageBackground source={background} className="w-full h-full" />
         </View>
         <View className="flex-1 flex items-center justify-center">
           <View className="h-auto flex items-center mb-4">
@@ -160,130 +161,127 @@ const ProfileScreen = () => {
     );
   }
 
-  if (isFetching) {
-    return (
-      <View className="relative w-full h-full">
-        <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-          <Image source={background} className="w-full h-full" />
-        </View>
-        <ProfileSkeleton />
-      </View>
-    );
-  }
-
   const averageScore = calculateAverageScore(data?.quizResults);
   const categories = categorizeResults(data?.quizResults);
 
   return (
     <SafeAreaView style={styles.container} className="bg-none relative">
       <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-        <Image source={background} className="w-full h-full" />
+        <ImageBackground source={background} className="w-full h-full" />
       </View>
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={isFetching}
-            onRefresh={() => {
-              refetch();
-            }}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-        className="z-10 bg-none"
-      >
-        <View className="z-10 flex justify-center items-center mt-10">
-          <View className="mb-4 border-4 border-white rounded-full w-[100px] h-[100px] overflow-hidden">
-            {data?.avatar ? (
-              <Image
-                source={{ uri: data?.avatar ?? "/placehodler.svg" }}
-                className="w-full h-full rounded-full"
-              />
-            ) : (
-              <View style={styles.avatarPlaceholder}>
-                <Text style={styles.avatarText}>
-                  {data?.first_name?.charAt(0)}
-                  {data?.last_name?.charAt(0)}
+      {isFetching ? (
+        <ProfileSkeleton />
+      ) : (
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isFetching}
+              onRefresh={() => {
+                refetch();
+              }}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+          className="z-10 bg-none  px-1"
+        >
+          <View className="z-10 flex justify-center items-center mt-10">
+            <View className="mb-4 border-4 border-white rounded-full w-[100px] h-[100px] overflow-hidden">
+              {data?.avatar ? (
+                <Image
+                  source={{ uri: data?.avatar ?? "/placehodler.svg" }}
+                  className="w-full h-full rounded-full"
+                />
+              ) : (
+                <View style={styles.avatarPlaceholder}>
+                  <Text style={styles.avatarText}>
+                    {data?.first_name?.charAt(0)}
+                    {data?.last_name?.charAt(0)}
+                  </Text>
+                </View>
+              )}
+            </View>
+
+            <Text className="font-pbold text-xl text-center text-white">
+              {data?.first_name} {data?.last_name}
+            </Text>
+            <Text className="font-pmedium text-sm text-gray-300 mb-2">
+              @{data?.username}
+            </Text>
+            <Text className="font-plight text-lg text-gray-100 mb-4">
+              {formatDate(data?.date_of_birth, "DD/MM/YYYY")}
+            </Text>
+
+            <View style={styles.badgeContainer}>
+              <View style={styles.badge}>
+                <Ionicons name="school-outline" size={14} color="#666" />
+                <Text style={styles.badgeText}>
+                  {data?.organizationId?.name}
                 </Text>
               </View>
-            )}
-          </View>
+            </View>
 
-          <Text className="font-pbold text-xl text-center text-white">
-            {data?.first_name} {data?.last_name}
-          </Text>
-          <Text className="font-pmedium text-sm text-gray-300 mb-2">
-            @{data?.username}
-          </Text>
-          <Text className="font-plight text-lg text-gray-100 mb-4">
-            {formatDate(data?.date_of_birth, "DD/MM/YYYY")}
-          </Text>
-
-          <View style={styles.badgeContainer}>
-            <View style={styles.badge}>
-              <Ionicons name="school-outline" size={14} color="#666" />
-              <Text style={styles.badgeText}>{data?.organizationId?.name}</Text>
+            <View className="flex flex-row justify-center w-full  gap-4 mb-2">
+              <TouchableOpacity
+                onPress={handleChangeProfile}
+                className="flex-1 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
+              >
+                <UserPen color="white" size={22} className="mb-2 mr-2" />
+                <Text className="text-white font-pbold mr-2 mb-2">
+                  Thay đổi hồ sơ
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleChangePassword}
+                className="flex-1 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
+              >
+                <KeyRound color="white" size={22} className="mb-2 mr-2" />
+                <Text className="text-white font-pbold mr-2 mb-2">
+                  Đổi mật khẩu
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
 
-          <View className="flex flex-row justify-center w-full  gap-4 mb-2">
-            <TouchableOpacity
-              onPress={handleChangeProfile}
-              className="flex-1 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
-            >
-              <UserPen color="white" size={22} className="mb-2 mr-2" />
-              <Text className="text-white font-pbold mr-2 mb-2">
-                Thay đổi hồ sơ
+          <View style={styles.scoreCard}>
+            <Text style={styles.cardTitle}>Điểm trung bình</Text>
+            <Text style={styles.cardSubtitle}>
+              Tổng hợp từ tất cả các bài kiểm tra
+            </Text>
+
+            <View style={styles.averageScoreContainer}>
+              <Text style={styles.averageScore}>
+                {averageScore?.toFixed(1)}
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleChangePassword}
-              className="flex-1 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
-            >
-              <KeyRound color="white" size={22} className="mb-2 mr-2" />
-              <Text className="text-white font-pbold mr-2 mb-2">
-                Đổi mật khẩu
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+              <Text style={styles.maxScore}>/10</Text>
+            </View>
 
-        <View style={styles.scoreCard}>
-          <Text style={styles.cardTitle}>Điểm trung bình</Text>
-          <Text style={styles.cardSubtitle}>
-            Tổng hợp từ tất cả các bài kiểm tra
-          </Text>
-
-          <View style={styles.averageScoreContainer}>
-            <Text style={styles.averageScore}>{averageScore?.toFixed(1)}</Text>
-            <Text style={styles.maxScore}>/10</Text>
+            <View style={styles.progressBackground}>
+              <View
+                style={[
+                  styles.progressFill,
+                  {
+                    width: `${averageScore * 10}%`,
+                    backgroundColor:
+                      averageScore >= 8
+                        ? "#4CAF50"
+                        : averageScore >= 5
+                        ? "#F59E0B"
+                        : "#EF4444",
+                  },
+                ]}
+              />
+            </View>
           </View>
 
-          <View style={styles.progressBackground}>
-            <View
-              style={[
-                styles.progressFill,
-                {
-                  width: `${averageScore * 10}%`,
-                  backgroundColor:
-                    averageScore >= 8
-                      ? "#4CAF50"
-                      : averageScore >= 5
-                      ? "#F59E0B"
-                      : "#EF4444",
-                },
-              ]}
-            />
-          </View>
-        </View>
+          <ResultAnalysisCard categories={categories} />
 
-        <ResultAnalysisCard categories={categories} />
-
-        <QuizHistoryCard
-          quizResults={data?.quizResults}
-          formatDate={formatDate}
-        />
-        <LogOut />
-      </ScrollView>
+          <QuizHistoryCard
+            quizResults={data?.quizResults}
+            formatDate={formatDate}
+          />
+          <LogOut />
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };

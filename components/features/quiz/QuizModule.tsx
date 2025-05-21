@@ -3,6 +3,7 @@ import React from "react";
 import {
   Dimensions,
   FlatList,
+  Image,
   ImageBackground,
   SafeAreaView,
   StyleSheet,
@@ -21,6 +22,7 @@ import {
 import { skipToken } from "@reduxjs/toolkit/query";
 import TimerProgress from "./TimerProgress";
 import LoadingPage from "@/components/ui/LoadingPage";
+import QuizBackground from "./quiz-background";
 
 const { height } = Dimensions.get("window");
 
@@ -172,14 +174,9 @@ const QuizModule = () => {
   }
 
   return (
-    <HeaderShown title="Cuộc thi Lý thuyết" isBack>
+    <QuizBackground>
       <LoadingPage isLoading={isFetching} />
-      <ImageBackground
-        source={bg_game_1}
-        defaultSource={bg_game_1}
-        style={styles.bg}
-        resizeMode="cover"
-      />
+
       <View style={styles.container_game}>
         <View className="mx-3 mt-2">
           <TimerProgress value={timer} max={timeLimit} />
@@ -200,6 +197,7 @@ const QuizModule = () => {
           <FlatList
             style={{ width: "100%" }}
             data={answers}
+            scrollEnabled={false}
             contentContainerStyle={styles.answers}
             keyExtractor={(item) => item}
             renderItem={({ item, index }) => (
@@ -214,7 +212,7 @@ const QuizModule = () => {
           />
         </View>
       </View>
-    </HeaderShown>
+    </QuizBackground>
   );
 };
 
@@ -304,20 +302,12 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   container_game: {
-    // flex: 1,
+    flex: 1,
     position: "relative",
     display: "flex",
     width: "100%",
-    height: height * 0.85,
     flexDirection: "column",
     justifyContent: "flex-end",
-  },
-  bg: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
   },
   topLeft: {
     alignSelf: "flex-start",

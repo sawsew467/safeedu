@@ -1,8 +1,8 @@
 "use client";
 import Skeleton from "@/components/ui/skeleton";
 import { Stack } from "expo-router";
-import { View, StyleSheet, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React from "react";
+import { View, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 
 const ProfileSkeleton = () => {
   return (

@@ -27,7 +27,6 @@ const style = StyleSheet.create({
 });
 
 const ContestItem = ({ item }: { item: Competitions }) => {
-  console.log("🚀 ~ ContestItem ~ item:", item);
   return (
     <TouchableOpacity onPress={() => router.push(`/contest/${item?.slug}`)}>
       <View className="flex w-60 h-72 flex-col" style={style.shadow}>

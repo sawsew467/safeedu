@@ -98,7 +98,7 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
               fontWeight: "500",
             },
             headerTitle: title,
-            headerLeft: isBack
+            headerLeft: !headerLeft
               ? () => (
                   <Animated.View
                     style={{
@@ -114,7 +114,7 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
                     </TouchableOpacity>
                   </Animated.View>
                 )
-              : null,
+              : headerLeft,
             headerRight: rightIcon
               ? () => (
                   <Animated.View
@@ -149,13 +149,13 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
           }}
         />
         <SafeAreaView style={headerSafeArea.AndroidSafeArea}>
+          <View className="absolute top-0 bottom-0 left-0 right-0 bg-white z-0"></View>
           {HeaderComponent && <HeaderComponent />}
           {isScroll ? (
             <ScrollView
               ref={ref}
               {...props}
               overScrollMode="never"
-              bounces={false}
               style={styles.scrollView}
               contentContainerStyle={[
                 styles.scrollViewContent,
@@ -180,6 +180,7 @@ const headerSafeArea = StyleSheet.create({
   AndroidSafeArea: {
     flex: 1,
     paddingTop: 0,
+    position: "relative",
   },
 });
 

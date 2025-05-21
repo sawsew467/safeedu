@@ -12,6 +12,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -21,6 +22,7 @@ import Badge from "@/components/ui/badge";
 import { formatDate } from "@/utils/format-date";
 import { StarRating } from "./start-rating";
 import Skeleton from "@/components/ui/skeleton";
+import androidStyles from "@/components/ui/SafeViewAndroid";
 
 const { width, height } = Dimensions.get("window");
 const maxRating = 10;
@@ -106,107 +108,108 @@ const DialogViewScore = ({
       animationType="slide"
       presentationStyle="fullScreen"
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={onClose}>
-            <Entypo name="chevron-left" size={30} color="#0ea5e9" />
-          </TouchableOpacity>
+      <SafeAreaView style={[androidStyles.AndroidSafeArea, { width: "100%" }]}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={onClose}>
+              <Entypo name="chevron-left" size={30} color="#0ea5e9" />
+            </TouchableOpacity>
 
-          <View style={styles.userInfo}>
-            <Avatar
-              source={{
-                uri:
-                  myPicture?.user_id?.avatar ||
-                  "https://via.placeholder.com/48",
-              }}
-              fallback={
-                myPicture?.user_id?.username?.substring(0, 2).toUpperCase() ||
-                "UN"
-              }
-              size={48}
-            />
-
-            <View style={styles.userTextInfo}>
-              <View style={styles.nameAndBadge}>
-                <Text style={styles.userName}>
-                  {myPicture?.user_id?.first_name}{" "}
-                  {myPicture?.user_id?.last_name}
-                </Text>
-                {myPicture?.score !== undefined ? (
-                  <Badge text="Đã chấm" style={styles.badgeCompleted} />
-                ) : (
-                  <Badge text="Đang được chấm" style={styles.badgePending} />
-                )}
-              </View>
-              <Text style={styles.submissionTime}>
-                {myPicture?.completedAt
-                  ? `Được chấm vào: ${formatDate(myPicture?.completedAt)}`
-                  : `Đã nộp vào: ${formatDate(myPicture?.startedAt)}`}
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        <ScrollView style={styles.scrollView}>
-          <View style={styles.content}>
-            {/* Main Image */}
-            <View style={styles.imageContainer}>
-              <Image
+            <View style={styles.userInfo}>
+              <Avatar
                 source={{
-                  uri: myPicture?.picture || "https://via.placeholder.com/800",
+                  uri:
+                    myPicture?.user_id?.avatar ||
+                    "https://via.placeholder.com/48",
                 }}
-                style={styles.mainImage}
-                resizeMode="contain"
+                fallback={
+                  myPicture?.user_id?.username?.substring(0, 2).toUpperCase() ||
+                  "UN"
+                }
+                size={48}
               />
-            </View>
 
-            {/* Score Section */}
-            {myPicture?.score !== undefined && (
-              <View style={styles.scoreSection}>
-                <View style={styles.scoreHeader}>
-                  <View style={styles.scoreDisplay}>
-                    <Text style={styles.scoreValue}>
-                      {myPicture?.score?.toFixed(1)}
-                    </Text>
-                    <Text style={styles.scoreMax}>/ {maxRating}</Text>
-                  </View>
-                  <Badge text={`Đánh giá: ${ratingText}`} style={ratingColor} />
-                </View>
-
-                <View style={styles.starRatingContainer}>
-                  <StarRating
-                    maxRating={maxRating}
-                    rating={myPicture?.score ?? 0}
-                  />
-                </View>
-              </View>
-            )}
-
-            {/* Feedback Section */}
-            {myPicture?.feedback && (
-              <View style={styles.feedbackSection}>
-                <Text style={styles.feedbackTitle}>Đánh giá</Text>
-                {myPicture?.feedback?.split("\n\n").map((paragraph, i) => (
-                  <Text key={i} style={styles.feedbackParagraph}>
-                    {paragraph}
+              <View style={styles.userTextInfo}>
+                <View style={styles.nameAndBadge}>
+                  <Text style={styles.userName}>
+                    {myPicture?.user_id?.first_name}{" "}
+                    {myPicture?.user_id?.last_name}
                   </Text>
-                ))}
+                  {myPicture?.score !== undefined ? (
+                    <Badge text="Đã chấm" style={styles.badgeCompleted} />
+                  ) : (
+                    <Badge text="Đang được chấm" style={styles.badgePending} />
+                  )}
+                </View>
+                <Text style={styles.submissionTime}>
+                  {myPicture?.completedAt
+                    ? `Được chấm vào: ${formatDate(myPicture?.completedAt)}`
+                    : `Đã nộp vào: ${formatDate(myPicture?.startedAt)}`}
+                </Text>
               </View>
-            )}
+            </View>
           </View>
-        </ScrollView>
 
-        {/* Footer */}
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>Đóng</Text>
-          </TouchableOpacity>
+          <ScrollView style={styles.scrollView}>
+            <View style={styles.content}>
+              <View style={styles.imageContainer}>
+                <Image
+                  source={{
+                    uri:
+                      myPicture?.picture || "https://via.placeholder.com/800",
+                  }}
+                  style={styles.mainImage}
+                  resizeMode="contain"
+                />
+              </View>
+
+              {/* Score Section */}
+              {myPicture?.score !== undefined && (
+                <View style={styles.scoreSection}>
+                  <View style={styles.scoreHeader}>
+                    <View style={styles.scoreDisplay}>
+                      <Text style={styles.scoreValue}>
+                        {myPicture?.score?.toFixed(1)}
+                      </Text>
+                      <Text style={styles.scoreMax}>/ {maxRating}</Text>
+                    </View>
+                    <Badge
+                      text={`Đánh giá: ${ratingText}`}
+                      style={ratingColor}
+                    />
+                  </View>
+
+                  <View style={styles.starRatingContainer}>
+                    <StarRating
+                      maxRating={maxRating}
+                      rating={myPicture?.score ?? 0}
+                    />
+                  </View>
+                </View>
+              )}
+
+              {/* Feedback Section */}
+              {myPicture?.feedback && (
+                <View style={styles.feedbackSection}>
+                  <Text style={styles.feedbackTitle}>Đánh giá</Text>
+                  {myPicture?.feedback?.split("\n\n").map((paragraph, i) => (
+                    <Text key={i} style={styles.feedbackParagraph}>
+                      {paragraph}
+                    </Text>
+                  ))}
+                </View>
+              )}
+            </View>
+          </ScrollView>
+
+          {/* Footer */}
+          <View style={styles.footer}>
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <Text style={styles.closeButtonText}>Đóng</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </KeyboardAvoidingView>
+      </SafeAreaView>
     </Modal>
   );
 };
@@ -360,6 +363,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    width: "100%",
   },
   header: {
     flexDirection: "row",

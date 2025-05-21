@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -8,26 +8,22 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  ActivityIndicator,
   RefreshControl,
   SafeAreaView,
+  ImageBackground,
 } from "react-native";
-import { KeyRound, UserPen } from "lucide-react-native";
 
 import background from "@/assets/images/account/background.png";
 
-import { useNavigation } from "@react-navigation/native";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import QuizHistoryCard from "./quiz-history-card";
 import ResultAnalysisCard from "./result-analyst-card";
 import { skipToken } from "@reduxjs/toolkit/query";
-import {
-  useGetMeQuery,
-  useGetStudentByUsernameQuery,
-} from "@/services/user/user.api";
+import { useGetStudentByUsernameQuery } from "@/services/user/user.api";
 import ProfileSkeleton from "./profile-skeleton";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import stylesAdnroid from "@/components/ui/SafeViewAndroid";
 
 const ProfileUserScreen = () => {
   const router = useRouter();
@@ -92,7 +88,7 @@ const ProfileUserScreen = () => {
     return (
       <SafeAreaView style={styles.container} className="bg-none relative">
         <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-          <Image source={background} className="w-full h-full" />
+          <ImageBackground source={background} className="w-full h-full" />
         </View>
         <ScrollView
           refreshControl={
@@ -120,7 +116,7 @@ const ProfileUserScreen = () => {
       <>
         <View className="relative w-full h-full">
           <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-            <Image source={background} className="w-full h-full" />
+            <ImageBackground source={background} className="w-full h-full" />
           </View>
           <ProfileSkeleton />
         </View>
@@ -135,46 +131,40 @@ const ProfileUserScreen = () => {
     <>
       <Stack.Screen
         options={{
-          headerLeft: () => (
-            <View className="flex bg-white p-4 flex-row items-center justify-start gap-2">
-              <TouchableOpacity
-                onPress={() => {
-                  router.back();
-                }}
-              >
-                <Entypo
-                  name="chevron-left"
-                  size={30}
-                  className="text-primary"
-                />
-              </TouchableOpacity>
-              <View className="flex flex-row items-center">
-                <Image
-                  source={{ uri: data?.avatar }}
-                  className="w-12 h-12 rounded-full"
-                />
-                <View className="ml-4">
-                  <Text className="font-pmedium">
-                    {data?.first_name} {data?.last_name}{" "}
-                  </Text>
-                  <Text className="font-psemibold underline text-gray-500">
-                    @{data?.username}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          ),
-
-          headerTitle: () => <View className="hidden" />,
+          headerShown: false,
         }}
       />
       <SafeAreaView
-        style={styles.container}
+        style={[styles.container, stylesAdnroid.AndroidSafeArea]}
         className="bg-none h-full relative"
       >
         <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-          <Image source={background} className="w-full h-full" />
+          <ImageBackground source={background} className="w-full h-full" />
         </View>
+        <View className="flex py-2 flex-row items-center justify-start gap-2">
+          <TouchableOpacity
+            onPress={() => {
+              router.back();
+            }}
+          >
+            <Entypo name="chevron-left" size={30} className="text-primary" />
+          </TouchableOpacity>
+          <View className="flex flex-row items-center">
+            <Image
+              source={{ uri: data?.avatar }}
+              className="w-12 h-12 rounded-full"
+            />
+            <View className="ml-4">
+              <Text className="font-pmedium">
+                {data?.first_name} {data?.last_name}{" "}
+              </Text>
+              <Text className="font-psemibold underline text-gray-200">
+                @{data?.username}
+              </Text>
+            </View>
+          </View>
+        </View>
+
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -218,7 +208,7 @@ const ProfileUserScreen = () => {
               <View style={styles.badgeContainer}>
                 <View style={styles.badge}>
                   <Ionicons name="school-outline" size={14} color="#666" />
-                  <Text style={styles.badgeText}>
+                  <Text style={styles.badgeText} className="font-pregular">
                     {data?.organizationId?.name}
                   </Text>
                 </View>
@@ -272,7 +262,6 @@ const ProfileUserScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 0,
   },
   loadingContainer: {
     flex: 1,

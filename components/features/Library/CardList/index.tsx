@@ -74,18 +74,7 @@ const CardList = () => {
     }
   };
 
-  const getTextContainer = (index: number) => {
-    switch (index) {
-      case 0:
-        return styles.textContainer_1;
-      case 1:
-        return styles.textContainer_2;
-      case 2:
-        return styles.textContainer_3;
-      case 3:
-        return styles.textContainer_4;
-    }
-  };
+  console.log("libraryData :>> ", libraryData);
 
   return (
     <View>
@@ -120,7 +109,7 @@ const CardList = () => {
           isFetching
             ? Array.from({ length: 5 })
             : libraryData?.filter(
-                (library: TypeLibrary) => library?.topic_id === activeTab
+                (library: TypeLibrary) => library?.topic_id?._id === activeTab
               )
         }
         scrollEnabled={true}
