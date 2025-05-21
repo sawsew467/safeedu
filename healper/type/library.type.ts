@@ -7,7 +7,7 @@ export type TypeLibrary = {
   image: string;
   author: string;
   isActive: boolean;
-  topic_id: string;
+  topic_id: Topic;
   updated_at: Date;
   view: number;
   created_at: Date;

@@ -14,6 +14,8 @@ import {
   SafeAreaView,
   RefreshControl,
 } from "react-native";
+import QuizResultSkeleton from "./quiz-result-skeleton";
+import avatar from "@/components/ui/avatar";
 
 // Sample data structure based on the provided JSON
 interface QuizResultProps {
@@ -102,6 +104,8 @@ const QuizResult = () => {
   const onRefresh = () => {
     refetch();
   };
+
+  if (isFetching) return <QuizResultSkeleton />;
 
   return (
     <HeaderShown

@@ -18,12 +18,6 @@ const LogOutModule = () => {
     dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
     router.replace("/account");
   };
-  const handleSwitchAccount = () => {
-    dispatch(setAccessToken(""));
-    dispatch(setRefreshToken(""));
-    router.replace("/sign-in");
-    dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
-  };
 
   return (
     <View style={styles.container}>

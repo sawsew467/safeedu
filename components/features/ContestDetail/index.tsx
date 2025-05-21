@@ -24,11 +24,20 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import {
   useGetCompetitionQuery,
   useGetQuizzBySlugQuery,
+  useIsDoQuizzQuery,
 } from "@/services/competitions/competitions.api";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { Quizz, QuizzType } from "@/healper/type/Contest";
 import { useGetMeQuery } from "@/services/user/user.api";
 import { Button } from "@/components/ui/Button";
+import Skeleton from "@/components/ui/skeleton";
+import {
+  BookImage,
+  BookMarked,
+  BookOpen,
+  ChevronRight,
+  LibraryBig,
+} from "lucide-react-native";
 type ItemProps = {
   item: Quizz;
   index: number;
@@ -240,25 +249,71 @@ const styles = StyleSheet.create({
   },
 });
 
+const getIcon = (
+  type: QuizzType,
+  status: "done" | "not-started" | "cant-started"
+) => {
+  switch (type) {
+    case QuizzType.SingleChoice:
+      return (
+        <BookMarked size={20} color={status === "done" ? "white" : "black"} />
+      );
+    case QuizzType.PaintingPropaganda:
+      return (
+        <BookImage size={20} color={status === "done" ? "white" : "black"} />
+      );
+  }
+};
+
 const ListItem = ({ item, index, id }: ItemProps) => {
+  const { status } = useIsDoQuizzQuery(item ? { id: item?._id } : skipToken, {
+    selectFromResult: ({ data }) => ({
+      status: data?.data?.status,
+    }),
+  });
+
   const handleClickBtn = (item: Quizz) => {
     switch (item?.type) {
       case QuizzType.SingleChoice:
-        router.push(`/contest/${id}/quiz/${item?._id}`);
+        if (status === "done")
+          router.push(`/contest/${id}/quiz/${item?._id}/result`);
+        else if (status === "not-started")
+          router.push(`/contest/${id}/quiz/${item?._id}`);
         break;
       case QuizzType.PaintingPropaganda:
         router.push(`/contest/${id}/drawPicture/${item?._id}`);
         break;
     }
   };
+
+  console.log("status :>> ", status);
   return (
     <TouchableOpacity
       style={{ paddingHorizontal: 16 }}
       onPress={() => handleClickBtn(item)}
+      disabled={status === "cant-started"}
     >
-      <View style={styles.item}>
-        <Text style={styles.itemText}>{`${index + 1}. ${item?.title}`}</Text>
-        <Image source={chrven_right} style={{ width: 24, height: 24 }} />
+      <View
+        style={[
+          styles.item,
+          status === "done" && {
+            backgroundColor: "#75A815",
+            borderColor: "#75A815",
+          },
+        ]}
+      >
+        <View
+          className="flex flex-row justify-start items-center"
+          style={{ gap: 8 }}
+        >
+          {getIcon(item?.type, status)}
+          <Text
+            style={[styles.itemText, status === "done" && { color: "white" }]}
+          >
+            {item?.title}
+          </Text>
+        </View>
+        <ChevronRight size={24} color={status === "done" ? "white" : "black"} />
       </View>
     </TouchableOpacity>
   );
@@ -312,6 +367,8 @@ function Contest() {
     }
   };
 
+  console.log("competition :>> ", competition);
+
   return (
     <HeaderShown
       title="Mô tả cuộc thi"
@@ -345,7 +402,9 @@ function Contest() {
           <View style={styles.locationContainer}>
             <Image source={location} style={styles.locationIcon} />
             <Text style={styles.locationText}>
-              {competition?.organizations ?? "Toàn quốc"}
+              {competition?.isPublic === "public"
+                ? "Toàn quốc"
+                : competition?.organizationId?.name}
             </Text>
           </View>
         </View>
@@ -368,32 +427,46 @@ function Contest() {
         <FlatList
           scrollEnabled={false}
           style={styles.flatListContainer}
-          data={isError ? [] : isFetching ? [] : quizs}
-          renderItem={({ item, index }: { item: Quizz; index: number }) => (
-            <ListItem item={item} index={index} id={contestID} />
-          )}
-          keyExtractor={(item: Quizz) => item.slug}
-          ListEmptyComponent={() => (
-            <View className="flex flex-1 items-center justify-center h-full px-4">
-              <Text className="text-xl font-pmedium text-center">
-                Vui lòng đăng nhập để tham gia cuộc thi này
-              </Text>
-              <View className="flex flex-row justify-center items-center gap-2 mt-4">
-                <TouchableOpacity
-                  onPress={handleSignIn}
-                  className="w-44 flex items-center border-2  rounded-xl py-4 border-primary"
-                >
-                  <Text className="text-primary text-lg">Đăng nhập</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleSignUp}
-                  className="w-44 border-2 flex items-center px-8 rounded-xl py-4 border-primary bg-primary"
-                >
-                  <Text className="text-white text-lg">Đăng kí</Text>
-                </TouchableOpacity>
+          data={isError ? [] : isFetching ? Array.from({ length: 3 }) : quizs}
+          renderItem={({ item, index }: { item: Quizz; index: number }) =>
+            isFetching ? (
+              <View className="px-4 ">
+                <Skeleton width={"100%"} height={60} delay={400} />
               </View>
-            </View>
-          )}
+            ) : (
+              <ListItem item={item} index={index} id={contestID} />
+            )
+          }
+          keyExtractor={(item: Quizz) => item?.slug}
+          ListEmptyComponent={() =>
+            isError ? (
+              <View className="flex flex-1 items-center justify-center h-full px-4">
+                <Text className="text-xl font-pmedium text-center">
+                  Vui lòng đăng nhập để tham gia cuộc thi này
+                </Text>
+                <View className="flex flex-row justify-center items-center gap-2 mt-4">
+                  <TouchableOpacity
+                    onPress={handleSignIn}
+                    className="w-44 flex items-center border-2  rounded-xl py-4 border-primary"
+                  >
+                    <Text className="text-primary text-lg">Đăng nhập</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleSignUp}
+                    className="w-44 border-2 flex items-center px-8 rounded-xl py-4 border-primary bg-primary"
+                  >
+                    <Text className="text-white text-lg">Đăng kí</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : (
+              <View>
+                <Text className="text-center text-lg font-psemibold">
+                  Chưa có phần thi nào cho cuộc thi này
+                </Text>
+              </View>
+            )
+          }
           ListHeaderComponent={() => (
             <View style={styles.flatListHeaderContainer}>
               <View style={styles.flatListHeaderContent}>
@@ -413,19 +486,23 @@ function Contest() {
                   {"    "}
                   {competition?.description}
                 </Text>
-                <TouchableOpacity
-                  onPress={toggleExpanded}
-                  style={styles.expandButtonContainer}
-                >
-                  <View style={styles.expandButtonContent}>
-                    <Text style={styles.readMoreText}>
-                      {isExpanded ? "Lược bớt" : "Xem thêm"}
-                    </Text>
-                    <View style={styles.expandButtonIcon}>
-                      <Image source={isExpanded ? chrven_top : chrven_bottom} />
+                {competition?.description?.length > 100 && (
+                  <TouchableOpacity
+                    onPress={toggleExpanded}
+                    style={styles.expandButtonContainer}
+                  >
+                    <View style={styles.expandButtonContent}>
+                      <Text style={styles.readMoreText}>
+                        {isExpanded ? "Lược bớt" : "Xem thêm"}
+                      </Text>
+                      <View style={styles.expandButtonIcon}>
+                        <Image
+                          source={isExpanded ? chrven_top : chrven_bottom}
+                        />
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           )}
