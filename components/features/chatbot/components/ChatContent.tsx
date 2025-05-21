@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import {
   useCreateChatMutation,
@@ -469,81 +470,88 @@ function ChatContent() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={[styles.container, stylesAndroid.AndroidSafeArea]}
     >
-      <ScrollView style={{ flex: 1 }}>
-        <View style={styles.container_content}>
-          <View style={styles.container_header}>
-            <Image source={avatar_chatbot} />
-            {messages.length === 0 && (
-              <FlatList
-                scrollEnabled={false}
-                numColumns={2}
-                contentContainerStyle={{
-                  gap: 8,
-                  width: "100%",
-                  marginTop: 24,
-                  marginBottom: 20,
-                }}
-                columnWrapperStyle={{ gap: 8 }}
-                data={COMMON_QUESTIONS}
-                keyExtractor={(item: string) => item}
-                renderItem={({ item }: { item: string }) => (
-                  <ListCommonQuestion
-                    handleClick={handleSendMessageeee}
-                    text={item}
-                  />
-                )}
-              />
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={{ flex: 1 }}>
+          <View style={styles.container_content}>
+            <View style={styles.container_header}>
+              <Image source={avatar_chatbot} />
+              {messages.length === 0 && (
+                <FlatList
+                  scrollEnabled={false}
+                  numColumns={2}
+                  contentContainerStyle={{
+                    gap: 8,
+                    width: "100%",
+                    marginTop: 24,
+                    marginBottom: 20,
+                  }}
+                  columnWrapperStyle={{ gap: 8 }}
+                  data={COMMON_QUESTIONS}
+                  keyExtractor={(item: string) => item}
+                  renderItem={({ item }: { item: string }) => (
+                    <ListCommonQuestion
+                      handleClick={handleSendMessageeee}
+                      text={item}
+                    />
+                  )}
+                />
+              )}
+            </View>
+            <FlatList
+              contentContainerStyle={styles.container_chat}
+              scrollEnabled={false}
+              data={messages}
+              keyExtractor={(item, index) => item.id}
+              renderItem={({
+                item,
+                index,
+              }: {
+                item: Message;
+                index: number;
+              }) => (
+                <FrameChat
+                  {...item}
+                  error={error}
+                  isLoading={isLoading}
+                  isEnd={
+                    index + 1 === messages.length && item.role === "assistant"
+                  }
+                  id_message={item.role === "assistant" && item.id}
+                />
+              )}
+            />
+            {isLoading && (
+              <View style={styles.container_chat}>
+                <FrameChat
+                  content={""}
+                  error={error}
+                  role={"assistant"}
+                  isLoading={isLoading}
+                  isEnd={true}
+                  id_message={uuid.v4()}
+                />
+              </View>
             )}
           </View>
-          <FlatList
-            contentContainerStyle={styles.container_chat}
-            scrollEnabled={false}
-            data={messages}
-            keyExtractor={(item, index) => item.id}
-            renderItem={({ item, index }: { item: Message; index: number }) => (
-              <FrameChat
-                {...item}
-                error={error}
-                isLoading={isLoading}
-                isEnd={
-                  index + 1 === messages.length && item.role === "assistant"
-                }
-                id_message={item.role === "assistant" && item.id}
-              />
-            )}
+        </ScrollView>
+        {error ? (
+          <ErrorScreen
+            onRetry={() => {
+              setChatData([]);
+              setError(false);
+            }}
           />
-          {isLoading && (
-            <View style={styles.container_chat}>
-              <FrameChat
-                content={""}
-                error={error}
-                role={"assistant"}
-                isLoading={isLoading}
-                isEnd={true}
-                id_message={uuid.v4()}
-              />
-            </View>
-          )}
-        </View>
-      </ScrollView>
-
-      {error ? (
-        <ErrorScreen
-          onRetry={() => {
-            setChatData([]);
-            setError(false);
-          }}
+        ) : (
+          <Input handleSubmit={handleSubmit} />
+        )}
+        <ReportDialog
+          visible={isReport}
+          handleDialog={handleDialog}
+          setSelectedOption={setSelectedOption}
+          selectedOption={selectedOption}
         />
-      ) : (
-        <Input handleSubmit={handleSubmit} />
-      )}
-      <ReportDialog
-        visible={isReport}
-        handleDialog={handleDialog}
-        setSelectedOption={setSelectedOption}
-        selectedOption={selectedOption}
-      />
-      <Toast />
+        <Toast />
+      </SafeAreaView>
     </KeyboardAvoidingView>
   );
 }
