@@ -23,6 +23,9 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+
+import stylesAndroid from "@/components/ui/SafeViewAndroid";
+
 type TypeInput = {
   handleSubmit: (content: string) => void;
 };
@@ -74,14 +77,7 @@ function Input({ handleSubmit }: TypeInput) {
   // };
 
   return (
-    <KeyboardAvoidingView
-      {...(Platform.OS === "ios"
-        ? {
-            behavior: "position",
-            keyboardVerticalOffset: 20, // calculate height using onLayout callback method
-          }
-        : {})}
-    >
+    <View>
       <View style={styles.container_input}>
         <View style={[files.length !== 0 && styles.container_input_image]}>
           {files.length !== 0 && (
@@ -161,7 +157,7 @@ function Input({ handleSubmit }: TypeInput) {
           Trợ lý AI có thể nhầm lẫn, hãy cẩn thận nhé!
         </Text> */}
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
