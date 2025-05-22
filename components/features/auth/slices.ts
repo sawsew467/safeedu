@@ -5,12 +5,22 @@ import * as SecureStore from "expo-secure-store";
 export interface AuthState {
   access_token: string;
   refresh_token: string;
+  notifyca_update_profile: boolean;
 }
 
 const initialState: AuthState = {
   access_token: "",
   refresh_token: "",
+  notifyca_update_profile: true,
 };
+
+(async () => {
+  const notifyca_update_profile = await SecureStore.getItemAsync(
+    constants.NOTIFYCA_UPDATE_PROFILE
+  );
+  initialState.notifyca_update_profile =
+    notifyca_update_profile === "false" ? false : true;
+})();
 
 (async () => {
   const token = await SecureStore.getItemAsync(constants.ACCESS_TOKEN);
@@ -39,6 +49,11 @@ export const authSlice = createSlice({
 
       save(constants.REFRESH_TOKEN, action.payload);
     },
+    setNotifycaUpdateProfile: (state, action) => {
+      state.notifyca_update_profile = action.payload;
+
+      save(constants.NOTIFYCA_UPDATE_PROFILE, action.payload.toString());
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
@@ -55,6 +70,7 @@ export const authSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setAccessToken, setRefreshToken } = authSlice.actions;
+export const { setAccessToken, setRefreshToken, setNotifycaUpdateProfile } =
+  authSlice.actions;
 
 export default authSlice.reducer;

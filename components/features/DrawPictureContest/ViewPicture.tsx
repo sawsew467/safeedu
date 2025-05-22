@@ -52,9 +52,7 @@ const ModalViewPicture = () => {
         content: inputValue,
       }).unwrap();
       setInputValue("");
-    } catch (err) {
-      console.log("err :>> ", err);
-    }
+    } catch {}
   };
 
   const { myseft } = useGetMeQuery(undefined, {

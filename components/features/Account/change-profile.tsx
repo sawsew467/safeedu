@@ -77,8 +77,6 @@ const ProfileFormScreen = () => {
     }),
   });
 
-  console.log("profile :>> ", profile);
-
   const { provinces }: { provinces: Array<{ label: string; value: string }> } =
     useGetProvincesQuery(
       {},

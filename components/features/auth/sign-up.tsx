@@ -145,21 +145,7 @@ const SignUpModule = () => {
       newErrors.firstName = "Vui lòng nhập tên";
       hasError = true;
     }
-    if (!dob) {
-      newErrors.dob = "Vui lòng chọn ngày sinh";
-      hasError = true;
-    } else if (dob > new Date()) {
-      newErrors.dob = "Ngày sinh không hợp lệ";
-      hasError = true;
-    }
-    if (userType === "student" && !selectProvince) {
-      newErrors.city = "Vui lòng chọn thành phố";
-      hasError = true;
-    }
-    if (userType === "student" && !selectedSchool) {
-      newErrors.school = "Vui lòng chọn trường";
-      hasError = true;
-    }
+
     if (!userName) {
       newErrors.userName = "Vui lòng nhập tên đăng nhập";
       hasError = true;
@@ -204,7 +190,6 @@ const SignUpModule = () => {
     setError(newErrors);
 
     if (!hasError) {
-      console.log("userType :>> ", userType);
       try {
         switch (userType) {
           case "student":
@@ -236,7 +221,6 @@ const SignUpModule = () => {
       } catch (error) {
         const message: string =
           (error as any)?.data?.error?.message || "Đã xảy ra lỗi!";
-        console.log("error :>> ", error);
         Alert.alert(message);
       }
     }
@@ -303,7 +287,7 @@ const SignUpModule = () => {
             ) : null}
 
             <Text className="font-semibold text-base text-[#959595] mt-5">
-              Ngày sinh <Text className="text-red-500">*</Text>
+              Ngày sinh
             </Text>
             <TouchableOpacity
               onPress={() => {
@@ -367,7 +351,7 @@ const SignUpModule = () => {
             {userType === "student" && (
               <>
                 <Text className="font-semibold text-base text-[#959595] mt-5">
-                  Tỉnh/Thành phố <Text className="text-red-500">*</Text>
+                  Tỉnh/Thành phố
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
@@ -408,7 +392,7 @@ const SignUpModule = () => {
                 )}
 
                 <Text className="font-semibold text-base text-[#959595] mt-5">
-                  Trường <Text className="text-red-500">*</Text>
+                  Trường
                 </Text>
                 <TouchableOpacity
                   onPress={() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   RefreshControl,
   ImageBackground,
   SafeAreaView,
+  Modal,
 } from "react-native";
 import { KeyRound, UserPen, UserRound } from "lucide-react-native";
 
@@ -27,9 +28,17 @@ import {
 import ProfileSkeleton from "./profile-skeleton";
 import { useRouter } from "expo-router";
 import LogOut from "./logout";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { set } from "react-hook-form";
+import { setNotifycaUpdateProfile } from "../auth/slices";
 
 const ProfileScreen = () => {
   const router = useRouter();
+
+  const { notifyca_update_profile } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const [isAgreed, setIsAgreed] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(false);
   const {
     profile,
     isError: isGetProfileError,
@@ -64,6 +73,14 @@ const ProfileScreen = () => {
     }
   );
 
+  useEffect(() => {
+    if (data?.organizationId?._id) {
+      const isVisible =
+        Boolean(notifyca_update_profile) === true && !data?.organizationId?._id;
+      setIsVisible(isVisible);
+    }
+  }, [data]);
+
   const formatDate = (dateString, format = "DD tháng MM YYYY") => {
     if (!dateString) return "";
 
@@ -83,8 +100,6 @@ const ProfileScreen = () => {
 
   const isError = isGetProfileError || isGetProfileDetailError;
   const isFetching = isFetchingProfile || isFetchingProfileDetail;
-
-  console.log("is :>> ", isFetching);
 
   // Tính điểm trung bình
   const calculateAverageScore = (results) => {
@@ -120,6 +135,15 @@ const ProfileScreen = () => {
   };
   const handleChangePassword = () => {
     router.push("/account/change-password");
+  };
+
+  const handleUpdateProfile = useCallback(() => {
+    router.push("/account/change-profile");
+  }, [router]);
+  const handleCancel = () => {
+    if (isAgreed) {
+      dispatch(setNotifycaUpdateProfile("false"));
+    }
   };
 
   if (isError && !isFetching) {
@@ -184,6 +208,58 @@ const ProfileScreen = () => {
           showsVerticalScrollIndicator={false}
           className="z-10 bg-none  px-1"
         >
+          <Modal visible={isVisible} animationType="fade" transparent={true}>
+            <View className="flex-1 bg-slate-600/30 justify-center px-4">
+              <View className="bg-white p-5 rounded-xl max-h-[80%]">
+                <Text className="text-lg font-pmedium text-center">
+                  Bạn có muốn cập nhật thêm thông tin để có thể xem được những
+                  thông tin của trường không?
+                </Text>
+                <TouchableOpacity
+                  className="flex-row items-center mb-5 mt-5"
+                  onPress={() => setIsAgreed(!isAgreed)}
+                  activeOpacity={0.8}
+                >
+                  <View
+                    className={`w-5 h-5 mr-2 border rounded-sm ${
+                      isAgreed ? "bg-primary border-primary" : "border-gray-400"
+                    }`}
+                  >
+                    {isAgreed && (
+                      <Ionicons
+                        name="checkmark"
+                        size={16}
+                        color="white"
+                        style={{ textAlign: "center" }}
+                      />
+                    )}
+                  </View>
+                  <Text className="text-sm text-[#959595]">
+                    Không hiện lại thông báo này
+                  </Text>
+                </TouchableOpacity>
+                <View
+                  className="flex flex-row justify-center mt-4"
+                  style={{ gap: 10 }}
+                >
+                  <TouchableOpacity
+                    onPress={handleCancel}
+                    className="py-4 px-6 rounded-lg bg-gray-200"
+                  >
+                    <Text className="text-base font-pregular">Không</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleUpdateProfile}
+                    className="py-4 px-6 bg-primary rounded-lg"
+                  >
+                    <Text className="text-base font-psemibold text-white">
+                      Cập nhật
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
           <View className="z-10 flex justify-center items-center mt-10">
             <View className="mb-4 border-4 border-white rounded-full w-[100px] h-[100px] overflow-hidden">
               {data?.avatar ? (

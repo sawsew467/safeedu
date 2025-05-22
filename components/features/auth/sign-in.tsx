@@ -40,7 +40,6 @@ const SignInModule = () => {
       setError({ username: "", password: "Mật khẩu không được để trống" });
     try {
       const res = await signIn({ username, password }).unwrap();
-      console.log("res", res);
       router.push("/account");
     } catch (error) {
       const message: string =

@@ -102,9 +102,6 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     const selectedYear = years.findIndex(
       (y) => y.value === date.getFullYear().toString()
     );
-    console.log("selectedMonth", selectedMonth);
-    console.log("selectedDay", selectedDay);
-    console.log("selectedYear", selectedYear);
 
     monthScrollRef.current?.scrollTo({
       y: selectedMonth * ITEM_HEIGHT,
