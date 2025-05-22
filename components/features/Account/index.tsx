@@ -29,57 +29,68 @@ import ProfileSkeleton from "./profile-skeleton";
 import { useRouter } from "expo-router";
 import LogOut from "./logout";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { set } from "react-hook-form";
 import { setNotifycaUpdateProfile } from "../auth/slices";
 
 const ProfileScreen = () => {
   const router = useRouter();
 
   const { notifyca_update_profile } = useAppSelector((state) => state.auth);
+
   const dispatch = useAppDispatch();
   const [isAgreed, setIsAgreed] = React.useState(false);
-  const [isVisible, setIsVisible] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(true);
   const {
     profile,
     isError: isGetProfileError,
     isFetching: isFetchingProfile,
+    isSuccess: isGetProfileSuccess,
   } = useGetMeQuery(undefined, {
-    selectFromResult: ({ data, isError, isFetching }) => ({
+    selectFromResult: ({ data, isError, isFetching, isSuccess }) => ({
       profile: data?.data,
       isError,
       isFetching,
+      isSuccess,
     }),
-    refetchOnFocus: true, // khi quay lại app từ nền
-    refetchOnMountOrArgChange: true, // khi component mount lại
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: true,
   });
 
   const {
     data,
     isFetching: isFetchingProfileDetail,
     isError: isGetProfileDetailError,
+    isSuccess,
     refetch,
   } = useGetStudentByUsernameQuery(
     profile?.username ? { username: profile?.username } : skipToken,
     {
-      selectFromResult: ({ data, isFetching, isError }) => {
+      selectFromResult: ({ data, isFetching, isError, isSuccess }) => {
         return {
           data: data?.data,
           isFetching,
           isError,
+          isSuccess,
         };
       },
-      refetchOnFocus: true, // khi quay lại app từ nền
-      refetchOnMountOrArgChange: true, // khi component mount lại
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
     }
   );
 
   useEffect(() => {
-    if (data?.organizationId?._id) {
-      const isVisible =
-        Boolean(notifyca_update_profile) === true && !data?.organizationId?._id;
-      setIsVisible(isVisible);
+    if (String(notifyca_update_profile) === "off") {
+      setIsVisible(false);
+    } else if (
+      isSuccess &&
+      isGetProfileSuccess &&
+      !isFetchingProfile &&
+      !data?.organizationId?._id &&
+      !isVisible
+    ) {
+      setIsVisible(true);
     }
-  }, [data]);
+  }, [isSuccess]);
+  console.log("1 :>> ", 3);
 
   const formatDate = (dateString, format = "DD tháng MM YYYY") => {
     if (!dateString) return "";
@@ -125,7 +136,7 @@ const ProfileScreen = () => {
   };
 
   const handleChangeProfile = () => {
-    router.push("/account/change-profile");
+    router.push("/change-profile");
   };
   const handleSignIn = () => {
     router.push("/sign-in");
@@ -137,228 +148,238 @@ const ProfileScreen = () => {
     router.push("/account/change-password");
   };
 
-  const handleUpdateProfile = useCallback(() => {
+  const handleUpdateProfile = () => {
     router.push("/account/change-profile");
-  }, [router]);
+    dispatch(setNotifycaUpdateProfile("off"));
+    setIsVisible(false);
+  };
   const handleCancel = () => {
     if (isAgreed) {
-      dispatch(setNotifycaUpdateProfile("false"));
-    }
+      dispatch(setNotifycaUpdateProfile("off"));
+      setIsVisible(false);
+    } else setIsVisible(false);
   };
-
-  if (isError && !isFetching) {
-    return (
-      <SafeAreaView
-        style={styles.container}
-        className="bg-none h-full relative"
-      >
-        <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-          <ImageBackground source={background} className="w-full h-full" />
-        </View>
-        <View className="flex-1 flex items-center justify-center">
-          <View className="h-auto flex items-center mb-4">
-            <Image
-              source={require("@/assets/images/safeedu.png")}
-              className="h-64 w-56"
-            />
-            {/* <UserRound size={100} strokeWidth={1} color="white" /> */}
-            <Text className="text-gray-200 text-xl font-pmedium mb-2 mt-4">
-              Vui lòng đăng nhập để tiếp tục
-            </Text>
-          </View>
-          <View className="flex flex-row justify-center items-center w-full gap-4 mb-2 px-8">
-            <TouchableOpacity
-              onPress={handleSignIn}
-              className="w-1/2 flex-row h-[60px] bg-white rounded-2xl py-2 flex items-center justify-center border-2 border-primary"
-            >
-              <Text className="text-primary font-pmedium">Đăng nhập</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleSignUp}
-              className="w-1/2 flex-row h-[60px] bg-primary rounded-2xl py-2 flex items-center justify-center"
-            >
-              <Text className="text-white font-pmedium">Đăng ký</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </SafeAreaView>
-    );
-  }
 
   const averageScore = calculateAverageScore(data?.quizResults);
   const categories = categorizeResults(data?.quizResults);
 
   return (
-    <SafeAreaView style={styles.container} className="bg-none relative">
-      <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-        <ImageBackground source={background} className="w-full h-full" />
-      </View>
-      {isFetching ? (
-        <ProfileSkeleton />
-      ) : (
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={isFetching}
-              onRefresh={() => {
-                refetch();
-              }}
-            />
-          }
-          showsVerticalScrollIndicator={false}
-          className="z-10 bg-none  px-1"
+    <>
+      <SafeAreaView style={styles.container} className="bg-none relative">
+        <Modal
+          visible={isVisible}
+          animationType="fade"
+          transparent={true}
+          onRequestClose={() => setIsVisible(false)}
         >
-          <Modal visible={isVisible} animationType="fade" transparent={true}>
-            <View className="flex-1 bg-slate-600/30 justify-center px-4">
-              <View className="bg-white p-5 rounded-xl max-h-[80%]">
-                <Text className="text-lg font-pmedium text-center">
-                  Bạn có muốn cập nhật thêm thông tin để có thể xem được những
-                  thông tin của trường không?
-                </Text>
-                <TouchableOpacity
-                  className="flex-row items-center mb-5 mt-5"
-                  onPress={() => setIsAgreed(!isAgreed)}
-                  activeOpacity={0.8}
+          <View className="relative flex-1 bg-slate-600/30 justify-center px-4">
+            <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
+              <View className="bg-slate-600/30 w-full h-full"></View>
+            </View>
+            <View className="bg-white p-5 rounded-xl max-h-[80%]">
+              <Text className="text-lg font-pmedium text-center">
+                Bạn có muốn cập nhật thêm thông tin để có thể xem được những
+                thông tin của trường không?
+              </Text>
+              <TouchableOpacity
+                className="flex-row items-center mb-5 mt-5"
+                onPress={() => setIsAgreed(!isAgreed)}
+                activeOpacity={0.8}
+              >
+                <View
+                  className={`w-5 h-5 mr-2 border rounded-sm ${
+                    isAgreed ? "bg-primary border-primary" : "border-gray-400"
+                  }`}
                 >
-                  <View
-                    className={`w-5 h-5 mr-2 border rounded-sm ${
-                      isAgreed ? "bg-primary border-primary" : "border-gray-400"
-                    }`}
-                  >
-                    {isAgreed && (
-                      <Ionicons
-                        name="checkmark"
-                        size={16}
-                        color="white"
-                        style={{ textAlign: "center" }}
-                      />
-                    )}
-                  </View>
-                  <Text className="text-sm text-[#959595]">
-                    Không hiện lại thông báo này
+                  {isAgreed && (
+                    <Ionicons
+                      name="checkmark"
+                      size={16}
+                      color="white"
+                      style={{ textAlign: "center" }}
+                    />
+                  )}
+                </View>
+                <Text className="text-sm text-[#959595]">
+                  Không hiện lại thông báo này
+                </Text>
+              </TouchableOpacity>
+              <View
+                className="flex flex-row justify-center mt-4"
+                style={{ gap: 10 }}
+              >
+                <TouchableOpacity
+                  onPress={handleCancel}
+                  className="py-4 px-6 rounded-lg bg-gray-200"
+                >
+                  <Text className="text-base font-pregular">Không</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleUpdateProfile}
+                  className="py-4 px-6 bg-primary rounded-lg"
+                >
+                  <Text className="text-base font-psemibold text-white">
+                    Cập nhật
                   </Text>
                 </TouchableOpacity>
-                <View
-                  className="flex flex-row justify-center mt-4"
-                  style={{ gap: 10 }}
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
+          <ImageBackground source={background} className="w-full h-full" />
+        </View>
+        {isFetching ? (
+          <ProfileSkeleton />
+        ) : isError && !isFetching ? (
+          <>
+            <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
+              <ImageBackground source={background} className="w-full h-full" />
+            </View>
+            <View className="flex-1 flex items-center justify-center">
+              <View className="h-auto flex items-center mb-4">
+                <Image
+                  source={require("@/assets/images/safeedu.png")}
+                  className="h-64 w-56"
+                />
+                {/* <UserRound size={100} strokeWidth={1} color="white" /> */}
+                <Text className="text-gray-200 text-xl font-pmedium mb-2 mt-4">
+                  Vui lòng đăng nhập để tiếp tục
+                </Text>
+              </View>
+              <View className="flex flex-row justify-center items-center w-full gap-4 mb-2 px-8">
+                <TouchableOpacity
+                  onPress={handleSignIn}
+                  className="w-1/2 flex-row h-[60px] bg-white rounded-2xl py-2 flex items-center justify-center border-2 border-primary"
                 >
+                  <Text className="text-primary font-pmedium">Đăng nhập</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleSignUp}
+                  className="w-1/2 flex-row h-[60px] bg-primary rounded-2xl py-2 flex items-center justify-center"
+                >
+                  <Text className="text-white font-pmedium">Đăng ký</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </>
+        ) : (
+          <>
+            <ScrollView
+              refreshControl={
+                <RefreshControl
+                  refreshing={isFetching}
+                  onRefresh={() => {
+                    refetch();
+                  }}
+                />
+              }
+              showsVerticalScrollIndicator={false}
+              className="z-10 bg-none  px-1"
+            >
+              <View className="z-10 flex justify-center items-center mt-10">
+                <View className="mb-4 border-4 border-white rounded-full w-[100px] h-[100px] overflow-hidden">
+                  {data?.avatar ? (
+                    <Image
+                      source={{ uri: data?.avatar ?? "/placehodler.svg" }}
+                      className="w-full h-full rounded-full"
+                    />
+                  ) : (
+                    <View style={styles.avatarPlaceholder}>
+                      <Text style={styles.avatarText}>
+                        {data?.first_name?.charAt(0)}
+                        {data?.last_name?.charAt(0)}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+
+                <Text className="font-pbold text-xl text-center text-white">
+                  {data?.first_name} {data?.last_name}
+                </Text>
+                <Text className="font-pmedium text-sm text-gray-300 mb-2">
+                  @{data?.username}
+                </Text>
+                <Text className="font-plight text-lg text-gray-100 mb-4">
+                  {formatDate(data?.date_of_birth, "DD/MM/YYYY")}
+                </Text>
+
+                <View style={styles.badgeContainer}>
+                  {data?.organizationId?.name && (
+                    <View style={styles.badge}>
+                      <Ionicons name="school-outline" size={14} color="#666" />
+                      <Text style={styles.badgeText}>
+                        {data?.organizationId?.name}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+
+                <View className="flex flex-row justify-center w-full  gap-4 mb-2">
                   <TouchableOpacity
-                    onPress={handleCancel}
-                    className="py-4 px-6 rounded-lg bg-gray-200"
+                    onPress={handleChangeProfile}
+                    className="flex-1 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
                   >
-                    <Text className="text-base font-pregular">Không</Text>
+                    <UserPen color="white" size={22} className="mb-2 mr-2" />
+                    <Text className="text-white font-pbold mr-2 mb-2">
+                      Thay đổi hồ sơ
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={handleUpdateProfile}
-                    className="py-4 px-6 bg-primary rounded-lg"
+                    onPress={handleChangePassword}
+                    className="flex-1 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
                   >
-                    <Text className="text-base font-psemibold text-white">
-                      Cập nhật
+                    <KeyRound color="white" size={22} className="mb-2 mr-2" />
+                    <Text className="text-white font-pbold mr-2 mb-2">
+                      Đổi mật khẩu
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
-            </View>
-          </Modal>
-          <View className="z-10 flex justify-center items-center mt-10">
-            <View className="mb-4 border-4 border-white rounded-full w-[100px] h-[100px] overflow-hidden">
-              {data?.avatar ? (
-                <Image
-                  source={{ uri: data?.avatar ?? "/placehodler.svg" }}
-                  className="w-full h-full rounded-full"
-                />
-              ) : (
-                <View style={styles.avatarPlaceholder}>
-                  <Text style={styles.avatarText}>
-                    {data?.first_name?.charAt(0)}
-                    {data?.last_name?.charAt(0)}
+
+              <View style={styles.scoreCard}>
+                <Text style={styles.cardTitle}>Điểm trung bình</Text>
+                <Text style={styles.cardSubtitle}>
+                  Tổng hợp từ tất cả các bài kiểm tra
+                </Text>
+
+                <View style={styles.averageScoreContainer}>
+                  <Text style={styles.averageScore}>
+                    {averageScore?.toFixed(1)}
                   </Text>
+                  <Text style={styles.maxScore}>/10</Text>
                 </View>
-              )}
-            </View>
 
-            <Text className="font-pbold text-xl text-center text-white">
-              {data?.first_name} {data?.last_name}
-            </Text>
-            <Text className="font-pmedium text-sm text-gray-300 mb-2">
-              @{data?.username}
-            </Text>
-            <Text className="font-plight text-lg text-gray-100 mb-4">
-              {formatDate(data?.date_of_birth, "DD/MM/YYYY")}
-            </Text>
-
-            <View style={styles.badgeContainer}>
-              <View style={styles.badge}>
-                <Ionicons name="school-outline" size={14} color="#666" />
-                <Text style={styles.badgeText}>
-                  {data?.organizationId?.name}
-                </Text>
+                <View style={styles.progressBackground}>
+                  <View
+                    style={[
+                      styles.progressFill,
+                      {
+                        width: `${averageScore * 10}%`,
+                        backgroundColor:
+                          averageScore >= 8
+                            ? "#4CAF50"
+                            : averageScore >= 5
+                            ? "#F59E0B"
+                            : "#EF4444",
+                      },
+                    ]}
+                  />
+                </View>
               </View>
-            </View>
 
-            <View className="flex flex-row justify-center w-full  gap-4 mb-2">
-              <TouchableOpacity
-                onPress={handleChangeProfile}
-                className="flex-1 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
-              >
-                <UserPen color="white" size={22} className="mb-2 mr-2" />
-                <Text className="text-white font-pbold mr-2 mb-2">
-                  Thay đổi hồ sơ
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleChangePassword}
-                className="flex-1 flex-row gap-2 h-[60px] bg-primary rounded-2xl py-2 flex items-center m-0 justify-center"
-              >
-                <KeyRound color="white" size={22} className="mb-2 mr-2" />
-                <Text className="text-white font-pbold mr-2 mb-2">
-                  Đổi mật khẩu
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+              <ResultAnalysisCard categories={categories} />
 
-          <View style={styles.scoreCard}>
-            <Text style={styles.cardTitle}>Điểm trung bình</Text>
-            <Text style={styles.cardSubtitle}>
-              Tổng hợp từ tất cả các bài kiểm tra
-            </Text>
-
-            <View style={styles.averageScoreContainer}>
-              <Text style={styles.averageScore}>
-                {averageScore?.toFixed(1)}
-              </Text>
-              <Text style={styles.maxScore}>/10</Text>
-            </View>
-
-            <View style={styles.progressBackground}>
-              <View
-                style={[
-                  styles.progressFill,
-                  {
-                    width: `${averageScore * 10}%`,
-                    backgroundColor:
-                      averageScore >= 8
-                        ? "#4CAF50"
-                        : averageScore >= 5
-                        ? "#F59E0B"
-                        : "#EF4444",
-                  },
-                ]}
+              <QuizHistoryCard
+                quizResults={data?.quizResults}
+                formatDate={formatDate}
               />
-            </View>
-          </View>
-
-          <ResultAnalysisCard categories={categories} />
-
-          <QuizHistoryCard
-            quizResults={data?.quizResults}
-            formatDate={formatDate}
-          />
-          <LogOut />
-        </ScrollView>
-      )}
-    </SafeAreaView>
+              <LogOut />
+            </ScrollView>
+          </>
+        )}
+      </SafeAreaView>
+    </>
   );
 };
 

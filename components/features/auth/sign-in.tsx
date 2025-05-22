@@ -18,11 +18,14 @@ import { useAuthRequest } from "expo-auth-session";
 import { useSignInMutation } from "@/services/auth/auth.api";
 import background from "@/assets/images/sign-in-background.png";
 import { set } from "react-hook-form";
+import { useAppDispatch } from "@/hooks/redux";
+import { setNotifycaUpdateProfile } from "./slices";
 const SignInModule = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ username: "", password: "" });
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
 
@@ -39,7 +42,8 @@ const SignInModule = () => {
     if (!password)
       setError({ username: "", password: "Mật khẩu không được để trống" });
     try {
-      const res = await signIn({ username, password }).unwrap();
+      await signIn({ username, password }).unwrap();
+      dispatch(setNotifycaUpdateProfile("on"));
       router.push("/account");
     } catch (error) {
       const message: string =

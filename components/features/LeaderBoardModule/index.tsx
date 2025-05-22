@@ -16,7 +16,6 @@ import bg_ranking from "@/assets/images/contest/bg_ranking.png";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useGetLeaderBoardQuery } from "@/services/competitions/competitions.api";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { getToken, saveTokenToStorage } from "@/utils/token-storage";
 
 interface User {
   _id: string;
@@ -85,16 +84,6 @@ const LeaderBoardModule = () => {
   const { contestID } = useLocalSearchParams();
   const router = useRouter();
 
-  const handle = async () => {
-    await saveTokenToStorage({
-      acessToken:
-        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODBmOGFlZWJjMzJkZjA2ZmJhMzRhNGUiLCJyb2xlIjoiU3R1ZGVudCIsImlhdCI6MTc0NzIyMTQ4OCwiZXhwIjoxNzQ3MjI1MDg4fQ.jTCmgqvCoN7Jz1IGPD_MXXr-1s1zyi13PZFKnlZH5XvEoCMMMQapkpInkDFPQpRt73ubcaM2OAx52OAjoWh0v2xrtI3sDNX1CMutMXBdixm8wgXAPAwHe0uL7U48GcYEZ6gnDr6MAZD8bIoSoH2tf9KggdKua0KV58p_yxgeAP0c4Shtwh3fNRtBZE2dWgG1MqOLpJNULWOKaovfBLgISnIOl8uCsLzdLZwlB-0snztLZQU7IhPXATd_RtnaxCj2t_tHVplv4gHBKyDJAEdkyzX4l65bQQ75qPx42eU5V0lws0m6BDGT8QHk1cEOaZDMszahmcyjG5IgJ3ckRO8-Jw",
-      refreshToken: "",
-    });
-
-    console.log("getToken", await getToken());
-  };
-
   const { leaderBoard }: { leaderBoard: UserScore[] } = useGetLeaderBoardQuery(
     contestID ? { slug: contestID as string } : skipToken,
     {
@@ -104,9 +93,6 @@ const LeaderBoardModule = () => {
     }
   );
 
-  React.useEffect(() => {
-    handle();
-  }, []);
   return (
     <HeaderShown
       title="Bảng xếp hạng"

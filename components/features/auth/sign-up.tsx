@@ -183,10 +183,6 @@ const SignUpModule = () => {
       hasError = true;
     }
 
-    if (userType === "student" && !selectedSchool) {
-      newErrors.school = "Vui lòng chọn trường";
-    }
-
     setError(newErrors);
 
     if (!hasError) {
@@ -196,10 +192,10 @@ const SignUpModule = () => {
             await signUnStudent({
               first_name: firstName,
               last_name: lastName,
-              date_of_birth: dob.toISOString(),
+              date_of_birth: dob ? dob.toISOString() : "",
               phone_number: phone ?? undefined,
               email: email ?? undefined,
-              organizationId: selectedSchool,
+              organizationId: selectedSchool ?? "",
               username: userName,
               password,
             }).unwrap();
@@ -208,7 +204,7 @@ const SignUpModule = () => {
             await signUnCitizen({
               first_name: firstName,
               last_name: lastName,
-              date_of_birth: dob.toISOString(),
+              date_of_birth: dob ? dob.toISOString() : "",
               phone_number: phone ?? undefined,
               email: email ?? undefined,
               username: userName,
@@ -222,6 +218,7 @@ const SignUpModule = () => {
         const message: string =
           (error as any)?.data?.error?.message || "Đã xảy ra lỗi!";
         Alert.alert(message);
+        console.log("error :>> ", error);
       }
     }
   };

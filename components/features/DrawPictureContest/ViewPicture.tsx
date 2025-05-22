@@ -6,7 +6,6 @@ import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import moment from "moment";
 import React from "react";
 import {
-  Modal,
   View,
   TouchableOpacity,
   Image,
