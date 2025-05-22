@@ -42,8 +42,6 @@ const DialogViewScore = ({
     visible ? { id: quiz_id } : skipToken
   );
 
-  console.log("quiz_id :>> ", quiz_id);
-
   const myPicture = data?.data;
 
   if (isLoading) {

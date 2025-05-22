@@ -69,7 +69,6 @@ const VerifyCodeModule = () => {
       router.replace(`/reset-password?otp=${encodeURIComponent(data.code)}`);
     } catch (error) {
       const { error: message } = error?.data || {};
-      console.log("object :>> ", error);
       if (message) {
         control.setError("code", { message });
         setValue("code", ""); // Clear the code input

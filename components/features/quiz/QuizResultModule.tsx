@@ -59,8 +59,6 @@ const QuizResult = () => {
     }
   );
 
-  console.log("quizID :>> ", quizID);
-
   const { userInfo } = useGetMeQuery(undefined, {
     selectFromResult: ({ data }) => ({
       userInfo: data?.data,
@@ -93,13 +91,9 @@ const QuizResult = () => {
     return `${hours}:${minutes}:${seconds}`;
   }
 
-  console.log("data", data);
-
   // Count correct answers
   const correctAnswers = data?.questions?.filter((q) => q?.isCorrect)?.length;
   const totalQuestions = data?.questions?.length;
-  console.log("data :>> ", data);
-  console.log("userInfo :>> ", userInfo);
 
   const onRefresh = () => {
     refetch();

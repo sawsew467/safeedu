@@ -40,6 +40,8 @@ import Toast from "react-native-toast-message";
 import ReportDialog from "./report-dialog";
 
 import stylesAndroid from "@/components/ui/SafeViewAndroid";
+import { Stack } from "expo-router";
+
 interface Attachment {
   name?: string;
   contentType?: string;
@@ -106,20 +108,14 @@ function ChatContent() {
 
   const [statusLike, setStatusLike] = useState({});
 
-  const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [chatData, setChatData] = useState<TypeChat[]>([]);
-  const scrollViewRef = useRef(null);
 
-  const [input, setInput] = useState("");
-  const [images, setImages] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<Attachment[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
-  console.log("🚀 ~ ChatContent ~ messages:", messages);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSendMessageeee = async (userMessage: string) => {
-    console.log("🚀 ~ handleSendMessageeee ~ userMessage:", userMessage);
     if (!userMessage.trim()) return;
 
     const newUserMessage: Message = {
@@ -135,7 +131,6 @@ function ChatContent() {
     setIsLoading(true);
 
     const chatHistory = [...messages, newUserMessage];
-    console.log("🚀 ~ handleSendMessageeee ~ chatHistory:", chatHistory);
 
     setImageUrls([]);
 
@@ -148,7 +143,6 @@ function ChatContent() {
     })
       .then((res) => res.json())
       .then(async (data) => {
-        console.log("🚀 ~ .then ~ data:", data);
         const rawContent =
           data?.choices?.[0]?.message?.content || data?.content || "";
 
@@ -163,7 +157,6 @@ function ChatContent() {
         setMessages(tempMessages);
       })
       .catch((err) => {
-        console.log("🚀 ~ handleSendMessage ~ err:", err);
         const errorMessage: Message = {
           id: Date.now().toString() + "-error",
           role: "assistant",
@@ -182,10 +175,7 @@ function ChatContent() {
     const userInput = input.trim();
 
     if (userInput && !isLoading) {
-      console.log("🚀 ~ handleSubmit ~ userInput:", userInput);
-
       handleSendMessageeee(userInput);
-      setInput("");
     }
   };
 
@@ -267,8 +257,6 @@ function ChatContent() {
     isEnd,
     id_message,
   }: TypeChat & { isLoading: boolean; isEnd: boolean; error: boolean }) => {
-    console.log("🚀 ~ FrameChat ~ isLoading:", isLoading);
-
     if (isEnd && isLoading)
       return (
         <View
@@ -403,7 +391,6 @@ function ChatContent() {
   };
   const handleSendMessage = async (content: string) => {
     try {
-      setLoading(true);
       handleAddUserMessage(content);
       handleAddBotMessage("", null);
       const conversationResponse = await createConversation().unwrap();
@@ -428,7 +415,6 @@ function ChatContent() {
       }).unwrap();
       if (chatResponse.code != 0) {
         setError(true);
-        setLoading(false);
         handleAddBotMessage("Đã có lỗi xảy ra", uuid.v4());
         return;
       }
@@ -447,7 +433,6 @@ function ChatContent() {
           if (count > 15) {
             handleAddBotMessage("Đã có lỗi xảy ra", uuid.v4());
             setError(true);
-            setLoading(false);
             clearInterval(intervalId);
             count = 0;
           }
@@ -456,11 +441,8 @@ function ChatContent() {
             clearInterval(intervalId);
             const [answer] = messages;
             handleAddBotMessage(answer.content, answer.id);
-            setLoading(false);
           }
-        } catch {
-          // console.log("Fetch error:", error);
-        }
+        } catch {}
       }, 1000);
     } catch {}
   };

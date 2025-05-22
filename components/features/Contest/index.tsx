@@ -178,7 +178,6 @@ function Contest() {
   const isFetching = isFetchingForUser || isFetchingForAuth;
   const isSuccess = isSuccessForUser || isSuccessForAuth;
 
-  console.log("competitions :>> ", competitions);
 
   const onRefresh = () => {
     if (isSuccess) refetch();
