@@ -27,6 +27,7 @@ import { DateTimePicker } from "@/components/ui/datetime-input";
 import { formatDate } from "@/utils/format-date";
 
 import stylesAndroid from "@/components/ui/SafeViewAndroid";
+import { cn } from "@/utils/cn";
 
 type OrganizationOptions = {
   label: string;
@@ -186,6 +187,7 @@ const SignUpModule = () => {
     setError(newErrors);
 
     if (!hasError) {
+      console.log("userType :>> ", userType);
       try {
         switch (userType) {
           case "student":
@@ -217,6 +219,7 @@ const SignUpModule = () => {
       } catch (error) {
         const message: string =
           (error as any)?.data?.error?.message || "Đã xảy ra lỗi!";
+        console.log("error :>> ", error);
         Alert.alert(message);
         console.log("error :>> ", error);
       }
@@ -538,7 +541,10 @@ const SignUpModule = () => {
             ) : null}
 
             <TouchableOpacity
-              className="mt-5 max-w-full items-center justify-center bg-primary py-3 rounded-3xl"
+              className={cn(
+                "mt-5 max-w-full items-center justify-center bg-primary py-3 rounded-3xl",
+                !isAgreed && "opacity-50"
+              )}
               onPress={handleSignUp}
               disabled={isLoadingStudent || isLoadingCitizen || !isAgreed}
             >

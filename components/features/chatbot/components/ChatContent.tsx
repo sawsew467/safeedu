@@ -41,6 +41,7 @@ import ReportDialog from "./report-dialog";
 
 import stylesAndroid from "@/components/ui/SafeViewAndroid";
 import { Stack } from "expo-router";
+
 interface Attachment {
   name?: string;
   contentType?: string;

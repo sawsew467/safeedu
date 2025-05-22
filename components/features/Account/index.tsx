@@ -90,7 +90,6 @@ const ProfileScreen = () => {
       setIsVisible(true);
     }
   }, [isSuccess]);
-  console.log("1 :>> ", 3);
 
   const formatDate = (dateString, format = "DD tháng MM YYYY") => {
     if (!dateString) return "";
