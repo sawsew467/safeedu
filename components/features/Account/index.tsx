@@ -38,7 +38,7 @@ const ProfileScreen = () => {
 
   const dispatch = useAppDispatch();
   const [isAgreed, setIsAgreed] = React.useState(false);
-  const [isVisible, setIsVisible] = React.useState(true);
+  const [isVisible, setIsVisible] = React.useState(false);
   const {
     profile,
     isError: isGetProfileError,
