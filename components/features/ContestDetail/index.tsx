@@ -355,7 +355,7 @@ function Contest() {
   };
 
   const handleSignUp = () => {
-    router.push("/sign-up");
+    router.push("/user-type-screen");
   };
 
   const toggleExpanded = () => {
