@@ -3,21 +3,15 @@ import React from "react";
 import {
   Dimensions,
   FlatList,
-  Image,
-  ImageBackground,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableHighlight,
   View,
 } from "react-native";
-import bg_game_1 from "@/assets/images/game_images/gamePage_background.png";
-import CountdownTimer from "./count_down";
 import { router, useLocalSearchParams } from "expo-router";
-import HeaderShown from "@/components/ui/HeaderShown";
 import {
-  useGetAllQuestionQuery,
   useGetQuestionByQuizzIdQuery,
+  useSubmissionQuestionMutation,
 } from "@/services/quiz/quiz.api";
 import { skipToken } from "@reduxjs/toolkit/query";
 import TimerProgress from "./TimerProgress";
@@ -45,7 +39,7 @@ const RenderItemAnswer = ({
         return (
           <TouchableHighlight
             underlayColor="#F7941D"
-            onPress={() => handleChoice(index)}
+            onPress={() => handleChoice(index, item)}
             style={[
               styles.answer,
               itemStyle,
@@ -91,7 +85,6 @@ const RenderItemAnswer = ({
   };
   return cellRender();
 };
-const { width } = Dimensions.get("window");
 const QuizModule = () => {
   const { quizID, contestID }: { quizID: string; contestID: string } =
     useLocalSearchParams();
@@ -103,10 +96,8 @@ const QuizModule = () => {
   const [stateAnswer, setStateAnswer] = React.useState<
     "correct" | "incorrect" | "answering"
   >("answering");
-  const [listAnswer, setListAnswer] = React.useState({
-    correctAnswer: 0,
-    listQuizz: [],
-  });
+
+  const [submission, { isLoading }] = useSubmissionQuestionMutation();
 
   const { questions, isFetching, isError } = useGetQuestionByQuizzIdQuery(
     quizID ? { id: quizID } : skipToken,
@@ -152,12 +143,15 @@ const QuizModule = () => {
     }
   }, [timer]);
 
-  const handleChoice = (index: number) => {
-    setChoiceIndex(index);
-    if (questionIndex >= questions?.length - 1) handleEndQuizz();
-    else {
-      setQuestionIndex(questionIndex + 1);
-    }
+  const handleChoice = async (index: number, answer) => {
+    try {
+      await submission({ question_id: questions[questionIndex]?._id, answer });
+      setChoiceIndex(index);
+      if (questionIndex >= questions?.length - 1) handleEndQuizz();
+      else {
+        setQuestionIndex(questionIndex + 1);
+      }
+    } catch {}
   };
 
   const resetQuestion = () => {
@@ -308,6 +302,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "column",
     justifyContent: "flex-end",
+    zIndex: 1,
   },
   topLeft: {
     alignSelf: "flex-start",
