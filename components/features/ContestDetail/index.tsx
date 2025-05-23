@@ -286,7 +286,6 @@ const ListItem = ({ item, index, id }: ItemProps) => {
     }
   };
 
-  console.log("status :>> ", status);
   return (
     <TouchableOpacity
       style={{ paddingHorizontal: 16 }}
@@ -366,8 +365,6 @@ function Contest() {
       refetch();
     }
   };
-
-  console.log("competition :>> ", competition);
 
   return (
     <HeaderShown

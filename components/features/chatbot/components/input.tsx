@@ -47,8 +47,7 @@ function Input({ handleSubmit }: TypeInput) {
     setFile(newFiles);
   };
   const handleClick = () => {
-    console.log("🚀 ~ handleClick ~ value:", value);
-
+    setTestValue("");
     handleSubmit(value.trim());
   };
 
@@ -130,9 +129,9 @@ function Input({ handleSubmit }: TypeInput) {
               </TouchableOpacity> */}
               <View style={styles.conteiner_text_input}>
                 <TextInput
-                  blurOnSubmit={false}
                   multiline={true}
                   onChangeText={handleChange}
+                  value={value}
                   placeholder="Nhập câu hỏi..."
                   style={styles.text_input}
                 />

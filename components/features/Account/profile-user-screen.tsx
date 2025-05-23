@@ -83,7 +83,6 @@ const ProfileUserScreen = () => {
   };
 
   const insets = useSafeAreaInsets();
-  console.log("insets :>> ", insets);
   if (isError && !isFetching) {
     return (
       <SafeAreaView style={styles.container} className="bg-none relative">

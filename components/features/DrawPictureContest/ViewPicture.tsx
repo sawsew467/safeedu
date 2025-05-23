@@ -6,7 +6,6 @@ import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import moment from "moment";
 import React from "react";
 import {
-  Modal,
   View,
   TouchableOpacity,
   Image,
@@ -52,9 +51,7 @@ const ModalViewPicture = () => {
         content: inputValue,
       }).unwrap();
       setInputValue("");
-    } catch (err) {
-      console.log("err :>> ", err);
-    }
+    } catch {}
   };
 
   const { myseft } = useGetMeQuery(undefined, {

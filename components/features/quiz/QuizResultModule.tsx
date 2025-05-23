@@ -3,7 +3,7 @@ import { useGetQuizResultQuery } from "@/services/quiz/quiz.api";
 import { useGetMeQuery } from "@/services/user/user.api";
 import { formatDate } from "@/utils/format-date";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import type React from "react";
 import {
   View,
@@ -13,9 +13,12 @@ import {
   ScrollView,
   SafeAreaView,
   RefreshControl,
+  TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 import QuizResultSkeleton from "./quiz-result-skeleton";
 import avatar from "@/components/ui/avatar";
+import CircleResult from "./circleResult";
 
 // Sample data structure based on the provided JSON
 interface QuizResultProps {
@@ -47,7 +50,7 @@ interface QuizResultProps {
 }
 
 const QuizResult = () => {
-  const { quizID } = useLocalSearchParams();
+  const { quizID, contestID } = useLocalSearchParams();
 
   const { data, isFetching, refetch } = useGetQuizResultQuery(
     quizID ? { id: quizID } : skipToken,
@@ -58,8 +61,6 @@ const QuizResult = () => {
       }),
     }
   );
-
-  console.log("quizID :>> ", quizID);
 
   const { userInfo } = useGetMeQuery(undefined, {
     selectFromResult: ({ data }) => ({
@@ -93,13 +94,9 @@ const QuizResult = () => {
     return `${hours}:${minutes}:${seconds}`;
   }
 
-  console.log("data", data);
-
   // Count correct answers
   const correctAnswers = data?.questions?.filter((q) => q?.isCorrect)?.length;
   const totalQuestions = data?.questions?.length;
-  console.log("data :>> ", data);
-  console.log("userInfo :>> ", userInfo);
 
   const onRefresh = () => {
     refetch();
@@ -139,9 +136,7 @@ const QuizResult = () => {
           <View style={styles.scoreContainer}>
             <Text style={styles.sectionTitle}>Điểm của bạn</Text>
             <View style={styles.scoreCircleContainer}>
-              <View style={styles.scoreCircle}>
-                <Text style={styles.scoreText}>{data?.score?.toFixed(1)}</Text>
-              </View>
+              <CircleResult percent={data?.score * 10} />
             </View>
           </View>
 
@@ -173,6 +168,26 @@ const QuizResult = () => {
                 <Text style={styles.statLabel}>Câu trả lời đúng</Text>
               </View>
             </View>
+            <View className="mt-10" style={{ display: "flex", gap: 10 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  router.back();
+                }}
+                style={styles.btn_outline}
+              >
+                <Text style={styles.text_btn_outline}>
+                  Xem các phần thi khác
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  router.replace("/contest");
+                }}
+                style={styles.btn}
+              >
+                <Text style={styles.text_btn}>Trờ về trang chủ</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -184,6 +199,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
+  },
+  text_btn: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  text_btn_outline: {
+    color: "#75A815",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  btn: {
+    width: "100%",
+    backgroundColor: "#75A815",
+    borderRadius: 16,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 16,
+  },
+  btn_outline: {
+    width: "100%",
+    borderWidth: 2,
+    borderColor: "#75A815",
+    borderRadius: 16,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 16,
   },
   scrollContainer: {
     flexGrow: 1,

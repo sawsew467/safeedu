@@ -146,21 +146,7 @@ const SignUpModule = () => {
       newErrors.firstName = "Vui lòng nhập tên";
       hasError = true;
     }
-    if (!dob) {
-      newErrors.dob = "Vui lòng chọn ngày sinh";
-      hasError = true;
-    } else if (dob > new Date()) {
-      newErrors.dob = "Ngày sinh không hợp lệ";
-      hasError = true;
-    }
-    if (userType === "student" && !selectProvince) {
-      newErrors.city = "Vui lòng chọn thành phố";
-      hasError = true;
-    }
-    if (userType === "student" && !selectedSchool) {
-      newErrors.school = "Vui lòng chọn trường";
-      hasError = true;
-    }
+
     if (!userName) {
       newErrors.userName = "Vui lòng nhập tên đăng nhập";
       hasError = true;
@@ -198,10 +184,6 @@ const SignUpModule = () => {
       hasError = true;
     }
 
-    if (userType === "student" && !selectedSchool) {
-      newErrors.school = "Vui lòng chọn trường";
-    }
-
     setError(newErrors);
 
     if (!hasError) {
@@ -212,10 +194,10 @@ const SignUpModule = () => {
             await signUnStudent({
               first_name: firstName,
               last_name: lastName,
-              date_of_birth: dob.toISOString(),
+              date_of_birth: dob ? dob.toISOString() : "",
               phone_number: phone ?? undefined,
               email: email ?? undefined,
-              organizationId: selectedSchool,
+              organizationId: selectedSchool ?? "",
               username: userName,
               password,
             }).unwrap();
@@ -224,7 +206,7 @@ const SignUpModule = () => {
             await signUnCitizen({
               first_name: firstName,
               last_name: lastName,
-              date_of_birth: dob.toISOString(),
+              date_of_birth: dob ? dob.toISOString() : "",
               phone_number: phone ?? undefined,
               email: email ?? undefined,
               username: userName,
@@ -239,6 +221,7 @@ const SignUpModule = () => {
           (error as any)?.data?.error?.message || "Đã xảy ra lỗi!";
         console.log("error :>> ", error);
         Alert.alert(message);
+        console.log("error :>> ", error);
       }
     }
   };
@@ -304,7 +287,7 @@ const SignUpModule = () => {
             ) : null}
 
             <Text className="font-semibold text-base text-[#959595] mt-5">
-              Ngày sinh <Text className="text-red-500">*</Text>
+              Ngày sinh
             </Text>
             <TouchableOpacity
               onPress={() => {
@@ -368,7 +351,7 @@ const SignUpModule = () => {
             {userType === "student" && (
               <>
                 <Text className="font-semibold text-base text-[#959595] mt-5">
-                  Tỉnh/Thành phố <Text className="text-red-500">*</Text>
+                  Tỉnh/Thành phố
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
@@ -409,7 +392,7 @@ const SignUpModule = () => {
                 )}
 
                 <Text className="font-semibold text-base text-[#959595] mt-5">
-                  Trường <Text className="text-red-500">*</Text>
+                  Trường
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
