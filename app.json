@@ -21,7 +21,7 @@
       "bundleIdentifier": "com.vn.safeedu",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "NSPhotoLibraryUsageDescription": "Ứng dụng cần truy cập thư viện ảnh để bạn có thể chọn ảnh đại diện"
+        "NSPhotoLibraryUsageDescription": "SafeEdu cần quyền truy cập thư viện ảnh để bạn dễ dàng chọn và cập nhật ảnh đại diện cá nhân."
       },
       "config": {
         "usesNonExemptEncryption": false

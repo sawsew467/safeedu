@@ -76,7 +76,6 @@ const ChangPasswordScreen = () => {
       alert("Thay đổi mật khẩu thành công!");
     } catch (error) {
       const { message, details } = error?.data;
-      console.log("details :>> ", details);
 
       control.setError("old_password", {
         message: message || "Mật khẩu cũ không đúng",

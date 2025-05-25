@@ -76,6 +76,8 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     }
   }, [selectedValue]);
 
+  console.log("selectedValue", selectedValue);
+
   useEffect(() => {
     let timer;
     if (visible) {
@@ -84,9 +86,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       setSelectedDate(curentSelectDate);
 
       // Scroll to the selected values when modal opens
-      timer = setTimeout(() => {
-        scrollToSelectedValues(curentSelectDate);
-      }, 150);
+      scrollToSelectedValues(curentSelectDate);
     }
     return () => {
       clearTimeout(timer);
@@ -102,23 +102,20 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     const selectedYear = years.findIndex(
       (y) => y.value === date.getFullYear().toString()
     );
-    console.log("selectedMonth", selectedMonth);
-    console.log("selectedDay", selectedDay);
-    console.log("selectedYear", selectedYear);
 
     monthScrollRef.current?.scrollTo({
       y: selectedMonth * ITEM_HEIGHT,
-      animated: false,
+      animated: true,
     });
 
     dayScrollRef.current?.scrollTo({
       y: selectedDay * ITEM_HEIGHT,
-      animated: false,
+      animated: true,
     });
 
     yearScrollRef.current?.scrollTo({
       y: selectedYear * ITEM_HEIGHT,
-      animated: false,
+      animated: true,
     });
   };
 
@@ -204,7 +201,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
           ref={scrollViewRef}
           showsVerticalScrollIndicator={false}
           snapToInterval={ITEM_HEIGHT}
-          decelerationRate="fast"
+          decelerationRate="normal"
           contentContainerStyle={{
             paddingVertical: ITEM_HEIGHT,
           }}
@@ -215,7 +212,9 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
         >
           {items.map((item) => (
             <View key={item.value} style={styles.pickerItem}>
-              <Text style={styles.pickerItemText}>{item.label}</Text>
+              <Text style={styles.pickerItemText} className="font-pmedium">
+                {item.label}
+              </Text>
             </View>
           ))}
         </ScrollView>

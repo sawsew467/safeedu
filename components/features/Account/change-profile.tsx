@@ -154,7 +154,7 @@ const ProfileFormScreen = () => {
         avatar,
         first_name,
         last_name,
-        date_of_birth: new Date(date_of_birth),
+        date_of_birth: date_of_birth ? new Date(date_of_birth) : null,
         phone_number,
         email,
         provinceId: organizationId?.province_id,
@@ -174,16 +174,41 @@ const ProfileFormScreen = () => {
   };
 
   const handleExit = () => {
-    router.replace("/account");
+    router.replace("/accobunt");
   };
 
   const handleUploadAvatar = async (onChange: (value: string) => void) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
+      const permission =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (permission.status === "granted") {
+        return;
+      }
       Alert.alert(
-        "Yêu cầu quyền truy cập ảnh",
-        "Ứng dụng cần quyền truy cập ảnh để bạn có thể chọn ảnh đại diện cho hồ sơ.",
-        [{ text: "Đã hiểu" }]
+        "Yêu cầu quyền truy cập thư viện ảnh",
+        "SafeEdu cần quyền truy cập thư viện ảnh để bạn có thể chọn và cập nhật ảnh đại diện cá nhân của mình. Quyền này chỉ được sử dụng cho mục đích thay đổi ảnh đại diện.",
+        [
+          {
+            text: "Đã hiểu",
+            onPress: async () => {
+              await ImagePicker.requestMediaLibraryPermissionsAsync();
+              Alert.alert(
+                "Mở cài đặt",
+                "Vui lòng cấp quyền truy cập ảnh trong phần Cài đặt của thiết bị.",
+                [
+                  { text: "Hủy", style: "cancel" },
+                  {
+                    text: "Cho phép",
+                    onPress: () => {
+                      ImagePicker.requestMediaLibraryPermissionsAsync();
+                    },
+                  },
+                ]
+              );
+            },
+          },
+        ]
       );
       return;
     }
@@ -281,15 +306,12 @@ const ProfileFormScreen = () => {
           <View className="flex flex-row gap-2 mb-2">
             <Ionicons name="calendar-outline" size={20} color="#fff" />
             <Text className="font-semibold text-base text-white">
-              Ngày sinh <Text className="text-red-500">*</Text>
+              Ngày sinh
             </Text>
           </View>
           <Controller
             control={control}
             name={"date_of_birth"}
-            rules={{
-              required: "Ngày sinh không được để trống",
-            }}
             render={({ field: { onChange, value } }) => (
               <View>
                 <TouchableOpacity
@@ -313,7 +335,7 @@ const ProfileFormScreen = () => {
                   <Ionicons name="chevron-down" size={20} color={"#666"} />
                 </TouchableOpacity>
                 <DateTimePicker
-                  selectedValue={value}
+                  selectedValue={value ?? new Date()}
                   visible={openModalDob}
                   onSelect={(value) => onChange(value)}
                   onClose={() => setOpenModalDOb(false)}
@@ -369,16 +391,13 @@ const ProfileFormScreen = () => {
               <View className="flex flex-row gap-2 mb-2">
                 <Building2 size={20} color="#fff" />
                 <Text className="font-semibold text-base text-white">
-                  Tỉnh/Thành phố <Text className="text-red-500">*</Text>
+                  Tỉnh/Thành phố
                 </Text>
               </View>
 
               <Controller
                 control={control}
                 name={"provinceId"}
-                rules={{
-                  required: "Vui lòng chọn tỉnh/thành phố",
-                }}
                 render={({ field: { onChange, value } }) => (
                   <View>
                     <TouchableOpacity
@@ -430,15 +449,12 @@ const ProfileFormScreen = () => {
               <View className="flex flex-row gap-2 mb-2 mt-2">
                 <School size={20} color="#fff" />
                 <Text className="font-semibold text-base text-white mt-5">
-                  Trường <Text className="text-red-500">*</Text>
+                  Trường
                 </Text>
               </View>
               <Controller
                 control={control}
                 name="organizationId"
-                rules={{
-                  required: "Vui lòng chọn Trường",
-                }}
                 render={({ field: { onChange, value } }) => (
                   <View>
                     <TouchableOpacity
