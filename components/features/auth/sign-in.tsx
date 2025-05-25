@@ -164,19 +164,6 @@ const SignInModule = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.signUpContainer}>
-            <Text style={styles.signUpText}>
-              Hoặc đăng nhập với tư cách khách
-            </Text>
-            <TouchableOpacity onPress={handleGoHome}>
-              <Text
-                style={styles.signUpLink}
-                className="text-primary font-medium"
-              >
-                Trang chủ
-              </Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
     </KeyboardAvoidingView>
