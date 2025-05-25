@@ -178,7 +178,6 @@ function Contest() {
   const isFetching = isFetchingForUser || isFetchingForAuth;
   const isSuccess = isSuccessForUser || isSuccessForAuth;
 
-  console.log("competitions :>> ", competitions);
 
   const onRefresh = () => {
     if (isSuccess) refetch();
@@ -216,7 +215,7 @@ function Contest() {
             className="flex h-[400px] justify-center absolute right-0 left-0 w-full"
           />
           <View className="mt-16 flex flex-col justify-center px-4 ">
-            <SearchInput setValue={setValue} value={value} />
+            {/* <SearchInput setValue={setValue} value={value} /> */}
             <Text className="text-3xl font-bold text-white mt-10">
               Tham gia các cuộc thi về phòng chống ma tuý
             </Text>
@@ -252,7 +251,7 @@ function Contest() {
           />
         </Animated.View>
       </ScrollView>
-      <Animated.View
+      {/* <Animated.View
         style={[
           styles.animatedHeader,
           {
@@ -264,7 +263,7 @@ function Contest() {
         <View className="p-4 pb-2 flex items-end justify-end h-full w-full bg-white">
           <SearchInput setValue={setValue} value={value} />
         </View>
-      </Animated.View>
+      </Animated.View> */}
     </SafeAreaView>
   );
 }
