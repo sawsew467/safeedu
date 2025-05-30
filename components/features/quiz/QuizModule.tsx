@@ -106,8 +106,8 @@ const QuizModule = () => {
         isFetching,
         isError,
       }),
-      // refetchOnMountOrArgChange: true,
-      // refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
     }
   );
 
@@ -124,24 +124,24 @@ const QuizModule = () => {
     return questions?.[questionIndex]?.time_limit ?? 20;
   }, [questionIndex, questions?.length]);
 
-  // React.useEffect(() => {
-  //   if (questionIndex > 0) {
-  //     resetQuestion();
-  //     setTime(0);
-  //   }
-  //   const time = setInterval(() => {
-  //     setTime((prev) => (prev < timeLimit ? prev + 1 : prev));
-  //   }, 1000);
-  //   return () => clearInterval(time);
-  // }, [questionIndex, timeLimit]);
+  React.useEffect(() => {
+    if (questionIndex > 0) {
+      resetQuestion();
+      setTime(0);
+    }
+    const time = setInterval(() => {
+      setTime((prev) => (prev < timeLimit ? prev + 1 : prev));
+    }, 1000);
+    return () => clearInterval(time);
+  }, [questionIndex, timeLimit]);
 
-  // React.useEffect(() => {
-  //   if (timer >= timeLimit) {
-  //     setTimeout(() => {
-  //       handleChoice(choiceIndex, "");
-  //     }, 1000);
-  //   }
-  // }, [timer]);
+  React.useEffect(() => {
+    if (timer >= timeLimit) {
+      setTimeout(() => {
+        handleChoice(choiceIndex, "");
+      }, 1000);
+    }
+  }, [timer]);
 
   console.log("timeLimit", timeLimit);
   console.log("timer", timer);
