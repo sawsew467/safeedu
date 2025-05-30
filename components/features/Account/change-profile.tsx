@@ -174,7 +174,7 @@ const ProfileFormScreen = () => {
   };
 
   const handleExit = () => {
-    router.replace("/accobunt");
+    router.replace("/account");
   };
 
   const handleUploadAvatar = async (onChange: (value: string) => void) => {
