@@ -18,17 +18,15 @@ interface TimerProgressProps extends ViewProps {
   textStyle?: TextStyle;
 }
 
-const TimerProgress: React.FC<TimerProgressProps> = (
-  {
-    value = 0,
-    max = 100,
-    style,
-    progressColor = "#75A815", // primary color
-    backgroundColor = "#e5e7eb", // secondary color
-    textStyle,
-  },
-  props
-) => {
+const TimerProgress: React.FC<TimerProgressProps> = ({
+  value = 0,
+  max = 100,
+  style,
+  progressColor = "#75A815", // primary color
+  backgroundColor = "#e5e7eb", // secondary color
+  textStyle,
+  ...props
+}) => {
   const animatedWidth = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {

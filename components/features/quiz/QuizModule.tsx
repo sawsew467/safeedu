@@ -1,5 +1,5 @@
 import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Dimensions,
   FlatList,
@@ -91,7 +91,6 @@ const QuizModule = () => {
 
   const [choiceIndex, setChoiceIndex] = React.useState(null);
   const [timer, setTime] = React.useState(0);
-  const [isReset, setReset] = React.useState(false);
   const [questionIndex, setQuestionIndex] = React.useState(0);
   const [stateAnswer, setStateAnswer] = React.useState<
     "correct" | "incorrect" | "answering"
@@ -107,6 +106,8 @@ const QuizModule = () => {
         isFetching,
         isError,
       }),
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
     }
   );
 
@@ -114,13 +115,12 @@ const QuizModule = () => {
     return questions?.[questionIndex]?.answer;
   }, [questionIndex, questions?.length]);
 
-  // console.log('questions', answers)
   const question = React.useMemo(() => {
     return questions?.[questionIndex]?.question;
   }, [questionIndex, questions?.length]);
 
   const timeLimit = React.useMemo(() => {
-    return questions?.[questionIndex]?.time_limit ?? 15;
+    return questions?.[questionIndex]?.time_limit ?? 20;
   }, [questionIndex, questions?.length]);
 
   React.useEffect(() => {
@@ -132,13 +132,12 @@ const QuizModule = () => {
       setTime((prev) => (prev < timeLimit ? prev + 1 : prev));
     }, 1000);
     return () => clearInterval(time);
-  }, [questionIndex]);
+  }, [questionIndex, timeLimit]);
 
   React.useEffect(() => {
     if (timer >= timeLimit) {
       setTimeout(() => {
-        if (questionIndex >= questions?.length - 1) handleEndQuizz();
-        else setQuestionIndex(questionIndex + 1);
+        handleChoice(choiceIndex, "");
       }, 1000);
     }
   }, [timer]);
@@ -155,7 +154,6 @@ const QuizModule = () => {
   };
 
   const resetQuestion = () => {
-    setReset(true);
     setChoiceIndex(null);
     setStateAnswer("answering");
   };
@@ -168,12 +166,13 @@ const QuizModule = () => {
   }
 
   return (
-    <QuizBackground>
+    <View className="absolute top-0 left-0 right-0 bottom-0 z-10">
       <LoadingPage isLoading={isFetching} />
 
       <View style={styles.container_game}>
-        <View className="mx-3 mt-2">
-          <TimerProgress value={timer} max={timeLimit} />
+        <View className="mx-3 mt-4">
+          <TimerProgress value={timer} max={timeLimit} className="h-5" />
+          <View>{}</View>
         </View>
         <View style={{ flex: 1, display: "flex", justifyContent: "center" }}>
           <View style={styles.container_question}>
@@ -189,7 +188,7 @@ const QuizModule = () => {
         </View>
         <View style={styles.container_control_game}>
           <FlatList
-            style={{ width: "100%" }}
+            style={{ width: "100%", marginBottom: 20 }}
             data={answers}
             scrollEnabled={false}
             contentContainerStyle={styles.answers}
@@ -206,7 +205,7 @@ const QuizModule = () => {
           />
         </View>
       </View>
-    </QuizBackground>
+    </View>
   );
 };
 

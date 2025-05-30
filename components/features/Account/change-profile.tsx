@@ -13,6 +13,8 @@ import {
 } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 
+import * as Linking from "expo-linking";
+
 import background from "@/assets/images/account/background.png";
 
 import FormButton from "@/components/ui/form-button";
@@ -76,8 +78,6 @@ const ProfileFormScreen = () => {
       role: data?.data?.role,
     }),
   });
-
-  console.log("profile :>> ", profile);
 
   const { provinces }: { provinces: Array<{ label: string; value: string }> } =
     useGetProvincesQuery(
@@ -174,11 +174,12 @@ const ProfileFormScreen = () => {
   };
 
   const handleExit = () => {
-    router.replace("/accobunt");
+    router.replace("/account");
   };
 
   const handleUploadAvatar = async (onChange: (value: string) => void) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
     if (status !== "granted") {
       const permission =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -212,6 +213,7 @@ const ProfileFormScreen = () => {
       );
       return;
     }
+
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
