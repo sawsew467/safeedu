@@ -115,7 +115,6 @@ const QuizModule = () => {
     return questions?.[questionIndex]?.answer;
   }, [questionIndex, questions?.length]);
 
-  // console.log('questions', answers)
   const question = React.useMemo(() => {
     return questions?.[questionIndex]?.question;
   }, [questionIndex, questions?.length]);
@@ -142,9 +141,6 @@ const QuizModule = () => {
       }, 1000);
     }
   }, [timer]);
-
-  console.log("timeLimit", timeLimit);
-  console.log("timer", timer);
 
   const handleChoice = async (index: number, answer) => {
     try {
