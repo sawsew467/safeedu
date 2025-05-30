@@ -7,26 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E66AF0C4DC53F022EB5063C /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BBC71D8AB247A4D0FE303 /* ExpoModulesProvider.swift */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		B6FE60293E7AE798B425DD80 /* libPods-SafeEdu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1CAAB40A900DB84431EB31D /* libPods-SafeEdu.a */; };
+		48B5CE4403EB2608AE298D3C /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0CCF322C92A13F3F892DAD6 /* ExpoModulesProvider.swift */; };
+		5B37FABA9A679C1F59F6E142 /* libPods-SafeEdu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D832D8A120EB95E1772918B /* libPods-SafeEdu.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		F1EEAD16A4A37D07C4143597 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 86A5A4EFFAB3571EDC0AADB1 /* PrivacyInfo.xcprivacy */; };
+		F51448995CA2F767CF57B94A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B3C05E907A22FC860AFBE02E /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* SafeEdu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SafeEdu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SafeEdu/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SafeEdu/Info.plist; sourceTree = "<group>"; };
-		2C323C8FD46A89D61FC424B4 /* Pods-SafeEdu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafeEdu.release.xcconfig"; path = "Target Support Files/Pods-SafeEdu/Pods-SafeEdu.release.xcconfig"; sourceTree = "<group>"; };
-		75286117FF0326DF3E0B95E8 /* Pods-SafeEdu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafeEdu.debug.xcconfig"; path = "Target Support Files/Pods-SafeEdu/Pods-SafeEdu.debug.xcconfig"; sourceTree = "<group>"; };
-		86A5A4EFFAB3571EDC0AADB1 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = SafeEdu/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		2D832D8A120EB95E1772918B /* libPods-SafeEdu.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SafeEdu.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D24A81407F55C2CB94740AB /* Pods-SafeEdu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafeEdu.debug.xcconfig"; path = "Target Support Files/Pods-SafeEdu/Pods-SafeEdu.debug.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = SafeEdu/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AC9BBC71D8AB247A4D0FE303 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-SafeEdu/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		B3C05E907A22FC860AFBE02E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = SafeEdu/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		C1CAAB40A900DB84431EB31D /* libPods-SafeEdu.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SafeEdu.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3789CE67202945371960CBA /* Pods-SafeEdu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SafeEdu.release.xcconfig"; path = "Target Support Files/Pods-SafeEdu/Pods-SafeEdu.release.xcconfig"; sourceTree = "<group>"; };
+		E0CCF322C92A13F3F892DAD6 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-SafeEdu/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = SafeEdu/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* SafeEdu-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SafeEdu-Bridging-Header.h"; path = "SafeEdu/SafeEdu-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -37,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B6FE60293E7AE798B425DD80 /* libPods-SafeEdu.a in Frameworks */,
+				5B37FABA9A679C1F59F6E142 /* libPods-SafeEdu.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,43 +53,27 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				86A5A4EFFAB3571EDC0AADB1 /* PrivacyInfo.xcprivacy */,
+				B3C05E907A22FC860AFBE02E /* PrivacyInfo.xcprivacy */,
 			);
 			name = SafeEdu;
+			sourceTree = "<group>";
+		};
+		1D02561A0F869420053C634F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5D24A81407F55C2CB94740AB /* Pods-SafeEdu.debug.xcconfig */,
+				C3789CE67202945371960CBA /* Pods-SafeEdu.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				C1CAAB40A900DB84431EB31D /* libPods-SafeEdu.a */,
+				2D832D8A120EB95E1772918B /* libPods-SafeEdu.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		466F15B1BED207CC1778807F /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				75286117FF0326DF3E0B95E8 /* Pods-SafeEdu.debug.xcconfig */,
-				2C323C8FD46A89D61FC424B4 /* Pods-SafeEdu.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		6578E8AA9BF379E91F3251DD /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				6D4E0D9AB76D8E485A8AC810 /* SafeEdu */,
-			);
-			name = ExpoModulesProviders;
-			sourceTree = "<group>";
-		};
-		6D4E0D9AB76D8E485A8AC810 /* SafeEdu */ = {
-			isa = PBXGroup;
-			children = (
-				AC9BBC71D8AB247A4D0FE303 /* ExpoModulesProvider.swift */,
-			);
-			name = SafeEdu;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -106,8 +90,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				466F15B1BED207CC1778807F /* Pods */,
-				6578E8AA9BF379E91F3251DD /* ExpoModulesProviders */,
+				1D02561A0F869420053C634F /* Pods */,
+				D309EFC90952D77E731CA265 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -131,6 +115,22 @@
 			path = SafeEdu/Supporting;
 			sourceTree = "<group>";
 		};
+		CE38032A33AFA3C256671431 /* SafeEdu */ = {
+			isa = PBXGroup;
+			children = (
+				E0CCF322C92A13F3F892DAD6 /* ExpoModulesProvider.swift */,
+			);
+			name = SafeEdu;
+			sourceTree = "<group>";
+		};
+		D309EFC90952D77E731CA265 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				CE38032A33AFA3C256671431 /* SafeEdu */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -139,13 +139,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SafeEdu" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				65AB2EB897FE98C6A7C52567 /* [Expo] Configure project */,
+				F2534C849F1FBCDD83ACC091 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				32290323B971CF6246440B76 /* [CP] Embed Pods Frameworks */,
+				CCC4D52DB9E5070879C93904 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -195,7 +195,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				F1EEAD16A4A37D07C4143597 /* PrivacyInfo.xcprivacy in Resources */,
+				F51448995CA2F767CF57B94A /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,43 +238,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		32290323B971CF6246440B76 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SafeEdu/Pods-SafeEdu-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SafeEdu/Pods-SafeEdu-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		65AB2EB897FE98C6A7C52567 /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-SafeEdu/expo-configure-project.sh\"\n";
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -370,6 +333,43 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SafeEdu/Pods-SafeEdu-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		CCC4D52DB9E5070879C93904 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SafeEdu/Pods-SafeEdu-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SafeEdu/Pods-SafeEdu-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F2534C849F1FBCDD83ACC091 /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-SafeEdu/expo-configure-project.sh\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -378,7 +378,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				0E66AF0C4DC53F022EB5063C /* ExpoModulesProvider.swift in Sources */,
+				48B5CE4403EB2608AE298D3C /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,7 +387,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75286117FF0326DF3E0B95E8 /* Pods-SafeEdu.debug.xcconfig */;
+			baseConfigurationReference = 5D24A81407F55C2CB94740AB /* Pods-SafeEdu.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -413,7 +413,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vn.safeedu;
-				PRODUCT_NAME = "SafeEdu";
+				PRODUCT_NAME = SafeEdu;
 				SWIFT_OBJC_BRIDGING_HEADER = "SafeEdu/SafeEdu-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -424,7 +424,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2C323C8FD46A89D61FC424B4 /* Pods-SafeEdu.release.xcconfig */;
+			baseConfigurationReference = C3789CE67202945371960CBA /* Pods-SafeEdu.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -445,7 +445,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vn.safeedu;
-				PRODUCT_NAME = "SafeEdu";
+				PRODUCT_NAME = SafeEdu;
 				SWIFT_OBJC_BRIDGING_HEADER = "SafeEdu/SafeEdu-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -180,10 +180,35 @@ const ProfileFormScreen = () => {
   const handleUploadAvatar = async (onChange: (value: string) => void) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
+      const permission =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (permission.status === "granted") {
+        return;
+      }
       Alert.alert(
-        "Yêu cầu quyền truy cập ảnh",
-        "Ứng dụng cần quyền truy cập ảnh để bạn có thể chọn ảnh đại diện cho hồ sơ.",
-        [{ text: "Đã hiểu" }]
+        "Yêu cầu quyền truy cập thư viện ảnh",
+        "SafeEdu cần quyền truy cập thư viện ảnh để bạn có thể chọn và cập nhật ảnh đại diện cá nhân của mình. Quyền này chỉ được sử dụng cho mục đích thay đổi ảnh đại diện.",
+        [
+          {
+            text: "Đã hiểu",
+            onPress: async () => {
+              await ImagePicker.requestMediaLibraryPermissionsAsync();
+              Alert.alert(
+                "Mở cài đặt",
+                "Vui lòng cấp quyền truy cập ảnh trong phần Cài đặt của thiết bị.",
+                [
+                  { text: "Hủy", style: "cancel" },
+                  {
+                    text: "Cho phép",
+                    onPress: () => {
+                      ImagePicker.requestMediaLibraryPermissionsAsync();
+                    },
+                  },
+                ]
+              );
+            },
+          },
+        ]
       );
       return;
     }
