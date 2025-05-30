@@ -70,5 +70,12 @@ export const baseQueryWithReauth: typeof baseQuery = async (
 export const baseApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
-  tagTypes: ["comment", "picture", "quizResult", "students", "citizens"],
+  tagTypes: [
+    "comment",
+    "picture",
+    "quizResult",
+    "students",
+    "citizens",
+    "Question",
+  ],
 });

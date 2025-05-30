@@ -1,7 +1,7 @@
-import QuizModule from "@/components/features/quiz/QuizModule";
+import QuizBackground from "@/components/features/quiz/quiz-background";
 
 const Quiz = () => {
-  return <QuizModule />;
+  return <QuizBackground />;
 };
 
 export default Quiz;
