@@ -15,8 +15,6 @@ import { Controller, useForm } from "react-hook-form";
 
 import * as Linking from "expo-linking";
 
-import background from "@/assets/images/account/background.png";
-
 import FormButton from "@/components/ui/form-button";
 import { DateTimePicker } from "@/components/ui/datetime-input";
 import FormTextInput from "./form/form-text-input";
@@ -40,6 +38,10 @@ import {
 import { useUploadImageMutation } from "@/services/upload/api.upload";
 import { useRouter } from "expo-router";
 import { Building2, School } from "lucide-react-native";
+
+import background from "@/assets/images/account/background.png";
+import { baseApi } from "@/store/baseQuery";
+import { useAppDispatch } from "@/hooks/redux";
 
 type FormData = {
   avatar: string;
@@ -71,6 +73,8 @@ const ProfileFormScreen = () => {
     useUpdateProfileMutation();
   const [uploadImage, { isLoading: isUploadLoading }] =
     useUploadImageMutation();
+
+  const dispatch = useAppDispatch();
 
   const { profile, role } = useGetMeQuery(undefined, {
     selectFromResult: ({ data }) => ({
@@ -166,6 +170,7 @@ const ProfileFormScreen = () => {
   const onSubmit = async (data: FormData) => {
     try {
       await updateProfile(data).unwrap();
+      dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
       alert("Cập nhật hồ sơ thành công!");
     } catch (error) {
       alert("Đã xảy ra lỗi khi cập nhật hồ sơ!");

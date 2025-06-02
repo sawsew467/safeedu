@@ -50,7 +50,8 @@
         {
           "photosPermission": "Cho phép ứng dụng truy cập vào thư viện ảnh của bạn"
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "extra": {
       "router": {
