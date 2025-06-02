@@ -110,20 +110,20 @@ function Contest() {
       return {
         competitions: [
           {
-            title: "Cuộc thi mới nhất",
-            competitions:
-              competitions?.filter(
-                (item: Competitions) =>
-                  item?.isActive &&
-                  new Date(item?.endDate).getTime() > Date.now()
-              ) ?? [],
-          },
-          {
             title: "Cuộc thi đang tham gia",
             competitions:
               competitions?.filter(
                 (item: Competitions) =>
                   item?.status === "doing" &&
+                  item?.isActive &&
+                  new Date(item?.endDate).getTime() > Date.now()
+              ) ?? [],
+          },
+          {
+            title: "Cuộc thi mới nhất",
+            competitions:
+              competitions?.filter(
+                (item: Competitions) =>
                   item?.isActive &&
                   new Date(item?.endDate).getTime() > Date.now()
               ) ?? [],
@@ -177,7 +177,6 @@ function Contest() {
 
   const isFetching = isFetchingForUser || isFetchingForAuth;
   const isSuccess = isSuccessForUser || isSuccessForAuth;
-
 
   const onRefresh = () => {
     if (isSuccess) refetch();

@@ -14,8 +14,6 @@ import {
 } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 
-import background from "@/assets/images/account/background.png";
-
 import FormButton from "@/components/ui/form-button";
 import { DateTimePicker } from "@/components/ui/datetime-input";
 import FormTextInput from "./form/form-text-input";
@@ -43,6 +41,8 @@ import uploadImage from "@/components/ui/uploadImage";
 import { useRouter } from "expo-router";
 import FormPasswordInput from "./form/form-password-input";
 import { isLoading } from "expo-font";
+
+import background from "@/assets/images/account/background.png";
 
 type FormData = {
   old_password: string;

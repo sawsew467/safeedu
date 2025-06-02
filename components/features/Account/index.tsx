@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -12,10 +12,9 @@ import {
   ImageBackground,
   SafeAreaView,
   Modal,
+  ImageSourcePropType,
 } from "react-native";
-import { KeyRound, UserPen, UserRound } from "lucide-react-native";
-
-import background from "@/assets/images/account/background.png";
+import { KeyRound, UserPen } from "lucide-react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 import QuizHistoryCard from "./quiz-history-card";
@@ -26,13 +25,16 @@ import {
   useGetStudentByUsernameQuery,
 } from "@/services/user/user.api";
 import ProfileSkeleton from "./profile-skeleton";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import LogOut from "./logout";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setNotifycaUpdateProfile } from "../auth/slices";
 
 const ProfileScreen = () => {
   const router = useRouter();
+
+  const params = useLocalSearchParams();
+  const background = require("@/assets/images/account/background.png");
 
   const { notifyca_update_profile } = useAppSelector((state) => state.auth);
 
@@ -51,8 +53,6 @@ const ProfileScreen = () => {
       isFetching,
       isSuccess,
     }),
-    refetchOnMountOrArgChange: true,
-    refetchOnFocus: true,
   });
 
   const {
@@ -72,8 +72,6 @@ const ProfileScreen = () => {
           isSuccess,
         };
       },
-      refetchOnMountOrArgChange: true,
-      refetchOnFocus: true,
     }
   );
 

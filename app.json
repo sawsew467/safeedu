@@ -12,9 +12,7 @@
       "backgroundColor": "#ffffff"
     },
     "scheme": "SafeEdu",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "package": "com.vn.safeedu",
@@ -46,7 +44,14 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Cho phép ứng dụng truy cập vào thư viện ảnh của bạn"
+        }
+      ],
+      "expo-asset"
     ],
     "extra": {
       "router": {
