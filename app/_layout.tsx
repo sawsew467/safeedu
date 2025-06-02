@@ -6,6 +6,8 @@ import Providers from "@/providers";
 import { View } from "react-native";
 import { useAppSelector } from "@/hooks/redux";
 import React from "react";
+import LoadingPage from "@/components/ui/LoadingPage";
+import { useAssets } from "expo-asset";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,23 +23,35 @@ const RootLayout = () => {
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
+  const [assets, errorAsset] = useAssets([
+    require("../assets/images/account/background.png"),
+    require("../assets/images/game_images/gamePage_background.png"),
+    require("../assets/images/contest/bg_1.png"),
+  ]);
 
   useEffect(() => {
     if (error) throw error;
+    if (errorAsset) throw errorAsset;
 
-    if (fontsLoaded) {
+    if (fontsLoaded && assets) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, error]);
+  }, [fontsLoaded, error, errorAsset, assets]);
 
   if (!fontsLoaded) {
+    return <View />;
+  }
+  if (!assets) {
+    return <View />;
+  }
+
+  if (!assets && !errorAsset) {
     return <View />;
   }
 
   if (!fontsLoaded && !error) {
     return <View />;
   }
-
   return (
     <Providers>
       <Stack>

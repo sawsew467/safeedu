@@ -72,12 +72,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 16,
+    gap: 8,
     borderRadius: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#e0e0e0",
     width: "100%",
-    height: 56,
+    minHeight: 56,
     backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 0 },
@@ -86,7 +86,8 @@ const styles = StyleSheet.create({
     elevation: 4, // Dùng cho Android để có hiệu ứng shadow
   },
   itemText: {
-    fontSize: 16,
+    fontSize: 14,
+    flex: 1,
     color: "#333",
     fontFamily: "pbold",
   },
@@ -266,11 +267,15 @@ const getIcon = (
 };
 
 const ListItem = ({ item, index, id }: ItemProps) => {
-  const { status } = useIsDoQuizzQuery(item ? { id: item?._id } : skipToken, {
-    selectFromResult: ({ data }) => ({
-      status: data?.data?.status,
-    }),
-  });
+  const { status, isFetchingDoQuiz } = useIsDoQuizzQuery(
+    item ? { id: item?._id } : skipToken,
+    {
+      selectFromResult: ({ data, isFetching }) => ({
+        status: data?.data?.status,
+        isFetchingDoQuiz: isFetching,
+      }),
+    }
+  );
 
   const handleClickBtn = (item: Quizz) => {
     switch (item?.type) {
@@ -286,7 +291,11 @@ const ListItem = ({ item, index, id }: ItemProps) => {
     }
   };
 
-  return (
+  return isFetchingDoQuiz ? (
+    <View className="px-4 ">
+      <Skeleton width={"100%"} height={60} delay={400} />
+    </View>
+  ) : (
     <TouchableOpacity
       style={{ paddingHorizontal: 16 }}
       onPress={() => handleClickBtn(item)}
@@ -300,9 +309,10 @@ const ListItem = ({ item, index, id }: ItemProps) => {
             borderColor: "#75A815",
           },
         ]}
+        className="px-4"
       >
         <View
-          className="flex flex-row justify-start items-center"
+          className="flex flex-row justify-start flex-1 items-center"
           style={{ gap: 8 }}
         >
           {getIcon(item?.type, status)}
@@ -354,7 +364,7 @@ function Contest() {
   };
 
   const handleSignUp = () => {
-    router.push("/sign-up");
+    router.push("/user-type-screen");
   };
 
   const toggleExpanded = () => {

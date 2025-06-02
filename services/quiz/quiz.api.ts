@@ -32,6 +32,7 @@ export const QuestionApi = baseApi.injectEndpoints({
         method: "GET",
         flashError: true,
       }),
+      providesTags: ["Question"],
     }),
     getQuestionByQuizzId: build.query({
       query: ({ id }) => ({
@@ -49,6 +50,7 @@ export const QuestionApi = baseApi.injectEndpoints({
           flashError: true,
         };
       },
+      invalidatesTags: ["quizResult"],
     }),
   }),
 });

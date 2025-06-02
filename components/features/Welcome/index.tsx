@@ -15,7 +15,7 @@ import { useAppSelector } from "@/hooks/redux";
 
 const Welcome = () => {
   const handleRedirect = () => {
-    router.push("/home");
+    router.replace("/home");
   };
 
   return (

@@ -20,6 +20,7 @@ import background from "@/assets/images/sign-in-background.png";
 import { set } from "react-hook-form";
 import { useAppDispatch } from "@/hooks/redux";
 import { setNotifycaUpdateProfile } from "./slices";
+import { baseApi } from "@/store/baseQuery";
 const SignInModule = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -44,6 +45,7 @@ const SignInModule = () => {
     try {
       await signIn({ username, password }).unwrap();
       dispatch(setNotifycaUpdateProfile("on"));
+      dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
       router.push("/account");
     } catch (error) {
       const message: string =
@@ -155,19 +157,6 @@ const SignInModule = () => {
           </View>
           <View style={styles.signUpContainer}>
             <Text style={styles.signUpText}>Quay lại</Text>
-            <TouchableOpacity onPress={handleGoHome}>
-              <Text
-                style={styles.signUpLink}
-                className="text-primary font-medium"
-              >
-                Trang chủ
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.signUpContainer}>
-            <Text style={styles.signUpText}>
-              Hoặc đăng nhập với tư cách khách
-            </Text>
             <TouchableOpacity onPress={handleGoHome}>
               <Text
                 style={styles.signUpLink}
