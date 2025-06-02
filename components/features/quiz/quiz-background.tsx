@@ -1,9 +1,10 @@
 import HeaderShown from "@/components/ui/HeaderShown";
 import React from "react";
 import { ImageBackground } from "react-native";
-import bg_game_1 from "@/assets/images/game_images/gamePage_background.png";
 import { View } from "moti";
 import QuizModule from "./QuizModule";
+
+import background from "@/assets/images/game_images/gamePage_background.png";
 
 const QuizBackground = () => {
   return (
@@ -15,8 +16,8 @@ const QuizBackground = () => {
         HeaderComponent={() => (
           <View className="z-0 absolute bottom-0 top-0 left-0 right-0">
             <ImageBackground
-              source={bg_game_1}
-              defaultSource={bg_game_1}
+              source={background}
+              defaultSource={background}
               resizeMode="cover"
               className="w-full h-full"
             />

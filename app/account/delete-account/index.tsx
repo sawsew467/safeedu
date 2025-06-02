@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import androidStyles from "@/components/ui/SafeViewAndroid";
 import { Stack, useRouter } from "expo-router";
-import background from "@/assets/images/account/background.png";
 import { useDeleteAccountMutation } from "@/services/user/user.api";
 import {
   setAccessToken,
@@ -16,6 +15,8 @@ import {
 } from "@/components/features/auth/slices";
 import { baseApi } from "@/store/baseQuery";
 import { useAppDispatch } from "@/hooks/redux";
+
+import background from "@/assets/images/account/background.png";
 
 const DeleteAccount = () => {
   const router = useRouter();

@@ -267,11 +267,15 @@ const getIcon = (
 };
 
 const ListItem = ({ item, index, id }: ItemProps) => {
-  const { status } = useIsDoQuizzQuery(item ? { id: item?._id } : skipToken, {
-    selectFromResult: ({ data }) => ({
-      status: data?.data?.status,
-    }),
-  });
+  const { status, isFetchingDoQuiz } = useIsDoQuizzQuery(
+    item ? { id: item?._id } : skipToken,
+    {
+      selectFromResult: ({ data, isFetching }) => ({
+        status: data?.data?.status,
+        isFetchingDoQuiz: isFetching,
+      }),
+    }
+  );
 
   const handleClickBtn = (item: Quizz) => {
     switch (item?.type) {
@@ -287,7 +291,11 @@ const ListItem = ({ item, index, id }: ItemProps) => {
     }
   };
 
-  return (
+  return isFetchingDoQuiz ? (
+    <View className="px-4 ">
+      <Skeleton width={"100%"} height={60} delay={400} />
+    </View>
+  ) : (
     <TouchableOpacity
       style={{ paddingHorizontal: 16 }}
       onPress={() => handleClickBtn(item)}
