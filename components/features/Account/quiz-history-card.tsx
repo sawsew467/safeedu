@@ -16,11 +16,11 @@ const QuizHistoryCard = ({ quizResults, formatDate }) => {
       )}
       <View style={styles.resultsList}>
         {quizResults?.map((result, index) => (
-          <View key={index} style={styles.resultItem}>
+          <View key={result?._id} style={styles.resultItem}>
             <View style={styles.resultHeader}>
               <View>
-                <Text style={styles.resultTitle}>{result.quiz_id.title}</Text>
-                <Text style={styles.resultType}>{result.quiz_id.type}</Text>
+                <Text style={styles.resultTitle}>{result?.quiz_id?.title}</Text>
+                <Text style={styles.resultType}>{result?.quiz_id?.type}</Text>
               </View>
 
               <View
@@ -60,7 +60,7 @@ const QuizHistoryCard = ({ quizResults, formatDate }) => {
             </View>
 
             <Text style={styles.completionDate}>
-              Hoàn thành: {formatDate(result.completedAt, "DD/MM/YYYY HH:mm")}
+              Hoàn thành: {formatDate(result?.completedAt, "DD/MM/YYYY HH:mm")}
             </Text>
           </View>
         ))}
