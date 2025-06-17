@@ -493,11 +493,12 @@ function ChatContent() {
                 <FrameChat
                   {...item}
                   error={error}
+                  key={item?.id}
                   isLoading={isLoading}
                   isEnd={
-                    index + 1 === messages.length && item.role === "assistant"
+                    index + 1 === messages.length && item?.role === "assistant"
                   }
-                  id_message={item.role === "assistant" && item.id}
+                  id_message={item.role === "assistant" && item?.id}
                 />
               )}
             />
