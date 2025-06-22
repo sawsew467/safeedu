@@ -386,9 +386,8 @@ function Contest() {
         ),
         onPress: handleClickRankingBtn,
       }}
-      refreshControl={
-        <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
-      }
+      isRefreshing={isFetching}
+      onRefresh={onRefresh}
     >
       <View style={styles.imageContainer}>
         <View style={styles.imageDarkOverlay} />

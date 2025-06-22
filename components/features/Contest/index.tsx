@@ -193,9 +193,8 @@ function Contest() {
   return (
     <HeaderShown
       className="bg-white"
-      refreshControl={
-        <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
-      }
+      isRefreshing={isFetching}
+      onRefresh={onRefresh}
       backgroundImage={() => (
         <ImageBackground
           source={bg_1}

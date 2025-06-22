@@ -34,6 +34,8 @@ interface AnimatedHeaderScreenProps extends ScrollViewProps {
   HeaderComponent?: () => ReactNode;
   FooterComponent?: () => ReactNode;
   backgroundImage?: () => ReactNode;
+  isRefreshing?: boolean;
+  onRefresh?: () => void;
   ref: React.MutableRefObject<ScrollView | null>;
 }
 
@@ -59,7 +61,8 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
       shouldHaveHeader = true,
       headerLeft,
       backgroundImage,
-      refreshControl,
+      isRefreshing = false,
+      onRefresh = () => {},
       ...props
     },
     ref
@@ -67,7 +70,10 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
     const scrollY = useRef(new Animated.Value(0)).current;
     const insets = useSafeAreaInsets();
     const [isOverTop, setIsOverTop] = React.useState(false);
-    const statusBarHeight = StatusBar.currentHeight || 0;
+    const statusBarHeight =
+      Platform.OS === "android"
+        ? StatusBar.currentHeight ?? insets.top
+        : insets.top;
     const headerHeight = 56;
 
     const handleClickLeft = () => {
@@ -188,7 +194,7 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
             )}
             <View className="relative h-full flex-1">
               {HeaderComponent && <HeaderComponent />}
-              {(isOverTop || refreshControl?.props?.refreshing) && (
+              {(isOverTop || isRefreshing) && (
                 <View
                   style={{
                     position: "absolute",
@@ -216,8 +222,8 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
                       tintColor={"transparent"}
                       colors={["transparent"]}
                       style={{ backgroundColor: "transparent" }}
-                      refreshing={refreshControl?.props?.refreshing}
-                      onRefresh={refreshControl?.props?.onRefresh}
+                      refreshing={isRefreshing}
+                      onRefresh={onRefresh}
                     />
                   }
                   style={[styles.scrollView]}

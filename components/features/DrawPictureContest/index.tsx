@@ -239,9 +239,8 @@ function DrawPictureContest() {
   return (
     <HeaderShown
       title="Vẽ tranh cổ động"
-      refreshControl={
-        <RefreshControl onRefresh={handleRefresh} refreshing={isFetching} />
-      }
+      isRefreshing={isFetching}
+      onRefresh={handleRefresh}
     >
       <View>
         {status === "not-started" && statusCompetition === "Ongoing" ? (

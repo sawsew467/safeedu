@@ -166,14 +166,8 @@ const ProfileScreen = () => {
         backgroundImage={() => (
           <ImageBackground source={background} className="w-full h-full" />
         )}
-        refreshControl={
-          <RefreshControl
-            refreshing={isFetching}
-            onRefresh={() => {
-              refetch();
-            }}
-          />
-        }
+        isRefreshing={isFetching}
+        onRefresh={() => refetch()}
         shouldHaveHeader={false}
       >
         {isFetching ? (

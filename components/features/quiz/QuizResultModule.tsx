@@ -111,9 +111,8 @@ const QuizResult = () => {
       backgroundImage={() => (
         <ImageBackground source={background} className="w-full h-full" />
       )}
-      refreshControl={
-        <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
-      }
+      isRefreshing={isFetching}
+      onRefresh={onRefresh}
       scrollEnabled={false}
     >
       <View style={styles.scrollContainer}>
