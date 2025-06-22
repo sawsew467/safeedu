@@ -3,6 +3,7 @@ import Skeleton from "@/components/ui/skeleton";
 import { Stack } from "expo-router";
 import React from "react";
 import { View, StyleSheet, ScrollView, SafeAreaView } from "react-native";
+import androidSettings from "@/components/ui/SafeViewAndroid";
 
 const ProfileSkeleton = () => {
   return (
@@ -39,7 +40,7 @@ const ProfileSkeleton = () => {
           headerTitle: () => <View className="hidden" />,
         }}
       />
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView>
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Profile Section */}
           <View style={styles.profileSection}>

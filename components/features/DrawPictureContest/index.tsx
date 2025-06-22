@@ -1,7 +1,6 @@
 import {
   Image,
   FlatList,
-  SafeAreaView,
   ScrollView,
   View,
   StyleSheet,

@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     paddingTop: 24,
     paddingHorizontal: 20,
+    height: "100%",
     display: "flex",
     // alignItems: "center",
   },

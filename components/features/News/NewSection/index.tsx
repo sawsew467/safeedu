@@ -113,7 +113,7 @@ export function NewSection() {
 
   const header = React.useMemo(() => {
     return (
-      <View>
+      <View className="pt-12">
         <Text style={styles.newsText}>Tin mới</Text>
         <View style={styles.logoContainer}>
           <Image
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     zIndex: 10,
-    top: 36,
+    top: 84,
     left: "50%",
     transform: [{ translateX: -104 }, { translateY: -70 }],
   },

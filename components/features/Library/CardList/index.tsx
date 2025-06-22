@@ -74,8 +74,6 @@ const CardList = () => {
     }
   };
 
-  console.log("libraryData :>> ", libraryData);
-
   return (
     <View>
       <View>

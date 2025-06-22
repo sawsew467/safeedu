@@ -12,7 +12,6 @@ import {
   Text,
   Dimensions,
   ScrollView,
-  SafeAreaView,
   TextInput,
   StyleSheet,
   Platform,

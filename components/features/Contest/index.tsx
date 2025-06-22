@@ -1,7 +1,6 @@
 import {
   Image,
   FlatList,
-  SafeAreaView,
   ScrollView,
   Text,
   View,
@@ -29,6 +28,8 @@ import { Skeleton } from "moti/skeleton";
 import { skeletonCommonProps } from "@/healper/type/type-common-skeleton";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { router } from "expo-router";
+
+import HeaderShown from "@/components/ui/HeaderShown";
 const styles = StyleSheet.create({
   scrollViewContent: {
     marginTop: 20,
@@ -95,7 +96,7 @@ function Contest() {
   });
   const stickyTopViewContent = scrollY.interpolate({
     outputRange: [-50, -100],
-    inputRange: [0, 160],
+    inputRange: [20, 160],
     extrapolate: "clamp",
   });
 
@@ -190,29 +191,35 @@ function Contest() {
   };
 
   return (
-    <SafeAreaView style={GlobalStyles.AndroidSafeArea} className="bg-white">
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+    <HeaderShown
+      className="bg-white"
+      refreshControl={
+        <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+      }
+      backgroundImage={() => (
+        <ImageBackground
+          source={bg_1}
+          resizeMode="cover"
+          className="flex h-[450px] justify-center absolute right-0 left-0 w-full"
+        />
+      )}
+      overScrollMode="never"
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+      shouldHaveHeader={false}
+      onScroll={Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        {
+          useNativeDriver: false,
         }
-        overScrollMode="never"
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          {
-            useNativeDriver: false,
-          }
-        )}
-        className="relative"
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        scrollEventThrottle={16}
-      >
-        <View className=" h-[400px] left-0 right-0">
-          <ImageBackground
+      )}
+      HeaderComponent={() => (
+        <View className="flex absolute top-0 w-full">
+          {/* <ImageBackground
             source={bg_1}
             resizeMode="cover"
-            className="flex h-[400px] justify-center absolute right-0 left-0 w-full"
-          />
+            className="flex h-[450px] justify-center absolute right-0 left-0 w-full"
+          /> */}
           <View className="mt-16 flex flex-col justify-center px-4 ">
             {/* <SearchInput setValue={setValue} value={value} /> */}
             <Text className="text-3xl font-bold text-white mt-10">
@@ -223,33 +230,30 @@ function Contest() {
             </Text>
           </View>
         </View>
-        <Animated.View
-          className="h-full overflow-hidden rounded-[24px_24px_0_0] relative"
-          style={[
-            {
-              top: stickyTopViewContent,
-            },
-          ]}
-        >
-          <FlatList
-            scrollEnabled={false}
-            className="pt-4 px-4 bg-white rounded-[24px_24px_0_0]"
-            data={isFetching ? Array.from({ length: 3 }) : competitions}
-            renderItem={({ item }) => (
-              <ContestComponent
-                data={item as DataType}
-                isFetching={isFetching}
-              />
-            )}
-            keyExtractor={(item: DataType) => item?.title}
-            contentContainerStyle={{
-              gap: 32,
-              paddingVertical: 16,
-              overflow: "visible",
-            }}
-          />
-        </Animated.View>
-      </ScrollView>
+      )}
+    >
+      <Animated.View
+        className="h-full overflow-hidden mt-[400px] rounded-[24px_24px_0_0] relative"
+        style={[
+          {
+            top: stickyTopViewContent,
+          },
+        ]}
+      >
+        <FlatList
+          className="pt-4 px-4 bg-white rounded-[24px_24px_0_0]"
+          data={isFetching ? Array.from({ length: 3 }) : competitions}
+          renderItem={({ item }) => (
+            <ContestComponent data={item as DataType} isFetching={isFetching} />
+          )}
+          keyExtractor={(item: DataType) => item?.title}
+          contentContainerStyle={{
+            gap: 32,
+            paddingVertical: 16,
+            overflow: "visible",
+          }}
+        />
+      </Animated.View>
       {/* <Animated.View
         style={[
           styles.animatedHeader,
@@ -263,7 +267,7 @@ function Contest() {
           <SearchInput setValue={setValue} value={value} />
         </View>
       </Animated.View> */}
-    </SafeAreaView>
+    </HeaderShown>
   );
 }
 

@@ -1,13 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native";
+import { View, Text, Image, ScrollView, SafeAreaView } from "react-native";
 
 import logo from "@/assets/images/logo_new.png";
 import { Button } from "@/components/ui/Button";
@@ -19,7 +12,7 @@ const Welcome = () => {
   };
 
   return (
-    <SafeAreaView className="bg-white h-full">
+    <SafeAreaView className="bg-white h-screen">
       <ScrollView
         contentContainerStyle={{
           height: "100%",

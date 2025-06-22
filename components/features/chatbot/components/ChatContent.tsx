@@ -6,13 +6,11 @@ import {
   Image,
   FlatList,
   Dimensions,
-  ImageBackground,
   ActivityIndicator,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  SafeAreaView,
 } from "react-native";
 import {
   useCreateChatMutation,
@@ -21,8 +19,7 @@ import {
 } from "../queries/cozeQueries";
 // import { useExampleQuery, useGetAllCoursesQuery } from "../queries";
 import { Button } from "@/components/ui/Button";
-import HeaderShown from "@/components/ui/HeaderShown";
-import bg from "@/assets/images/chatbox/bg.png";
+
 import avatar_chatbot from "@/assets/icons/avatar_chatbot.png";
 import { COMMON_QUESTIONS } from "@/healper/data/chatbot";
 import Input from "./input";
@@ -40,7 +37,6 @@ import Toast from "react-native-toast-message";
 import ReportDialog from "./report-dialog";
 
 import stylesAndroid from "@/components/ui/SafeViewAndroid";
-import { Stack } from "expo-router";
 
 interface Attachment {
   name?: string;
@@ -449,9 +445,9 @@ function ChatContent() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={[styles.container, stylesAndroid.AndroidSafeArea]}
+      style={[styles.container]}
     >
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <ScrollView style={{ flex: 1 }}>
           <View style={styles.container_content}>
             <View style={styles.container_header}>
@@ -533,7 +529,7 @@ function ChatContent() {
           selectedOption={selectedOption}
         />
         <Toast />
-      </SafeAreaView>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -541,7 +537,6 @@ function ChatContent() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   errorContainer: {
     flex: 1,
@@ -606,11 +601,11 @@ const styles = StyleSheet.create({
   },
   frame_chat: {
     padding: 12,
-
     borderRadius: 16,
   },
   content_frame_chat: {
     width: "100%",
+    flex: 1,
     display: "flex",
     flexDirection: "row",
     alignItems: "flex-end",
@@ -646,7 +641,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   container_content: {
-    marginTop: 20,
+    paddingTop: 40,
   },
   bg: {
     position: "absolute",

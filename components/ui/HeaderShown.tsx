@@ -5,24 +5,24 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  ScrollViewProps,
+  StatusBar,
+  Text,
   SafeAreaView,
   Platform,
-  StatusBar,
-  Image,
+  RefreshControl,
   Dimensions,
-  ScrollViewProps,
-  ScrollViewComponent,
 } from "react-native";
 import { router, Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Entypo from "@expo/vector-icons/Entypo";
-import { FooterComponent } from "react-native-screens/lib/typescript/components/ScreenFooter";
-import { boolean, any } from "zod";
+import { LinearGradient } from "expo-linear-gradient";
+import * as Progress from "react-native-progress";
 interface AnimatedHeaderScreenProps extends ScrollViewProps {
   children: ReactNode;
   title?:
     | string
-    | ((props: { children: string; tintColor?: string }) => React.ReactNode);
+    | ((props?: { children?: string; tintColor?: string }) => React.ReactNode);
   isScroll?: boolean;
   isBack?: boolean;
   rightIcon?: {
@@ -30,14 +30,16 @@ interface AnimatedHeaderScreenProps extends ScrollViewProps {
     onPress: () => void;
   };
   headerLeft?: () => ReactNode;
+  shouldHaveHeader?: boolean;
   HeaderComponent?: () => ReactNode;
   FooterComponent?: () => ReactNode;
+  backgroundImage?: () => ReactNode;
   ref: React.MutableRefObject<ScrollView | null>;
 }
 
 const colors = {
   background: "#fff",
-  backgroundScrolled: "#6d6d6d4d",
+  backgroundScrolled: "#6d6d6d5b",
   headerBorder: "#fff",
   borderColor: "#fff",
   text: "#000",
@@ -54,23 +56,24 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
       FooterComponent,
       isScroll = true,
       isBack = true,
+      shouldHaveHeader = true,
       headerLeft,
+      backgroundImage,
+      refreshControl,
       ...props
     },
     ref
   ) => {
     const scrollY = useRef(new Animated.Value(0)).current;
     const insets = useSafeAreaInsets();
+    const [isOverTop, setIsOverTop] = React.useState(false);
+    const statusBarHeight = StatusBar.currentHeight || 0;
+    const headerHeight = 56;
 
     const handleClickLeft = () => {
       router.replace("..");
     };
 
-    const headerBackgroundColor = scrollY.interpolate({
-      inputRange: [0, 1000],
-      outputRange: [colors.background, colors.backgroundScrolled],
-      extrapolate: "clamp",
-    });
     // const opacity = scrollY.interpolate({
     //     inputRange: [0, 50],
     //     outputRange: [1, 0.3],
@@ -82,111 +85,205 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
       { useNativeDriver: false }
     );
 
-    const headerBorderWidth = scrollY.interpolate({
-      inputRange: [0, 50],
-      outputRange: [0, StyleSheet.hairlineWidth],
-      extrapolate: "clamp",
-    });
+    const handleOverScroll = (event) => {
+      const { contentOffset } = event.nativeEvent;
+
+      const isAtTop = contentOffset.y <= -10;
+
+      if (isAtTop) {
+        setIsOverTop(true);
+      } else {
+        setIsOverTop(false);
+      }
+    };
 
     return (
       <>
-        <Stack.Screen
-          options={{
-            headerShown: true,
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-              fontWeight: "500",
-            },
-            headerTitle: title,
-            headerLeft: !headerLeft
-              ? () => (
-                  <Animated.View
-                    style={{
-                      opacity: 1,
-                      marginLeft: 10,
-                    }}
-                  >
-                    <TouchableOpacity
-                      onPress={handleClickLeft}
-                      style={styles.btnIconLeft}
-                    >
-                      <Entypo name="chevron-left" size={24} color="black" />
-                    </TouchableOpacity>
-                  </Animated.View>
-                )
-              : headerLeft,
-            headerRight: rightIcon
-              ? () => (
-                  <Animated.View
-                    style={{
-                      opacity: 1,
-                      marginRight: 10,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={styles.btnIconRight}
-                      onPress={rightIcon?.onPress}
-                    >
-                      <rightIcon.icon />
-                    </TouchableOpacity>
-                  </Animated.View>
-                )
-              : undefined,
-            headerBackground: () => (
-              <Animated.View
+        <SafeAreaView className="flex-1 relative h-full">
+          {backgroundImage && (
+            <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
+              {backgroundImage()}
+            </View>
+          )}
+          <LinearGradient
+            colors={["#000000a5", "#00000000"]}
+            style={{
+              paddingTop: 40,
+            }}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            className="absolute top-0 left-0 right-0 z-50"
+          />
+          <Stack.Screen options={{ headerShown: false }} />
+          <View
+            className="flex flex-1 absolute top-0 left-0 right-0 bottom-0 "
+            style={{
+              flex: Platform.OS === "android" && 1,
+            }}
+          >
+            <StatusBar barStyle="light-content" backgroundColor="transparent" />
+            {shouldHaveHeader && (
+              <View
                 style={[
-                  StyleSheet.absoluteFill,
-                  styles.headerBackground,
+                  styles.container,
                   {
-                    backgroundColor: headerBackgroundColor,
-                    // opacity: opacity,
-                    borderBottomColor: colors.borderColor,
-                    borderBottomWidth: headerBorderWidth,
+                    paddingTop:
+                      Platform.OS === "android" ? statusBarHeight : insets.top,
                   },
                 ]}
-              />
-            ),
-          }}
-        />
-        <SafeAreaView style={headerSafeArea.AndroidSafeArea}>
-          <View className="absolute top-0 bottom-0 left-0 right-0 bg-white z-0"></View>
-          {HeaderComponent && <HeaderComponent />}
-          {isScroll ? (
-            <ScrollView
-              ref={ref}
-              {...props}
-              overScrollMode="never"
-              style={styles.scrollView}
-              contentContainerStyle={[
-                styles.scrollViewContent,
-                { paddingBottom: insets.bottom },
-              ]}
-              onScroll={handleScroll}
-              scrollEventThrottle={16}
-            >
-              <View style={styles.content}>{children}</View>
-            </ScrollView>
-          ) : (
-            <View style={styles.content}>{children}</View>
-          )}
-          {FooterComponent && <FooterComponent />}
+              >
+                <View />
+                <View style={[styles.headerContent, { height: headerHeight }]}>
+                  {isBack && (
+                    <View style={styles.leftContainer}>
+                      {!headerLeft ? (
+                        <Animated.View
+                          style={{
+                            opacity: 1,
+                            marginLeft: 10,
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={handleClickLeft}
+                            style={styles.btnIconLeft}
+                          >
+                            <Entypo
+                              name="chevron-left"
+                              size={24}
+                              color="black"
+                            />
+                          </TouchableOpacity>
+                        </Animated.View>
+                      ) : (
+                        headerLeft()
+                      )}
+                    </View>
+                  )}
+
+                  <View style={styles.centerContainer}>
+                    <Text style={styles.headerTitle}>
+                      {typeof title === "string" ? title : title ? title() : ""}
+                    </Text>
+                  </View>
+
+                  <View style={styles.rightContainer}>
+                    {rightIcon && (
+                      <Animated.View
+                        style={{
+                          opacity: 1,
+                          marginRight: 10,
+                        }}
+                      >
+                        <TouchableOpacity
+                          style={styles.btnIconRight}
+                          onPress={rightIcon.onPress}
+                        >
+                          <rightIcon.icon />
+                        </TouchableOpacity>
+                      </Animated.View>
+                    )}
+                  </View>
+                </View>
+              </View>
+            )}
+            <View className="relative h-full flex-1">
+              {HeaderComponent && <HeaderComponent />}
+              {(isOverTop || refreshControl?.props?.refreshing) && (
+                <View
+                  style={{
+                    position: "absolute",
+                    width: Dimensions.get("window").width,
+                    height: 60,
+                    top:
+                      Platform.OS === "android" ? statusBarHeight : insets.top,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Progress.CircleSnail
+                    color={["#fff"]}
+                    duration={700}
+                    progress={0.5}
+                  />
+                </View>
+              )}
+              {isScroll ? (
+                <ScrollView
+                  ref={ref}
+                  {...props}
+                  refreshControl={
+                    <RefreshControl
+                      tintColor={"transparent"}
+                      colors={["transparent"]}
+                      style={{ backgroundColor: "transparent" }}
+                      refreshing={refreshControl?.props?.refreshing}
+                      onRefresh={refreshControl?.props?.onRefresh}
+                    />
+                  }
+                  style={[styles.scrollView]}
+                  contentContainerStyle={[styles.scrollViewContent]}
+                  onScroll={(event) => {
+                    handleScroll(event);
+                    handleOverScroll(event);
+                  }}
+                  scrollEventThrottle={16}
+                >
+                  <View style={styles.content}>{children}</View>
+                </ScrollView>
+              ) : (
+                <View style={styles.content}>{children}</View>
+              )}
+              {FooterComponent && <FooterComponent />}
+            </View>
+          </View>
         </SafeAreaView>
       </>
     );
   }
 );
 
-const headerSafeArea = StyleSheet.create({
-  AndroidSafeArea: {
-    flex: 1,
-    paddingTop: 0,
-    position: "relative",
-  },
-});
-
 const styles = StyleSheet.create({
+  statusBarBackground: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1001,
+  },
+  container: {
+    position: "relative",
+    zIndex: 1000,
+  },
+  headerContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 0,
+  },
+  leftContainer: {
+    flex: 1,
+    alignItems: "flex-start",
+    justifyContent: "center",
+  },
+  centerContainer: {
+    flex: 2,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  rightContainer: {
+    flex: 1,
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
+  headerTitle: {
+    fontSize: 17,
+    fontWeight: "500",
+    color: "black",
+    textAlign: "center",
+  },
   scrollView: {
     flex: 1,
+    height: "100%",
   },
   btnIconLeft: {
     display: "flex",
@@ -208,9 +305,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    height: "100%",
   },
   headerBackground: {
     borderBottomWidth: 0,
+    height: "100%",
+    flex: 1,
   },
   rightIcon: {
     height: "100%",

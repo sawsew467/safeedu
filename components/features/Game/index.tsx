@@ -3,7 +3,6 @@ import {
   Dimensions,
   FlatList,
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -42,9 +41,12 @@ function Game() {
                     Luyện tập về các câu hỏi phòng tránh ma túy ngay nào
                   </Text>
                 </View>
-                <TouchableOpacity onPress={() => {
-                  router.push("/game/1")
-                }} style={styles.startButton}>
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push("/game/1");
+                  }}
+                  style={styles.startButton}
+                >
                   <Text
                     style={styles.startButtonText}
                     numberOfLines={1}
@@ -104,9 +106,12 @@ function Game() {
                   paddingVertical: 10,
                 }}
                 renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => {
-                    router.push("/game/1")
-                  }} style={styles.challengeGameCardContainer}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      router.push("/game/1");
+                    }}
+                    style={styles.challengeGameCardContainer}
+                  >
                     <Image
                       style={styles.challengeGameImage}
                       source={item.image}
