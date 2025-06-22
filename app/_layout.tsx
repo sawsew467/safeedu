@@ -1,17 +1,16 @@
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import "react-native-url-polyfill/auto";
-import { Redirect, SplashScreen, Stack, useRouter } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import Providers from "@/providers";
 import { View } from "react-native";
-import { useAppSelector } from "@/hooks/redux";
 import React from "react";
-import LoadingPage from "@/components/ui/LoadingPage";
 import { useAssets } from "expo-asset";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+  const [appReady, setAppReady] = React.useState(false);
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -36,9 +35,19 @@ const RootLayout = () => {
     if (errorAsset) throw errorAsset;
 
     if (fontsLoaded && assets) {
-      SplashScreen.hideAsync();
+      setAppReady(true);
     }
   }, [fontsLoaded, error, errorAsset, assets]);
+
+  const onLayoutRootView = React.useCallback(async () => {
+    if (appReady) {
+      await SplashScreen.hideAsync(); // an toàn hơn
+    }
+  }, [appReady]);
+
+  if (!appReady) {
+    return <View />;
+  }
 
   if (!fontsLoaded) {
     return <View />;
@@ -55,16 +64,17 @@ const RootLayout = () => {
     return <View />;
   }
   return (
-    <Providers>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="achiverment/index"
-          options={{ headerShown: false }}
-        />
-        {/* <Stack.Screen
+    <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      <Providers>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="achiverment/index"
+            options={{ headerShown: false }}
+          />
+          {/* <Stack.Screen
           name="contest/[contestID]"
           options={{ headerShown: false }}
         />
@@ -76,22 +86,23 @@ const RootLayout = () => {
           name="contest/[contestID]/drawPicture"
           options={{ headerShown: false }}
         /> */}
-        {/* <Stack.Screen
+          {/* <Stack.Screen
           name="contest/[contestID]/drawPicture/[drawPictureID]"
           options={{ headerShown: false }}
         /> */}
-        <Stack.Screen name="news/[newsID]" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="library/[libraryID]"
-          options={{ headerShown: false }}
-        />
-        {/* <Stack.Screen
+          <Stack.Screen name="news/[newsID]" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="library/[libraryID]"
+            options={{ headerShown: false }}
+          />
+          {/* <Stack.Screen
           name="leaderboard_game/[leaderboardID]"
           options={{ headerShown: false }}
         /> */}
-        {/* <Stack.Screen name="game/[gameID]" options={{ headerShown: false }} /> */}
-      </Stack>
-    </Providers>
+          {/* <Stack.Screen name="game/[gameID]" options={{ headerShown: false }} /> */}
+        </Stack>
+      </Providers>
+    </View>
   );
 };
 
