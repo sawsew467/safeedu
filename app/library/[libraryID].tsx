@@ -1,9 +1,7 @@
-import LibraryDetail from '@/components/features/LibraryDetail';
-import React from 'react';
+import LibraryDetail from "@/components/features/LibraryDetail";
+import React from "react";
 const LibraryID = () => {
-    return (
-        <LibraryDetail />
-    )
-}
+  return <LibraryDetail />;
+};
 
-export default LibraryID
+export default LibraryID;

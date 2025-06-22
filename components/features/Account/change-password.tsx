@@ -1,46 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  ImageBackground,
-  Image,
-  ActivityIndicator,
-} from "react-native";
-import { Controller, useForm } from "react-hook-form";
+import React from "react";
+import { View, StyleSheet, ImageBackground } from "react-native";
+import { useForm } from "react-hook-form";
 
 import FormButton from "@/components/ui/form-button";
-import { DateTimePicker } from "@/components/ui/datetime-input";
-import FormTextInput from "./form/form-text-input";
-import FormDropdown from "./form/form-dropdown";
-import FormPhoneInput from "./form/form-phonenumber-input";
+
 import HeaderShown from "@/components/ui/HeaderShown";
-import { formatDate } from "@/utils/format-date";
-import { Ionicons } from "@expo/vector-icons";
-import { ModalPicker } from "@/components/ui/modal-picker";
-import * as ImagePicker from "expo-image-picker";
 
-import { Province, Organization } from "@/healper/type/Organization";
+import { useChangePasswordMutation } from "@/services/user/user.api";
 
-import {
-  useGetProvincesQuery,
-  useGetOrganizationsQuery,
-} from "@/services/auth/auth.api";
-import {
-  useChangePasswordMutation,
-  useGetMeQuery,
-  useUpdateProfileMutation,
-} from "@/services/user/user.api";
-import { useUploadImageMutation } from "@/services/upload/api.upload";
-import uploadImage from "@/components/ui/uploadImage";
 import { useRouter } from "expo-router";
 import FormPasswordInput from "./form/form-password-input";
-import { isLoading } from "expo-font";
 
 import background from "@/assets/images/account/background.png";
 
@@ -92,10 +63,8 @@ const ChangPasswordScreen = () => {
     <HeaderShown
       title="Thay đổi Mật khẩu của bạn"
       style={styles.container}
-      HeaderComponent={() => (
-        <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-          <ImageBackground source={background} className="w-full h-full" />
-        </View>
+      backgroundImage={() => (
+        <ImageBackground source={background} className="w-full h-full" />
       )}
     >
       <View style={styles.scrollContainer}>

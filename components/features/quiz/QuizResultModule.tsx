@@ -11,14 +11,15 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  SafeAreaView,
   RefreshControl,
-  TouchableHighlight,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import QuizResultSkeleton from "./quiz-result-skeleton";
-import avatar from "@/components/ui/avatar";
+
 import CircleResult from "./circleResult";
+
+import background from "@/assets/images/account/background.png";
 
 // Sample data structure based on the provided JSON
 interface QuizResultProps {
@@ -107,12 +108,15 @@ const QuizResult = () => {
   return (
     <HeaderShown
       title={data?.quiz_id?.title ?? "Kết quả cuộc thi"}
-      isBack
+      backgroundImage={() => (
+        <ImageBackground source={background} className="w-full h-full" />
+      )}
       refreshControl={
         <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
       }
+      scrollEnabled={false}
     >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.scrollContainer}>
         <View style={styles.card}>
           <View style={styles.userInfoContainer}>
             <Text style={styles.sectionTitle}>Thông tin người làm</Text>
@@ -190,7 +194,7 @@ const QuizResult = () => {
             </View>
           </View>
         </View>
-      </ScrollView>
+      </View>
     </HeaderShown>
   );
 };
@@ -231,7 +235,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    padding: 16,
+    paddingHorizontal: 16,
   },
   card: {
     backgroundColor: "white",

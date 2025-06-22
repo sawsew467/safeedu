@@ -47,7 +47,10 @@ export default function ProgressScore({ percent = 20 }: { percent?: number }) {
         />
       </Svg>
       <View style={styles.textContainer}>
-        <Text style={[styles.percentText, { color: getColor(percent) }]}>
+        <Text
+          style={[styles.percentText, { color: getColor(percent) }]}
+          className="font-normal"
+        >
           {score.toFixed(1)}
         </Text>
       </View>

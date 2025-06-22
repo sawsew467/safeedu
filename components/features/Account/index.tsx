@@ -10,9 +10,7 @@ import {
   Image,
   RefreshControl,
   ImageBackground,
-  SafeAreaView,
   Modal,
-  ImageSourcePropType,
 } from "react-native";
 import { KeyRound, UserPen } from "lucide-react-native";
 
@@ -29,6 +27,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import LogOut from "./logout";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setNotifycaUpdateProfile } from "../auth/slices";
+import HeaderShown from "@/components/ui/HeaderShown";
 
 const ProfileScreen = () => {
   const router = useRouter();
@@ -163,17 +162,24 @@ const ProfileScreen = () => {
 
   return (
     <>
-      <SafeAreaView style={styles.container} className="bg-none relative">
-        <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
+      <HeaderShown
+        backgroundImage={() => (
           <ImageBackground source={background} className="w-full h-full" />
-        </View>
+        )}
+        refreshControl={
+          <RefreshControl
+            refreshing={isFetching}
+            onRefresh={() => {
+              refetch();
+            }}
+          />
+        }
+        shouldHaveHeader={false}
+      >
         {isFetching ? (
           <ProfileSkeleton />
         ) : isError && !isFetching ? (
           <>
-            <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-              <ImageBackground source={background} className="w-full h-full" />
-            </View>
             <View className="flex-1 flex items-center justify-center">
               <View className="h-auto flex items-center mb-4">
                 <Image
@@ -265,19 +271,8 @@ const ProfileScreen = () => {
                 </View>
               </View>
             </Modal>
-            <ScrollView
-              refreshControl={
-                <RefreshControl
-                  refreshing={isFetching}
-                  onRefresh={() => {
-                    refetch();
-                  }}
-                />
-              }
-              showsVerticalScrollIndicator={false}
-              className="z-10 bg-none  px-1"
-            >
-              <View className="z-10 flex justify-center items-center mt-10">
+            <View className="z-10 bg-none px-1">
+              <View className="z-10 flex justify-center items-center my-10">
                 <View className="mb-4 border-4 border-white rounded-full w-[100px] h-[100px] overflow-hidden">
                   {data?.avatar ? (
                     <Image
@@ -375,10 +370,10 @@ const ProfileScreen = () => {
                 formatDate={formatDate}
               />
               <LogOut />
-            </ScrollView>
+            </View>
           </>
         )}
-      </SafeAreaView>
+      </HeaderShown>
     </>
   );
 };

@@ -11,6 +11,8 @@ import {
   RefreshControl,
   SafeAreaView,
   ImageBackground,
+  Platform,
+  StatusBar,
 } from "react-native";
 
 import background from "@/assets/images/account/background.png";
@@ -85,7 +87,7 @@ const ProfileUserScreen = () => {
   const insets = useSafeAreaInsets();
   if (isError && !isFetching) {
     return (
-      <SafeAreaView style={styles.container} className="bg-none relative">
+      <SafeAreaView className="bg-none relative">
         <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
           <ImageBackground source={background} className="w-full h-full" />
         </View>
@@ -128,19 +130,21 @@ const ProfileUserScreen = () => {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-      />
-      <SafeAreaView
-        style={[styles.container, stylesAdnroid.AndroidSafeArea]}
-        className="bg-none h-full relative"
-      >
+      <SafeAreaView className="bg-none h-full relative">
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+        />
         <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
           <ImageBackground source={background} className="w-full h-full" />
         </View>
-        <View className="flex py-2 flex-row items-center justify-start gap-2">
+        <View
+          className="flex py-2 flex-row items-center justify-start gap-2"
+          style={{
+            paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+          }}
+        >
           <TouchableOpacity
             onPress={() => {
               router.back();
@@ -173,7 +177,7 @@ const ProfileUserScreen = () => {
               }}
             />
           }
-          className="z-10 bg-none "
+          className="z-10 bg-none h-full"
           contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.top * 3 }}
         >
           <View className="z-10 flex justify-center items-center mt-10">

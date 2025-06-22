@@ -187,7 +187,7 @@ const SignUpModule = () => {
     setError(newErrors);
 
     if (!hasError) {
-      console.log("userType :>> ", userType);
+      // console.log("userType :>> ", userType);
       try {
         switch (userType) {
           case "student":
@@ -219,9 +219,9 @@ const SignUpModule = () => {
       } catch (error) {
         const message: string =
           (error as any)?.data?.error?.message || "Đã xảy ra lỗi!";
-        console.log("error :>> ", error);
+        // console.log("error :>> ", error);
         Alert.alert(message);
-        console.log("error :>> ", error);
+        // console.log("error :>> ", error);
       }
     }
   };

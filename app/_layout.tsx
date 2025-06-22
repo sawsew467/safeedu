@@ -27,6 +27,8 @@ const RootLayout = () => {
     require("../assets/images/account/background.png"),
     require("../assets/images/game_images/gamePage_background.png"),
     require("../assets/images/contest/bg_1.png"),
+    require("../assets/images/phone-verification-background.png"),
+    require("../assets/images/contest/details/bg_leaderboard.png"),
   ]);
 
   useEffect(() => {

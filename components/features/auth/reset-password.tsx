@@ -4,9 +4,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   ScrollView,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import { useForm } from "react-hook-form";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -61,7 +61,7 @@ const ResetPasswordScreen = () => {
 
   return (
     <HeaderShown title="Đặt lại mật khẩu" style={styles.container}>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Text style={styles.subtitle}>
             Hãy tạo một mật khẩu mới cho tài khoản của bạn

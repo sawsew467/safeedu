@@ -257,10 +257,8 @@ const ProfileFormScreen = () => {
     <HeaderShown
       title="Thay đổi hồ sơ của bạn"
       style={styles.container}
-      HeaderComponent={() => (
-        <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-          <ImageBackground source={background} className="w-full h-full" />
-        </View>
+      backgroundImage={() => (
+        <ImageBackground source={background} className="w-full h-full" />
       )}
     >
       <View style={styles.scrollContainer}>
