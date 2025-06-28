@@ -35,14 +35,6 @@ const TabIcon = ({ IconComponent, color, name, focused }) => {
 };
 
 const TabLayout = () => {
-  // const { access_token } = useAppSelector((state) => state.auth);
-  // const router = useRouter();
-  // React.useEffect(() => {
-  //   if (!access_token) {
-  //     router.replace("/sign-in");
-  //   }
-  // }, [access_token]);
-
   return (
     <>
       <Tabs
