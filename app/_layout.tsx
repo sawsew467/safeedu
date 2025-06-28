@@ -31,8 +31,8 @@ const RootLayout = () => {
   ]);
 
   useEffect(() => {
-    if (error) throw error;
-    if (errorAsset) throw errorAsset;
+    if (error) return;
+    if (errorAsset) return;
 
     if (fontsLoaded && assets) {
       setAppReady(true);
@@ -67,9 +67,9 @@ const RootLayout = () => {
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <Providers>
         <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen
             name="achiverment/index"
             options={{ headerShown: false }}
