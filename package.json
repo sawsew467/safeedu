@@ -21,7 +21,6 @@
     "class-variance-authority": "^0.7.0",
     "date-fns": "^4.1.0",
     "expo": "~53.0.0",
-    "expo-asset": "~11.1.5",
     "expo-auth-session": "~6.2.0",
     "expo-av": "~15.1.6",
     "expo-clipboard": "~7.1.4",
