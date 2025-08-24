@@ -2,9 +2,9 @@ import React from "react";
 import {
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
   ImageBackground,
+  SafeAreaView,
 } from "react-native";
 import androidStyles from "@/components/ui/SafeViewAndroid";
 import { Stack, useRouter } from "expo-router";
@@ -17,6 +17,7 @@ import { baseApi } from "@/store/baseQuery";
 import { useAppDispatch } from "@/hooks/redux";
 
 import background from "@/assets/images/account/background.png";
+import HeaderShown from "@/components/ui/HeaderShown";
 
 const DeleteAccount = () => {
   const router = useRouter();
@@ -38,16 +39,12 @@ const DeleteAccount = () => {
 
   return (
     <>
-      <SafeAreaView style={androidStyles.AndroidSafeArea}>
-        <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
+      <HeaderShown
+        backgroundImage={() => (
           <ImageBackground source={background} className="w-full h-full" />
-        </View>
-        <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-        />
-
+        )}
+        shouldHaveHeader={false}
+      >
         <View className="flex-1 flex justify-center items-center px-4">
           <View>
             <Text className="text-center text-2xl font-pbold">
@@ -75,7 +72,7 @@ const DeleteAccount = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </SafeAreaView>
+      </HeaderShown>
     </>
   );
 };

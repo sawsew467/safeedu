@@ -3,6 +3,7 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
+  View,
 } from "react-native";
 
 interface FormButtonProps {
@@ -30,12 +31,13 @@ const FormButton = ({
       onPress={onPress}
       disabled={disabled || isLoading}
     >
-      {isLoading ? (
-        <ActivityIndicator
-          color={variant === "secondary" ? "#8BC34A" : "#FFFFFF"}
-          size="small"
-        />
-      ) : (
+      <View className="flex flex-row gap-2 items-center">
+        {isLoading && (
+          <ActivityIndicator
+            color={variant === "secondary" ? "#8BC34A" : "#FFFFFF"}
+            size="small"
+          />
+        )}
         <Text
           style={[
             styles.buttonText,
@@ -46,7 +48,7 @@ const FormButton = ({
         >
           {title}
         </Text>
-      )}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginVertical: 8,
     paddingHorizontal: 16,
+    gap: 4,
   },
   primaryButton: {
     backgroundColor: "#8BC34A",

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -134,6 +134,20 @@ const ProfileFormScreen = () => {
 
   const selectedProvince = watch("provinceId");
 
+  const avaiableProvincesByOrg = useMemo(() => {
+    const object = organizations.reduce((acc, org) => {
+      if (org.province_id && !acc[org.province_id]) {
+        acc[org.province_id] = {
+          label: provinces.find((p) => p.value === org.province_id)?.label,
+          value: org.province_id,
+        };
+      }
+      return acc;
+    }, {});
+
+    return Object.values(object) as OrganizationOptions[];
+  }, [provinces?.length, organizations?.length]);
+
   React.useEffect(() => {
     if (provinces && organizations) {
       const filteredOrganizations = organizations?.filter(
@@ -142,6 +156,12 @@ const ProfileFormScreen = () => {
       setOrganizationsByProvince(filteredOrganizations);
     }
   }, [provinces.length, organizations.length, selectedProvince]);
+
+  useEffect(() => {
+    if (selectedProvince) {
+      setValue("organizationId", "");
+    }
+  }, [selectedProvince]);
 
   React.useEffect(() => {
     if (profile) {
@@ -226,12 +246,12 @@ const ProfileFormScreen = () => {
         aspect: [1, 1],
         quality: 1,
       });
-      if (!result.canceled && result.assets && result.assets[0]) {
-        const asset: any = result.assets[0];
-        if (asset.uri === undefined) {
+      if (!result?.canceled && result?.assets && result?.assets[0]) {
+        const asset: any = result?.assets[0];
+        if (asset?.uri === undefined) {
           alert("Vui lòng chọn ảnh khác");
         }
-        let localUri = asset.uri;
+        let localUri = asset?.uri;
         let filename = localUri.split("/").pop();
 
         let match = /\.(\w+)$/.exec(filename);
@@ -257,10 +277,8 @@ const ProfileFormScreen = () => {
     <HeaderShown
       title="Thay đổi hồ sơ của bạn"
       style={styles.container}
-      HeaderComponent={() => (
-        <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-          <ImageBackground source={background} className="w-full h-full" />
-        </View>
+      backgroundImage={() => (
+        <ImageBackground source={background} className="w-full h-full" />
       )}
     >
       <View style={styles.scrollContainer}>
@@ -367,7 +385,7 @@ const ProfileFormScreen = () => {
           label="Số điện thoại"
           rules={{
             pattern: {
-              value: /^[0-9]{9,10}$/,
+              value: /^(\+?[1-9]\d{6,14}|[0-9]{9,10})$/,
               message: "Số điện thoại không hợp lệ",
             },
           }}
@@ -422,7 +440,7 @@ const ProfileFormScreen = () => {
                         ]}
                       >
                         {value
-                          ? provinces?.find(
+                          ? avaiableProvincesByOrg?.find(
                               (province) => province.value === value
                             )?.label
                           : "Chọn tỉnh/thành phố"}
@@ -435,7 +453,7 @@ const ProfileFormScreen = () => {
                         setTypeModalProvinceVisible(false);
                       }}
                       title="Chọn tỉnh/thành phố"
-                      options={provinces}
+                      options={avaiableProvincesByOrg}
                       selectedValue={value}
                       onSelect={(value) => {
                         onChange(value);

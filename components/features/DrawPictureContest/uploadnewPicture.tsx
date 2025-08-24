@@ -81,7 +81,7 @@ const UploadMyPicture = ({
   };
 
   return (
-    <SafeAreaView style={stylesAndroid.AndroidSafeArea} className="flex-1">
+    <SafeAreaView className="flex-1">
       <Modal
         visible={isVisible}
         animationType="slide"

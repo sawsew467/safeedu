@@ -3,8 +3,8 @@ import React from "react";
 import {
   View,
   StyleSheet,
-  SafeAreaView,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 
 const LoadingPage = ({ isLoading }: { isLoading: boolean }) => {

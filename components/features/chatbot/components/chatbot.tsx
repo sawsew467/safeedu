@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, ImageBackground } from "react-native";
 import React from "react";
 
 // import { useExampleQuery, useGetAllCoursesQuery } from "../queries";
@@ -7,25 +7,19 @@ import bg from "@/assets/images/chatbox/bg.png";
 
 import ChatContent from "./ChatContent";
 import { useMemo } from "react";
+import HeaderShown from "@/components/ui/HeaderShown";
 
 function Chatbot() {
-  const background = useMemo(() => {
-    return (
-      <Image
-        source={bg}
-        defaultSource={bg}
-        style={styles.bg_image}
-        resizeMode="cover"
-      />
-    );
-  }, []);
   return (
-    <>
+    <HeaderShown
+      shouldHaveHeader={false}
+      backgroundImage={() => <ImageBackground source={bg} style={styles.bg} />}
+      isScroll={false}
+    >
       <View style={styles.container_content}>
         <ChatContent />
       </View>
-      <View style={styles.bg}>{background}</View>
-    </>
+    </HeaderShown>
   );
 }
 
@@ -36,7 +30,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 1,
+    zIndex: 3,
   },
   bg: {
     position: "absolute",
@@ -44,9 +38,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 0,
-  },
-  bg_image: {
+    zIndex: 1,
     width: "100%",
     height: "100%",
   },

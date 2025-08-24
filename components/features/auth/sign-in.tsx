@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   View,
   Text,
@@ -9,18 +8,17 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
-  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router"; // Import router để chuyển trang
 import * as Google from "expo-auth-session/providers/google";
 import { useAuthRequest } from "expo-auth-session";
 import { useSignInMutation } from "@/services/auth/auth.api";
-import background from "@/assets/images/sign-in-background.png";
 import { set } from "react-hook-form";
 import { useAppDispatch } from "@/hooks/redux";
 import { setNotifycaUpdateProfile } from "./slices";
 import { baseApi } from "@/store/baseQuery";
+import { BlurView } from "expo-blur"; // Import BlurView để làm mờ nền
 const SignInModule = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -72,110 +70,124 @@ const SignInModule = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
-    >
+    <View className="flex-1 relative bg-white/50">
       <ImageBackground
-        source={background}
-        className="w-[100%] h-[85%] absolute"
+        source={require("assets/images/sign-in-background.png")}
+        className="w-[100%] h-[60%] top-0 absolute"
         imageStyle={{ resizeMode: "cover" }}
-      ></ImageBackground>
-      <View className="flex justify-center items-center top-2/3">
-        <View className="w-[90%] p-5 rounded-[20px]">
-          <Text className="text-[16px] font-medium text-black mb-[8px]">
-            Tên tài khoản
-          </Text>
-          <View style={styles.input} className="px-4 flex justify-center">
-            <TextInput
-              placeholder="Nhập tên tài khoản"
-              value={username}
-              onChangeText={setUsername}
-              style={{ flex: 1 }}
-            />
-          </View>
-          {error.username ? (
-            <Text style={styles.errorText}>{error.username}</Text>
-          ) : null}
-
-          <View className="flex flex-row w-full justify-between mt-2">
-            <Text style={styles.label}>Mật khẩu</Text>
-            <TouchableOpacity onPress={handleForgotPassword}>
-              <Text className="text-primary font-pmedium underline underline-offset-4">
-                Quên mật khẩu
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.passwordContainer}>
-            <View
-              style={styles.input}
-              className="px-4 flex justify-center relative"
+      />
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+        className="flex-1 "
+      >
+        <View className="flex-1 relative mb-20 ">
+          <View className="flex flex-1 justify-center items-center  pt-[300px]">
+            <BlurView
+              intensity={100}
+              tint="light"
+              className="rounded-lg border-1 border-gray-100 overflow-hidden"
             >
-              <TextInput
-                placeholder="Nhập mật khẩu"
-                secureTextEntry={!passwordVisible}
-                value={password}
-                style={{ flex: 1 }}
-                onChangeText={setPassword}
-              />
-              <TouchableOpacity
-                onPress={togglePasswordVisibility}
-                className="absolute right-4 top-1/2translate-y-[50px]"
-              >
-                <Ionicons
-                  name={passwordVisible ? "eye" : "eye-off"}
-                  size={24}
-                  color="#888"
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          {error.password ? (
-            <Text style={styles.errorText}>{error.password}</Text>
-          ) : null}
+              <View className="w-[90%] p-5 rounded-[20px]">
+                <Text className="text-[16px] font-pmedium text-black mb-[8px]">
+                  Tên tài khoản
+                </Text>
+                <View style={styles.input} className="px-4 flex justify-center">
+                  <TextInput
+                    placeholder="Nhập tên tài khoản"
+                    value={username}
+                    onChangeText={setUsername}
+                    style={{ flex: 1 }}
+                  />
+                </View>
+                {error.username ? (
+                  <Text style={styles.errorText}>{error.username}</Text>
+                ) : null}
 
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={handleSignIn}
-            disabled={isLoading}
-          >
-            <Text style={styles.loginText}>
-              {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
-            </Text>
-          </TouchableOpacity>
+                <View className="flex flex-row w-full justify-between mt-2">
+                  <Text style={styles.label} className="font-pmedium">
+                    Mật khẩu
+                  </Text>
+                  <TouchableOpacity onPress={handleForgotPassword}>
+                    <Text className="text-primary font-pmedium underline underline-offset-4">
+                      Quên mật khẩu
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.passwordContainer}>
+                  <View
+                    style={styles.input}
+                    className="px-4 flex justify-center relative"
+                  >
+                    <TextInput
+                      placeholder="Nhập mật khẩu"
+                      secureTextEntry={!passwordVisible}
+                      value={password}
+                      style={{ flex: 1 }}
+                      onChangeText={setPassword}
+                    />
+                    <TouchableOpacity
+                      onPress={togglePasswordVisibility}
+                      className="absolute right-4 top-1/2translate-y-[50px]"
+                    >
+                      <Ionicons
+                        name={passwordVisible ? "eye" : "eye-off"}
+                        size={24}
+                        color="#888"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                {error.password ? (
+                  <Text style={styles.errorText}>{error.password}</Text>
+                ) : null}
 
-          <View style={styles.signUpContainer}>
-            <Text style={styles.signUpText}>Tạo tài khoản mới?</Text>
-            <TouchableOpacity onPress={handleSignUp}>
-              <Text
-                style={styles.signUpLink}
-                className="text-primary font-medium"
-              >
-                Đăng kí tại đây
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.signUpContainer}>
-            <Text style={styles.signUpText}>Quay lại</Text>
-            <TouchableOpacity onPress={handleGoHome}>
-              <Text
-                style={styles.signUpLink}
-                className="text-primary font-medium"
-              >
-                Trang chủ
-              </Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.loginButton}
+                  onPress={handleSignIn}
+                  disabled={isLoading}
+                >
+                  <Text style={styles.loginText} className="font-pmedium">
+                    {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
+                  </Text>
+                </TouchableOpacity>
+
+                <View style={styles.signUpContainer}>
+                  <Text style={styles.signUpText} className="font-pregular">
+                    Tạo tài khoản mới?
+                  </Text>
+                  <TouchableOpacity onPress={handleSignUp}>
+                    <Text
+                      style={styles.signUpLink}
+                      className="text-primary font-pmedium"
+                    >
+                      Đăng kí tại đây
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.signUpContainer}>
+                  <Text style={styles.signUpText}>Quay lại</Text>
+                  <TouchableOpacity onPress={handleGoHome}>
+                    <Text
+                      style={styles.signUpLink}
+                      className="text-primary font-pmedium"
+                    >
+                      Trang chủ
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </BlurView>
           </View>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   label: {
     fontSize: 16,
-    fontWeight: "bold",
     color: "#333",
     marginBottom: 5,
   },

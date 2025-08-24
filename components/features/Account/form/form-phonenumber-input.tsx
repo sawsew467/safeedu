@@ -1,12 +1,22 @@
 "use client";
-import { View, Text, TextInput, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  Pressable,
+} from "react-native";
 import {
   type Control,
   Controller,
   type FieldValues,
   type Path,
+  useForm,
 } from "react-hook-form";
 import { Ionicons } from "@expo/vector-icons";
+import ModalCountryPhonenumber from "./modal-country-phonenumber";
+import { useState } from "react";
 
 interface FormPhoneInputProps<T extends FieldValues> {
   control: Control<T>;
@@ -19,7 +29,7 @@ interface FormPhoneInputProps<T extends FieldValues> {
 }
 
 function FormPhoneInput<T extends FieldValues>({
-  control,
+  control: phoneNumberControl,
   name,
   label,
   placeholder = "Nhập số điện thoại...",
@@ -27,44 +37,100 @@ function FormPhoneInput<T extends FieldValues>({
   error,
   helperText,
 }: FormPhoneInputProps<T>) {
+  const [typeModalVisible, setTypeModalVisible] = useState(false);
+
+  const { control, setValue } = useForm<{
+    codePhoneNumber: {
+      code: string;
+      value: string;
+    };
+  }>({
+    defaultValues: {
+      codePhoneNumber: {
+        code: "VN",
+        value: "+84",
+      },
+    },
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.labelContainer}>
         <Ionicons name="call-outline" size={20} color="#fff" />
         <Text style={styles.label}>{label}</Text>
       </View>
-
       <Controller
-        control={control}
+        control={phoneNumberControl}
         name={name}
         rules={rules}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <View
-            style={[
-              styles.inputContainer,
-              error ? styles.inputContainerError : null,
-            ]}
-          >
-            <View style={styles.countryCode}>
-              <Image
-                source={{ uri: "https://flagcdn.com/w40/vn.png" }}
-                style={styles.flag}
-                resizeMode="contain"
-              />
-              <Ionicons name="chevron-down" size={16} color="#666" />
-            </View>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-              placeholder={placeholder}
-              keyboardType="phone-pad"
-            />
-          </View>
+        render={({
+          field: {
+            onChange: onChangePhoneNumber,
+            onBlur: onBlurPhoneNumber,
+            value: phoneNumberValue,
+          },
+        }) => (
+          <Controller
+            control={control}
+            name="codePhoneNumber"
+            render={({ field: { onChange, value } }) => (
+              <View
+                style={[
+                  styles.inputContainer,
+                  error ? styles.inputContainerError : null,
+                ]}
+              >
+                <Pressable
+                  style={styles.countryCode}
+                  onPress={() => setTypeModalVisible(true)}
+                >
+                  <Image
+                    source={{
+                      uri: `https://flagcdn.com/w40/${value?.code?.toLowerCase()}.png`,
+                    }}
+                    style={styles.flag}
+                    resizeMode="contain"
+                  />
+                  <Text>{value.value}</Text>
+                  <Ionicons name="chevron-down" size={16} color="#666" />
+                </Pressable>
+                <ModalCountryPhonenumber
+                  visible={typeModalVisible}
+                  onClose={() => {
+                    setTypeModalVisible(false);
+                  }}
+                  selectedValue={value?.value}
+                  onSelect={(newValue) => {
+                    onChangePhoneNumber(
+                      `${newValue?.value}${phoneNumberValue.replace(
+                        value?.value,
+                        ""
+                      )}`
+                    );
+                    onChange(newValue);
+                  }}
+                />
+
+                <TextInput
+                  style={[
+                    styles.input,
+                    error ? styles.inputContainerError : null,
+                  ]}
+                  placeholder={placeholder}
+                  placeholderTextColor="#c0c0c0"
+                  value={phoneNumberValue.replace(value?.value, "")}
+                  onChangeText={(phoneNumber) => {
+                    if (isNaN(Number(phoneNumber))) return;
+                    onChangePhoneNumber(`${value?.value}${phoneNumber}`);
+                  }}
+                  onBlur={onBlurPhoneNumber}
+                  keyboardType="phone-pad"
+                />
+              </View>
+            )}
+          />
         )}
       />
-
       {error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : helperText ? (
@@ -105,6 +171,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRightWidth: 1,
     borderRightColor: "#CCCCCC",
+    gap: 2,
   },
   flag: {
     width: 24,

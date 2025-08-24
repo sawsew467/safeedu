@@ -47,19 +47,27 @@ export const ModalPicker: React.FC<ModalPickerProps> = ({
     onClose();
   };
 
+  const handleClose = () => {
+    if (selectedValue === null && options.length === 1) {
+      onSelect(options[0].value);
+    }
+    onClose();
+  };
+
   return (
     <Modal
       visible={visible}
       animationType="fade"
       transparent={true}
-      onRequestClose={onClose}
+      onRequestClose={handleClose}
+      statusBarTranslucent={true}
     >
-      <View className="flex-1 bg-slate-900/70 justify-end">
+      <View className="flex-1 h-screen bg-slate-900/70 justify-end">
         <View className="bg-white max-h-[80%] p-5 rounded-t-3xl">
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-lg font-bold">{title}</Text>
-            <Pressable onPress={onClose} className="px-4 py-2">
-              <Text className="text-primary font-medium">Xong</Text>
+            <Pressable onPress={handleClose} className="px-4 py-2">
+              <Text className="text-primary font-pmedium">Xong</Text>
             </Pressable>
           </View>
 

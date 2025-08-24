@@ -106,7 +106,7 @@ const DialogViewScore = ({
       animationType="slide"
       presentationStyle="fullScreen"
     >
-      <SafeAreaView style={[androidStyles.AndroidSafeArea, { width: "100%" }]}>
+      <SafeAreaView>
         <View style={styles.container}>
           <View style={styles.header}>
             <TouchableOpacity onPress={onClose}>

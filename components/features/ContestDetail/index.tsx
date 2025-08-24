@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Text,
   RefreshControl,
+  ImageBackground,
 } from "react-native";
 import GlobalStyles from "@/components/ui/SafeViewAndroid";
 import React from "react";
@@ -385,15 +386,8 @@ function Contest() {
         ),
         onPress: handleClickRankingBtn,
       }}
-      onScroll={Animated.event(
-        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-        {
-          useNativeDriver: false,
-        }
-      )}
-      refreshControl={
-        <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
-      }
+      isRefreshing={isFetching}
+      onRefresh={onRefresh}
     >
       <View style={styles.imageContainer}>
         <View style={styles.imageDarkOverlay} />

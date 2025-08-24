@@ -25,7 +25,7 @@ export function NavMenu() {
 
 const styles = StyleSheet.create({
   navContainer: {
-    padding: 12,
+    // padding: 12,
     display: "flex",
     flexDirection: "row",
   },

@@ -76,8 +76,6 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     }
   }, [selectedValue]);
 
-  console.log("selectedValue", selectedValue);
-
   useEffect(() => {
     let timer;
     if (visible) {
@@ -206,9 +204,12 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             paddingVertical: ITEM_HEIGHT,
           }}
           onScroll={(e) => handleScroll(scrollViewType, e)}
-          onMomentumScrollEnd={(e) => handleScrollEnd(scrollViewType, e)}
+          // onMomentumScrollEnd={(e) => handleScrollEnd(scrollViewType, e)}
           scrollEventThrottle={16}
-          style={{ height: SCROLL_VIEW_HEIGHT }}
+          style={{
+            height: SCROLL_VIEW_HEIGHT,
+            width: "100%",
+          }}
         >
           {items.map((item) => (
             <View key={item.value} style={styles.pickerItem}>
@@ -281,6 +282,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     height: ITEM_HEIGHT * VISIBLE_ITEMS,
     position: "relative",
+    gap: 10,
   },
   pickerColumn: {
     flex: 1,

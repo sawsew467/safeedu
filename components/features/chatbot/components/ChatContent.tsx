@@ -6,13 +6,12 @@ import {
   Image,
   FlatList,
   Dimensions,
-  ImageBackground,
   ActivityIndicator,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  SafeAreaView,
+  StatusBar,
 } from "react-native";
 import {
   useCreateChatMutation,
@@ -21,8 +20,6 @@ import {
 } from "../queries/cozeQueries";
 // import { useExampleQuery, useGetAllCoursesQuery } from "../queries";
 import { Button } from "@/components/ui/Button";
-import HeaderShown from "@/components/ui/HeaderShown";
-import bg from "@/assets/images/chatbox/bg.png";
 import avatar_chatbot from "@/assets/icons/avatar_chatbot.png";
 import { COMMON_QUESTIONS } from "@/healper/data/chatbot";
 import Input from "./input";
@@ -35,13 +32,79 @@ import Feather from "@expo/vector-icons/Feather";
 import Octicons from "@expo/vector-icons/Octicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Toast from "react-native-toast-message";
 import ReportDialog from "./report-dialog";
 
-import stylesAndroid from "@/components/ui/SafeViewAndroid";
-import { Stack } from "expo-router";
+const markdownStyles = StyleSheet.create({
+  heading1: {
+    color: "#333",
+    fontWeight: "bold",
+    fontSize: 24,
+    marginBottom: 12,
+  },
+  heading2: {
+    color: "#555",
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  strong: {
+    color: "#000",
+    fontWeight: "bold",
+    fontFamily: "Arial", // Arial không dùng tốt cho code
+  },
+  em: {
+    fontStyle: "italic",
+    color: "#1976d2",
+  },
 
+  blockquote: {
+    backgroundColor: "#f0f0f0",
+    color: "#333", // sửa lại vì bạn để white nên không thấy rõ
+    padding: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: "#ccc",
+    borderRadius: 6,
+    marginVertical: 10,
+    overflow: "hidden",
+  },
+
+  list_item: {
+    color: "#000",
+    marginVertical: 4,
+    paddingLeft: 8,
+  },
+
+  code_block: {
+    backgroundColor: "#272822",
+    color: "#f8f8f2",
+    fontFamily: "monospace", // Arial không dùng tốt cho code
+    padding: 12,
+    borderRadius: 6,
+    marginVertical: 10,
+    overflow: "scroll", // hoặc hidden
+  },
+
+  inlineCode: {
+    backgroundColor: "#eee",
+    fontFamily: "monospace",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+
+  link: {
+    color: "#0066cc",
+    textDecorationLine: "underline",
+  },
+
+  paragraph: {
+    color: "#222",
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 10,
+    fontFamily: "Arial", // Arial không dùng tốt cho code
+  },
+});
 interface Attachment {
   name?: string;
   contentType?: string;
@@ -306,25 +369,13 @@ function ChatContent() {
                 },
             ]}
           >
-            <Text style={styles.text_frame_chat} className="font-pregular">
+            <View style={styles.text_frame_chat} className="font-pregular">
               {role === "assistant" ? (
-                <Markdown
-                  style={{
-                    body: {
-                      color: "#000",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      flex: 1,
-                      width: width * 0.7,
-                    },
-                  }}
-                >
-                  {content}
-                </Markdown>
+                <Markdown style={markdownStyles}>{content}</Markdown>
               ) : (
-                content
+                <Text className="text-white">{content}</Text>
               )}
-            </Text>
+            </View>
           </View>
         </View>
         {role === "assistant" && (
@@ -358,190 +409,191 @@ function ChatContent() {
     }));
   };
 
-  const handleAddBotMessage = (content: string, id_message: string | null) => {
-    if (content) {
-      setChatData((prevData) => {
-        const data = prevData;
-        data.splice(prevData.length - 1, 1);
-        return [
-          ...data,
-          {
-            content: content,
-            role: "assistant",
-            id_message,
-          },
-        ];
-      });
-      setStatusLike((prev) => ({
-        ...prev,
-        [id_message]: {
-          status: "none",
-        },
-      }));
-    } else {
-      setChatData((prevData) => [
-        ...prevData,
-        {
-          content: content,
-          role: "assistant",
-          id_message,
-        },
-      ]);
-    }
-  };
-  const handleSendMessage = async (content: string) => {
-    try {
-      handleAddUserMessage(content);
-      handleAddBotMessage("", null);
-      const conversationResponse = await createConversation().unwrap();
-      const { id: conversationId } = conversationResponse.data;
+  // const handleAddBotMessage = (content: string, id_message: string | null) => {
+  //   if (content) {
+  //     setChatData((prevData) => {
+  //       const data = prevData;
+  //       data.splice(prevData.length - 1, 1);
+  //       return [
+  //         ...data,
+  //         {
+  //           content: content,
+  //           role: "assistant",
+  //           id_message,
+  //         },
+  //       ];
+  //     });
+  //     setStatusLike((prev) => ({
+  //       ...prev,
+  //       [id_message]: {
+  //         status: "none",
+  //       },
+  //     }));
+  //   } else {
+  //     setChatData((prevData) => [
+  //       ...prevData,
+  //       {
+  //         content: content,
+  //         role: "assistant",
+  //         id_message,
+  //       },
+  //     ]);
+  //   }
+  // };
+  // const handleSendMessage = async (content: string) => {
+  //   try {
+  //     handleAddUserMessage(content);
+  //     handleAddBotMessage("", null);
+  //     const conversationResponse = await createConversation().unwrap();
+  //     const { id: conversationId } = conversationResponse.data;
 
-      const chatResponse = await createChat({
-        params: {
-          conversation_id: conversationId,
-        },
-        data: {
-          bot_id: "7430824648633745415",
-          user_id: "7361642627714876433",
-          auto_save_history: true,
-          additional_messages: [
-            {
-              role: "user",
-              content: content,
-              content_type: "text",
-            },
-          ],
-        },
-      }).unwrap();
-      if (chatResponse.code != 0) {
-        setError(true);
-        handleAddBotMessage("Đã có lỗi xảy ra", uuid.v4());
-        return;
-      }
-      const { id: chatId } = chatResponse?.data;
-      let count = 0;
-      const intervalId = setInterval(async () => {
-        try {
-          const messagesResponse = await getChatMessages({
-            params: {
-              chat_id: chatId,
-              conversation_id: conversationId,
-            },
-          });
-          const messages = messagesResponse.data.data;
-          count++;
-          if (count > 15) {
-            handleAddBotMessage("Đã có lỗi xảy ra", uuid.v4());
-            setError(true);
-            clearInterval(intervalId);
-            count = 0;
-          }
+  //     const chatResponse = await createChat({
+  //       params: {
+  //         conversation_id: conversationId,
+  //       },
+  //       data: {
+  //         bot_id: "7430824648633745415",
+  //         user_id: "7361642627714876433",
+  //         auto_save_history: true,
+  //         additional_messages: [
+  //           {
+  //             role: "user",
+  //             content: content,
+  //             content_type: "text",
+  //           },
+  //         ],
+  //       },
+  //     }).unwrap();
+  //     if (chatResponse.code != 0) {
+  //       setError(true);
+  //       handleAddBotMessage("Đã có lỗi xảy ra", uuid.v4());
+  //       return;
+  //     }
+  //     const { id: chatId } = chatResponse?.data;
+  //     let count = 0;
+  //     const intervalId = setInterval(async () => {
+  //       try {
+  //         const messagesResponse = await getChatMessages({
+  //           params: {
+  //             chat_id: chatId,
+  //             conversation_id: conversationId,
+  //           },
+  //         });
+  //         const messages = messagesResponse.data.data;
+  //         count++;
+  //         if (count > 15) {
+  //           handleAddBotMessage("Đã có lỗi xảy ra", uuid.v4());
+  //           setError(true);
+  //           clearInterval(intervalId);
+  //           count = 0;
+  //         }
 
-          if (messages.length > 1) {
-            clearInterval(intervalId);
-            const [answer] = messages;
-            handleAddBotMessage(answer.content, answer.id);
-          }
-        } catch {}
-      }, 1000);
-    } catch {}
-  };
+  //         if (messages.length > 1) {
+  //           clearInterval(intervalId);
+  //           const [answer] = messages;
+  //           handleAddBotMessage(answer.content, answer.id);
+  //         }
+  //       } catch {}
+  //     }, 1000);
+  //   } catch {}
+  // };
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={[styles.container, stylesAndroid.AndroidSafeArea]}
-    >
-      <SafeAreaView style={styles.container}>
-        <ScrollView style={{ flex: 1 }}>
-          <View style={styles.container_content}>
-            <View style={styles.container_header}>
-              <Image source={avatar_chatbot} />
-              {messages.length === 0 && (
-                <FlatList
-                  scrollEnabled={false}
-                  numColumns={2}
-                  contentContainerStyle={{
-                    gap: 8,
-                    width: "100%",
-                    marginTop: 24,
-                    marginBottom: 20,
-                  }}
-                  columnWrapperStyle={{ gap: 8 }}
-                  data={COMMON_QUESTIONS}
-                  keyExtractor={(item: string) => item}
-                  renderItem={({ item }: { item: string }) => (
-                    <ListCommonQuestion
-                      handleClick={handleSendMessageeee}
-                      text={item}
-                    />
-                  )}
-                />
+    <View className="flex-1 relative">
+      <KeyboardAvoidingView behavior="padding" style={[styles.container]}>
+        <View style={styles.container}>
+          <ScrollView style={{ flex: 1 }}>
+            <View style={styles.container_content}>
+              <View style={styles.container_header}>
+                <Image source={avatar_chatbot} />
+                {messages.length === 0 && (
+                  <FlatList
+                    scrollEnabled={false}
+                    numColumns={2}
+                    contentContainerStyle={{
+                      gap: 8,
+                      width: "100%",
+                      marginTop: 24,
+                      marginBottom: 20,
+                    }}
+                    columnWrapperStyle={{ gap: 8 }}
+                    data={COMMON_QUESTIONS}
+                    keyExtractor={(item: string) => item}
+                    renderItem={({ item }: { item: string }) => (
+                      <ListCommonQuestion
+                        handleClick={handleSendMessageeee}
+                        text={item}
+                      />
+                    )}
+                  />
+                )}
+              </View>
+              <FlatList
+                contentContainerStyle={styles.container_chat}
+                scrollEnabled={false}
+                data={messages}
+                keyExtractor={(item, index) =>
+                  isLoading ? uuid.v4() : item?.id
+                }
+                renderItem={({
+                  item,
+                  index,
+                }: {
+                  item: Message;
+                  index: number;
+                }) => (
+                  <FrameChat
+                    {...item}
+                    error={error}
+                    key={item?.id}
+                    isLoading={isLoading}
+                    isEnd={
+                      index + 1 === messages.length &&
+                      item?.role === "assistant"
+                    }
+                    id_message={item.role === "assistant" && item?.id}
+                  />
+                )}
+              />
+              {isLoading && (
+                <View style={styles.container_chat}>
+                  <FrameChat
+                    content={""}
+                    error={error}
+                    role={"assistant"}
+                    isLoading={isLoading}
+                    isEnd={true}
+                    id_message={uuid.v4()}
+                  />
+                </View>
               )}
             </View>
-            <FlatList
-              contentContainerStyle={styles.container_chat}
-              scrollEnabled={false}
-              data={messages}
-              keyExtractor={(item, index) => item.id}
-              renderItem={({
-                item,
-                index,
-              }: {
-                item: Message;
-                index: number;
-              }) => (
-                <FrameChat
-                  {...item}
-                  error={error}
-                  key={item?.id}
-                  isLoading={isLoading}
-                  isEnd={
-                    index + 1 === messages.length && item?.role === "assistant"
-                  }
-                  id_message={item.role === "assistant" && item?.id}
-                />
-              )}
+          </ScrollView>
+          {error ? (
+            <ErrorScreen
+              onRetry={() => {
+                setChatData([]);
+                setError(false);
+              }}
             />
-            {isLoading && (
-              <View style={styles.container_chat}>
-                <FrameChat
-                  content={""}
-                  error={error}
-                  role={"assistant"}
-                  isLoading={isLoading}
-                  isEnd={true}
-                  id_message={uuid.v4()}
-                />
-              </View>
-            )}
-          </View>
-        </ScrollView>
-        {error ? (
-          <ErrorScreen
-            onRetry={() => {
-              setChatData([]);
-              setError(false);
-            }}
+          ) : (
+            <Input handleSubmit={handleSubmit} />
+          )}
+          <ReportDialog
+            visible={isReport}
+            handleDialog={handleDialog}
+            setSelectedOption={setSelectedOption}
+            selectedOption={selectedOption}
           />
-        ) : (
-          <Input handleSubmit={handleSubmit} />
-        )}
-        <ReportDialog
-          visible={isReport}
-          handleDialog={handleDialog}
-          setSelectedOption={setSelectedOption}
-          selectedOption={selectedOption}
-        />
-        <Toast />
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+          <Toast />
+        </View>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   errorContainer: {
     flex: 1,
@@ -606,11 +658,11 @@ const styles = StyleSheet.create({
   },
   frame_chat: {
     padding: 12,
-
     borderRadius: 16,
   },
   content_frame_chat: {
     width: "100%",
+    flex: 1,
     display: "flex",
     flexDirection: "row",
     alignItems: "flex-end",
@@ -646,7 +698,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   container_content: {
-    marginTop: 20,
+    paddingTop: 40,
   },
   bg: {
     position: "absolute",

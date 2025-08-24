@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/Button";
-import axios from "axios";
 import React, { useState } from "react";
 import GlobalStyles from "@/components/ui/SafeViewAndroid";
 import { SafeAreaView, ScrollView, Text, TextInput, View } from "react-native";
@@ -72,7 +71,7 @@ const ChatComponent = () => {
   };
 
   return (
-    <SafeAreaView style={GlobalStyles.AndroidSafeArea} className="bg-white">
+    <SafeAreaView className="bg-white">
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={{ height: "100%" }}

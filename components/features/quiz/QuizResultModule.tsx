@@ -11,14 +11,15 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  SafeAreaView,
   RefreshControl,
-  TouchableHighlight,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import QuizResultSkeleton from "./quiz-result-skeleton";
-import avatar from "@/components/ui/avatar";
+
 import CircleResult from "./circleResult";
+
+import background from "@/assets/images/account/background.png";
 
 // Sample data structure based on the provided JSON
 interface QuizResultProps {
@@ -107,12 +108,14 @@ const QuizResult = () => {
   return (
     <HeaderShown
       title={data?.quiz_id?.title ?? "Kết quả cuộc thi"}
-      isBack
-      refreshControl={
-        <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
-      }
+      backgroundImage={() => (
+        <ImageBackground source={background} className="w-full h-full" />
+      )}
+      isRefreshing={isFetching}
+      onRefresh={onRefresh}
+      scrollEnabled={false}
     >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.scrollContainer}>
         <View style={styles.card}>
           <View style={styles.userInfoContainer}>
             <Text style={styles.sectionTitle}>Thông tin người làm</Text>
@@ -134,7 +137,9 @@ const QuizResult = () => {
 
           {/* Score */}
           <View style={styles.scoreContainer}>
-            <Text style={styles.sectionTitle}>Điểm của bạn</Text>
+            <Text style={styles.sectionTitle} className="font-pmedium">
+              Điểm của bạn
+            </Text>
             <View style={styles.scoreCircleContainer}>
               <CircleResult percent={data?.score * 10} />
             </View>
@@ -146,14 +151,14 @@ const QuizResult = () => {
 
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Nộp bài vào lúc:</Text>
-              <Text style={styles.summaryValue}>
+              <Text style={styles.summaryValue} className="font-pregular">
                 {formatDate(data?.completedAt, "HH:mm:ss DD/MM/yyyy")}
               </Text>
             </View>
 
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Thời gian làm bài:</Text>
-              <Text style={styles.summaryValue}>
+              <Text style={styles.summaryValue} className="font-pregular">
                 {formatDurationToHHMMSS(data?.startAt, data?.completedAt)}
               </Text>
             </View>
@@ -175,7 +180,7 @@ const QuizResult = () => {
                 }}
                 style={styles.btn_outline}
               >
-                <Text style={styles.text_btn_outline}>
+                <Text style={styles.text_btn_outline} className="font-pmedium">
                   Xem các phần thi khác
                 </Text>
               </TouchableOpacity>
@@ -185,12 +190,14 @@ const QuizResult = () => {
                 }}
                 style={styles.btn}
               >
-                <Text style={styles.text_btn}>Trờ về trang chủ</Text>
+                <Text style={styles.text_btn} className="font-pmedium">
+                  Trờ về trang chủ
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
-      </ScrollView>
+      </View>
     </HeaderShown>
   );
 };
@@ -231,7 +238,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    padding: 16,
+    paddingHorizontal: 16,
   },
   card: {
     backgroundColor: "white",

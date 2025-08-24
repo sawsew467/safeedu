@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Image,
+  ImageBackground,
   ImageSourcePropType,
   SafeAreaView,
   ScrollView,
@@ -12,8 +13,8 @@ import SafeViewAndroid from "@/components/ui/SafeViewAndroid";
 import { NavMenu } from "@/components/features/News/NavMenu";
 import { NewSection } from "@/components/features/News/NewSection";
 
-import news_background1 from "@/assets/images/news_image/news_background1.png";
-import news_background_2 from "@/assets/images/news_image/news_background_2.png";
+import news_background from "@/assets/images/news_image/news_background.png";
+import HeaderShown from "@/components/ui/HeaderShown";
 
 const styles = StyleSheet.create({
   newsBackground1: {
@@ -44,16 +45,21 @@ const styles = StyleSheet.create({
 
 function News() {
   return (
-    <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
+    <HeaderShown
+      shouldHaveHeader={false}
+      isScroll={false}
+      backgroundImage={() => (
+        <ImageBackground
+          source={news_background}
+          style={styles.newsBackground1}
+        />
+      )}
+    >
       <View style={styles.scroll_container}>
         <NavMenu />
         <NewSection />
       </View>
-      <Image source={news_background1} style={styles.newsBackground1} />
-      <View style={styles.backgroundContainer}>
-        <Image source={news_background_2} style={styles.newsBackground2} />
-      </View>
-    </SafeAreaView>
+    </HeaderShown>
   );
 }
 export default News;

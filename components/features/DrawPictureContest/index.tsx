@@ -1,7 +1,6 @@
 import {
   Image,
   FlatList,
-  SafeAreaView,
   ScrollView,
   View,
   StyleSheet,
@@ -240,9 +239,8 @@ function DrawPictureContest() {
   return (
     <HeaderShown
       title="Vẽ tranh cổ động"
-      refreshControl={
-        <RefreshControl onRefresh={handleRefresh} refreshing={isFetching} />
-      }
+      isRefreshing={isFetching}
+      onRefresh={handleRefresh}
     >
       <View>
         {status === "not-started" && statusCompetition === "Ongoing" ? (
@@ -251,10 +249,6 @@ function DrawPictureContest() {
               variant="primary"
               onPress={() => {
                 if (status === "not-started") setOpenUploadNewPicture(true);
-                else if (status === undefined) {
-                  dispatch(setAccessToken(null));
-                  dispatch(setRefreshToken(null));
-                }
               }}
             >
               Nộp tranh

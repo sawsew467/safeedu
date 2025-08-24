@@ -6,6 +6,7 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import React from "react";
 import bg_leaderboard from "@/assets/images/contest/details/bg_leaderboard.png";
@@ -96,14 +97,12 @@ const LeaderBoardModule = () => {
   return (
     <HeaderShown
       title="Bảng xếp hạng"
-      HeaderComponent={() => (
-        <View style={styles.bg_container}>
-          <Image
-            style={styles.bg_image}
-            source={bg_leaderboard}
-            resizeMode="cover"
-          />
-        </View>
+      backgroundImage={() => (
+        <ImageBackground
+          style={styles.bg_image}
+          source={bg_leaderboard}
+          resizeMode="cover"
+        />
       )}
     >
       <View style={styles.content_container}>
@@ -304,9 +303,11 @@ const styles = StyleSheet.create({
   content_container: {
     marginTop: 50,
     display: "flex",
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
+    height: "100%",
     paddingHorizontal: 20,
     paddingBottom: 40,
   },
