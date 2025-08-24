@@ -74,4 +74,5 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# @end expo-cli
+# @end expo-cliandroid/app/release/*.apk
+*.apk
