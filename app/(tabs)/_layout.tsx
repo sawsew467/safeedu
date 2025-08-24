@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Tabs, useRouter } from "expo-router";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
@@ -9,7 +9,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   BookIcon,
   BotMessageSquareIcon,
@@ -17,8 +17,27 @@ import {
   TrophyIcon,
   UserIcon,
 } from "lucide-react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import constants from "@/settings/constants";
+import {
+  setAccessToken,
+  setRefreshToken,
+} from "@/components/features/auth/slices";
 
 const TabIcon = ({ IconComponent, color, name, focused }) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    (async () => {
+      const token = await AsyncStorage.getItem(constants.ACCESS_TOKEN);
+      dispatch(setAccessToken(token));
+    })();
+    (async () => {
+      const token = await AsyncStorage.getItem(constants.REFRESH_TOKEN);
+      dispatch(setRefreshToken(token));
+    })();
+  }, []);
+
   return (
     <View className="flex items-center justify-center flex-1">
       <IconComponent color={color} size={24} />

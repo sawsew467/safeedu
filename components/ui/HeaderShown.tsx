@@ -167,7 +167,7 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
                   )}
 
                   <View style={styles.centerContainer}>
-                    <Text style={styles.headerTitle}>
+                    <Text style={styles.headerTitle} className="font-psemibold">
                       {typeof title === "string" ? title : title ? title() : ""}
                     </Text>
                   </View>
@@ -194,25 +194,6 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
             )}
             <View className="relative h-full flex-1">
               {HeaderComponent && <HeaderComponent />}
-              {(isOverTop || isRefreshing) && (
-                <View
-                  style={{
-                    position: "absolute",
-                    width: Dimensions.get("window").width,
-                    height: 60,
-                    top:
-                      Platform.OS === "android" ? statusBarHeight : insets.top,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Progress.CircleSnail
-                    color={["#fff"]}
-                    duration={700}
-                    progress={0.5}
-                  />
-                </View>
-              )}
               {isScroll ? (
                 <ScrollView
                   ref={ref}
@@ -234,6 +215,13 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
                   }}
                   scrollEventThrottle={16}
                 >
+                  <View
+                    className="w-full "
+                    style={{
+                      height:
+                        Platform.OS === "ios" ? insets.top : statusBarHeight,
+                    }}
+                  />
                   <View style={styles.content}>{children}</View>
                 </ScrollView>
               ) : (

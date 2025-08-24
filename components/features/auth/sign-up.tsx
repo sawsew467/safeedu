@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -51,6 +51,7 @@ const SignUpModule = () => {
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [selectProvince, setSelectProvince] = useState("");
   const [organizationsByProvince, setOrganizationsByProvince] = useState([]);
+  const [avaialbeProvinces, setAvailableProvinces] = useState([]);
   const [typeModalProvinceVisible, setTypeModalProvinceVisible] =
     useState(false);
   const [typeModalOrgVisible, setTypeModalOrgVisible] = useState(false);
@@ -115,6 +116,22 @@ const SignUpModule = () => {
       setOrganizationsByProvince(filteredOrganizations);
     }
   }, [provinces.length, organizations.length, selectProvince]);
+
+  const avaiableProvincesByOrg = useMemo(() => {
+    const object = organizations.reduce((acc, org) => {
+      if (org.province_id && !acc[org.province_id]) {
+        acc[org.province_id] = {
+          label: provinces.find((p) => p.value === org.province_id)?.label,
+          value: org.province_id,
+        };
+      }
+      return acc;
+    }, {});
+
+    return Object.values(object) as OrganizationOptions[];
+  }, [provinces?.length, organizations?.length]);
+
+  console.log("avaiableProvincesByOrg :>> ", avaiableProvincesByOrg);
 
   const router = useRouter();
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
@@ -233,337 +250,342 @@ const SignUpModule = () => {
   const [isAgreed, setIsAgreed] = useState(false);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={[{ flex: 1, position: "relative" }, stylesAndroid.AndroidSafeArea]}
-    >
-      <ImageBackground
-        source={background}
-        className="absolute top-0 h-[110%] left-0 w-screen z-0"
-      />
-      <View className="px-4 h-full pt-[90px]">
-        <View className="bg-white w-full h-[100%] rounded-t-[40px] px-6 py-4">
-          <Text className="text-center font-semibold text-2xl text-primary mb-5">
-            {userType === "student"
-              ? "Đăng ký Học sinh"
-              : userType === "citizen"
-              ? "Đăng ký Người dân"
-              : null}
-          </Text>
-
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <Text className="font-semibold text-base text-[#959595]">
-              Họ <Text className="text-red-500">*</Text>
+    <View className="flex-1 relative ">
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+        behavior="padding"
+        style={[{ flex: 1 }]}
+      >
+        <ImageBackground
+          source={background}
+          className="absolute top-0 h-[110%] left-0 w-screen z-0"
+        />
+        <View className="px-4 h-full pt-[90px]">
+          <View className="bg-white w-full h-[100%] rounded-t-[40px] px-6 py-4">
+            <Text className="text-center font-semibold text-2xl text-primary mb-5">
+              {userType === "student"
+                ? "Đăng ký Học sinh"
+                : userType === "citizen"
+                ? "Đăng ký Người dân"
+                : null}
             </Text>
-            <TextInput
-              placeholder="Nguyễn"
-              placeholderTextColor="#C4C4C4"
-              value={lastName}
-              onChangeText={setLastName}
-              className="text-lg text-black pl-0 pb-0"
-            />
-            <View className="w-full h-[1.5px] bg-black mt-2" />
-            {error.lastName ? (
-              <Text className="text-red-500 text-xs mt-2">
-                {error.lastName}
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text className="font-semibold text-base text-[#959595]">
+                Họ <Text className="text-red-500">*</Text>
               </Text>
-            ) : null}
-
-            <Text className="font-semibold text-base text-[#959595] mt-5">
-              Tên <Text className="text-red-500">*</Text>
-            </Text>
-            <TextInput
-              placeholder="Văn A"
-              placeholderTextColor="#C4C4C4"
-              value={firstName}
-              onChangeText={setFirstName}
-              className="text-lg text-black pl-0 pb-0"
-            />
-            <View className="w-full h-[1.5px] bg-black mt-2" />
-            {error.firstName ? (
-              <Text className="text-red-500 text-xs mt-2">
-                {error.firstName}
-              </Text>
-            ) : null}
-
-            <Text className="font-semibold text-base text-[#959595] mt-5">
-              Ngày sinh
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setTypeModalDobVisible(true);
-              }}
-              className="flex-row justify-between items-center"
-            >
-              <Text className="text-lg text-black pl-0 pb-0">
-                {dob
-                  ? formatDate(dob.toISOString(), "DD/MM/yyyy")
-                  : "Chọn ngày sinh"}
-              </Text>
-              <Ionicons name="chevron-down" size={24} color="#888" />
-            </TouchableOpacity>
-            <DateTimePicker
-              selectedValue={dob}
-              visible={typeModalDobVisible}
-              onSelect={(value) => setDob(value)}
-              onClose={() => setTypeModalDobVisible(false)}
-              title="Chọn ngày sinh"
-            />
-            <View className="w-full h-[1.5px] bg-black mt-2" />
-            {error.dob ? (
-              <Text className="text-red-500 text-xs mt-2">{error.dob}</Text>
-            ) : (
-              <Text className="text-gray-500 text-xs mt-2">
-                Vui lòng nhập ngày sinh để xác minh độ tuổi của bạn.
-              </Text>
-            )}
-
-            <Text className="font-semibold text-base text-[#959595] mt-5">
-              Số điện thoại
-            </Text>
-            <TextInput
-              placeholder="0123456789"
-              placeholderTextColor="#C4C4C4"
-              value={phone}
-              onChangeText={setPhone}
-              className="text-lg text-black pl-0 pb-0"
-            />
-            <View className="w-full h-[1.5px] bg-black mt-2" />
-            {error.phone ? (
-              <Text className="text-red-500 text-xs mt-2">{error.phone}</Text>
-            ) : null}
-
-            <Text className="font-semibold text-base text-[#959595] mt-5">
-              Email
-            </Text>
-            <TextInput
-              placeholder="Nhập email"
-              placeholderTextColor="#C4C4C4"
-              value={email}
-              onChangeText={setEmail}
-              className="text-lg text-black pl-0 pb-0"
-            />
-            <View className="w-full h-[1.5px] bg-black mt-2" />
-            {error.email ? (
-              <Text className="text-red-500 text-xs mt-2">{error.email}</Text>
-            ) : null}
-
-            {userType === "student" && (
-              <>
-                <Text className="font-semibold text-base text-[#959595] mt-5">
-                  Tỉnh/Thành phố
-                </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setTypeModalProvinceVisible(true);
-                  }}
-                  className="flex-row justify-between items-center"
-                >
-                  <Text className="text-lg text-black pl-0 pb-0">
-                    {selectProvince
-                      ? provinces?.find(
-                          (province) => province.value === selectProvince
-                        )?.label
-                      : "Chọn tỉnh/thành phố"}
-                  </Text>
-                  <Ionicons name="chevron-down" size={24} color="#888" />
-                </TouchableOpacity>
-                <ModalPicker
-                  visible={typeModalProvinceVisible}
-                  onClose={() => {
-                    setTypeModalProvinceVisible(false);
-                  }}
-                  title="Chọn tỉnh/thành phố"
-                  options={provinces}
-                  selectedValue={selectProvince}
-                  onSelect={(value) => {
-                    setSelectProvince(value);
-                  }}
-                />
-                <View className="w-full h-[1.5px] bg-black mt-2" />
-                {error.city ? (
-                  <Text className="text-red-500 text-xs mt-2">
-                    {error.city}
-                  </Text>
-                ) : (
-                  <Text className="text-gray-500 text-xs mt-2">
-                    Chọn tỉnh để hiển thị danh sách trường học.
-                  </Text>
-                )}
-
-                <Text className="font-semibold text-base text-[#959595] mt-5">
-                  Trường
-                </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setTypeModalOrgVisible(true);
-                  }}
-                  className="flex-row justify-between items-center"
-                >
-                  <Text className="text-lg text-black pl-0 pb-0">
-                    {selectedSchool
-                      ? organizationsByProvince?.find(
-                          (org) => org.value === selectedSchool
-                        )?.label
-                      : "Chọn trường"}
-                  </Text>
-                  <Ionicons name="chevron-down" size={24} color="#888" />
-                </TouchableOpacity>
-                <ModalPicker
-                  visible={typeModalOrgVisible}
-                  onClose={() => {
-                    setTypeModalOrgVisible(false);
-                  }}
-                  title="Chọn trường"
-                  options={organizationsByProvince}
-                  selectedValue={selectedSchool}
-                  onSelect={(value) => {
-                    setSelectedSchool(value);
-                  }}
-                />
-                <View className="w-full h-[1.5px] bg-black mt-2" />
-                {error.school ? (
-                  <Text className="text-red-500 text-xs mt-2">
-                    {error.school}
-                  </Text>
-                ) : (
-                  <Text className="text-gray-500 text-xs mt-2">
-                    Học sinh cần cung cấp thông tin về trường.
-                  </Text>
-                )}
-              </>
-            )}
-
-            <Text className="font-semibold text-base text-[#959595] mt-5">
-              Tên tài khoản <Text className="text-red-500">*</Text>
-            </Text>
-            <TextInput
-              placeholder="vana"
-              placeholderTextColor="#C4C4C4"
-              value={userName}
-              onChangeText={setUserName}
-              className="text-lg text-black pl-0 pb-0"
-            />
-            <View className="w-full h-[1.5px] bg-black mt-2" />
-            {error.userName ? (
-              <Text className="text-red-500 text-xs mt-2">
-                {error.userName}
-              </Text>
-            ) : null}
-
-            <Text className="font-semibold text-base text-[#959595] mt-5">
-              Mật khẩu <Text className="text-red-500">*</Text>
-            </Text>
-            <View className="relative">
               <TextInput
-                placeholder="Nhập mật khẩu"
+                placeholder="Nguyễn"
                 placeholderTextColor="#C4C4C4"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!passwordVisible}
-                className="text-lg text-black pl-0 pb-0 pr-10"
+                value={lastName}
+                onChangeText={setLastName}
+                className="text-lg text-black pl-0 pb-0"
               />
-              <TouchableOpacity
-                onPress={togglePasswordVisibility}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2"
-              >
-                <Ionicons
-                  name={passwordVisible ? "eye" : "eye-off"}
-                  size={24}
-                  color="#888"
-                />
-              </TouchableOpacity>
-            </View>
-            <View className="w-full h-[1.5px] bg-black mt-2" />
-            {error.password ? (
-              <Text className="text-red-500 text-xs mt-2">
-                {error.password}
-              </Text>
-            ) : null}
+              <View className="w-full h-[1.5px] bg-black mt-2" />
+              {error.lastName ? (
+                <Text className="text-red-500 text-xs mt-2">
+                  {error.lastName}
+                </Text>
+              ) : null}
 
-            <Text className="font-semibold text-base text-[#959595] mt-5">
-              Xác nhận mật khẩu <Text className="text-red-500">*</Text>
-            </Text>
-            <View className="relative">
+              <Text className="font-semibold text-base text-[#959595] mt-5">
+                Tên <Text className="text-red-500">*</Text>
+              </Text>
               <TextInput
-                placeholder="Xác nhận mật khẩu"
+                placeholder="Văn A"
                 placeholderTextColor="#C4C4C4"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry={!confirmPasswordVisible}
-                className="text-lg text-black pl-0 pb-0 pr-10"
+                value={firstName}
+                onChangeText={setFirstName}
+                className="text-lg text-black pl-0 pb-0"
               />
+              <View className="w-full h-[1.5px] bg-black mt-2" />
+              {error.firstName ? (
+                <Text className="text-red-500 text-xs mt-2">
+                  {error.firstName}
+                </Text>
+              ) : null}
+
+              <Text className="font-semibold text-base text-[#959595] mt-5">
+                Ngày sinh
+              </Text>
               <TouchableOpacity
-                onPress={toggleConfirmPasswordVisibility}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                onPress={() => {
+                  setTypeModalDobVisible(true);
+                }}
+                className="flex-row justify-between items-center"
               >
-                <Ionicons
-                  name={confirmPasswordVisible ? "eye" : "eye-off"}
-                  size={24}
-                  color="#888"
-                />
+                <Text className="text-lg text-black pl-0 pb-0">
+                  {dob
+                    ? formatDate(dob.toISOString(), "DD/MM/yyyy")
+                    : "Chọn ngày sinh"}
+                </Text>
+                <Ionicons name="chevron-down" size={24} color="#888" />
               </TouchableOpacity>
-            </View>
-            <View className="w-full h-[1.5px] bg-black mt-2" />
-            {error.confirmPassword ? (
-              <Text className="text-red-500 text-xs mt-2">
-                {error.confirmPassword}
-              </Text>
-            ) : null}
-
-            <TouchableOpacity
-              className="flex-row items-center mb-5 mt-5"
-              onPress={() => setIsAgreed(!isAgreed)}
-              activeOpacity={0.8}
-            >
-              <View
-                className={`w-5 h-5 mr-2 border rounded-sm ${
-                  isAgreed ? "bg-primary border-primary" : "border-gray-400"
-                }`}
-              >
-                {isAgreed && (
-                  <Ionicons
-                    name="checkmark"
-                    size={16}
-                    color="white"
-                    style={{ textAlign: "center" }}
-                  />
-                )}
-              </View>
-              <Text className="text-sm text-[#959595]">
-                Tôi đồng ý với điều khoản & bảo mật
-              </Text>
-            </TouchableOpacity>
-            {error.agreement ? (
-              <Text className="text-red-500 text-xs mt-2">
-                {error.agreement}
-              </Text>
-            ) : null}
-
-            <TouchableOpacity
-              className={cn(
-                "mt-5 max-w-full items-center justify-center bg-primary py-3 rounded-3xl",
-                !isAgreed && "opacity-50"
+              <DateTimePicker
+                selectedValue={dob}
+                visible={typeModalDobVisible}
+                onSelect={(value) => setDob(value)}
+                onClose={() => setTypeModalDobVisible(false)}
+                title="Chọn ngày sinh"
+              />
+              <View className="w-full h-[1.5px] bg-black mt-2" />
+              {error.dob ? (
+                <Text className="text-red-500 text-xs mt-2">{error.dob}</Text>
+              ) : (
+                <Text className="text-gray-500 text-xs mt-2">
+                  Vui lòng nhập ngày sinh để xác minh độ tuổi của bạn.
+                </Text>
               )}
-              onPress={handleSignUp}
-              disabled={isLoadingStudent || isLoadingCitizen || !isAgreed}
-            >
-              <Text className="text-white text-lg font-normal">
-                Hoàn tất đăng ký
+
+              <Text className="font-semibold text-base text-[#959595] mt-5">
+                Số điện thoại
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className="mt-5 mb-3 max-w-full items-center justify-center"
-              onPress={handleNavigationToSignIn}
-            >
-              <Text className="text-primary text-lg font-normal underline">
-                Quay lại đăng nhập
+              <TextInput
+                placeholder="0123456789"
+                placeholderTextColor="#C4C4C4"
+                value={phone}
+                onChangeText={setPhone}
+                className="text-lg text-black pl-0 pb-0"
+              />
+              <View className="w-full h-[1.5px] bg-black mt-2" />
+              {error.phone ? (
+                <Text className="text-red-500 text-xs mt-2">{error.phone}</Text>
+              ) : null}
+
+              <Text className="font-semibold text-base text-[#959595] mt-5">
+                Email
               </Text>
-            </TouchableOpacity>
-          </ScrollView>
+              <TextInput
+                placeholder="Nhập email"
+                placeholderTextColor="#C4C4C4"
+                value={email}
+                onChangeText={setEmail}
+                className="text-lg text-black pl-0 pb-0"
+              />
+              <View className="w-full h-[1.5px] bg-black mt-2" />
+              {error.email ? (
+                <Text className="text-red-500 text-xs mt-2">{error.email}</Text>
+              ) : null}
+
+              {userType === "student" && (
+                <>
+                  <Text className="font-semibold text-base text-[#959595] mt-5">
+                    Tỉnh/Thành phố
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setTypeModalProvinceVisible(true);
+                    }}
+                    className="flex-row justify-between items-center"
+                  >
+                    <Text className="text-lg text-black pl-0 pb-0">
+                      {selectProvince
+                        ? avaiableProvincesByOrg?.find(
+                            (province) => province.value === selectProvince
+                          )?.label
+                        : "Chọn tỉnh/thành phố"}
+                    </Text>
+                    <Ionicons name="chevron-down" size={24} color="#888" />
+                  </TouchableOpacity>
+                  <ModalPicker
+                    visible={typeModalProvinceVisible}
+                    onClose={() => {
+                      setTypeModalProvinceVisible(false);
+                    }}
+                    title="Chọn tỉnh/thành phố"
+                    options={avaiableProvincesByOrg ?? []}
+                    selectedValue={selectProvince}
+                    onSelect={(value) => {
+                      setSelectProvince(value);
+                    }}
+                  />
+                  <View className="w-full h-[1.5px] bg-black mt-2" />
+                  {error.city ? (
+                    <Text className="text-red-500 text-xs mt-2">
+                      {error.city}
+                    </Text>
+                  ) : (
+                    <Text className="text-gray-500 text-xs mt-2">
+                      Chọn tỉnh để hiển thị danh sách trường học.
+                    </Text>
+                  )}
+
+                  <Text className="font-semibold text-base text-[#959595] mt-5">
+                    Trường
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setTypeModalOrgVisible(true);
+                    }}
+                    className="flex-row justify-between items-center"
+                  >
+                    <Text className="text-lg text-black pl-0 pb-0">
+                      {organizationsByProvince?.find(
+                        (org) => org.value === selectedSchool
+                      )?.label
+                        ? organizationsByProvince?.find(
+                            (org) => org.value === selectedSchool
+                          )?.label
+                        : "Chọn trường"}
+                    </Text>
+                    <Ionicons name="chevron-down" size={24} color="#888" />
+                  </TouchableOpacity>
+                  <ModalPicker
+                    visible={typeModalOrgVisible}
+                    onClose={() => {
+                      setTypeModalOrgVisible(false);
+                    }}
+                    title="Chọn trường"
+                    options={organizationsByProvince}
+                    selectedValue={selectedSchool}
+                    onSelect={(value) => {
+                      setSelectedSchool(value);
+                    }}
+                  />
+                  <View className="w-full h-[1.5px] bg-black mt-2" />
+                  {error.school ? (
+                    <Text className="text-red-500 text-xs mt-2">
+                      {error.school}
+                    </Text>
+                  ) : (
+                    <Text className="text-gray-500 text-xs mt-2">
+                      Học sinh cần cung cấp thông tin về trường.
+                    </Text>
+                  )}
+                </>
+              )}
+
+              <Text className="font-semibold text-base text-[#959595] mt-5">
+                Tên tài khoản <Text className="text-red-500">*</Text>
+              </Text>
+              <TextInput
+                placeholder="vana"
+                placeholderTextColor="#C4C4C4"
+                value={userName}
+                onChangeText={setUserName}
+                className="text-lg text-black pl-0 pb-0"
+              />
+              <View className="w-full h-[1.5px] bg-black mt-2" />
+              {error.userName ? (
+                <Text className="text-red-500 text-xs mt-2">
+                  {error.userName}
+                </Text>
+              ) : null}
+
+              <Text className="font-semibold text-base text-[#959595] mt-5">
+                Mật khẩu <Text className="text-red-500">*</Text>
+              </Text>
+              <View className="relative">
+                <TextInput
+                  placeholder="Nhập mật khẩu"
+                  placeholderTextColor="#C4C4C4"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!passwordVisible}
+                  className="text-lg text-black pl-0 pb-0 pr-10"
+                />
+                <TouchableOpacity
+                  onPress={togglePasswordVisibility}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                >
+                  <Ionicons
+                    name={passwordVisible ? "eye" : "eye-off"}
+                    size={24}
+                    color="#888"
+                  />
+                </TouchableOpacity>
+              </View>
+              <View className="w-full h-[1.5px] bg-black mt-2" />
+              {error.password ? (
+                <Text className="text-red-500 text-xs mt-2">
+                  {error.password}
+                </Text>
+              ) : null}
+
+              <Text className="font-semibold text-base text-[#959595] mt-5">
+                Xác nhận mật khẩu <Text className="text-red-500">*</Text>
+              </Text>
+              <View className="relative">
+                <TextInput
+                  placeholder="Xác nhận mật khẩu"
+                  placeholderTextColor="#C4C4C4"
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={!confirmPasswordVisible}
+                  className="text-lg text-black pl-0 pb-0 pr-10"
+                />
+                <TouchableOpacity
+                  onPress={toggleConfirmPasswordVisibility}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                >
+                  <Ionicons
+                    name={confirmPasswordVisible ? "eye" : "eye-off"}
+                    size={24}
+                    color="#888"
+                  />
+                </TouchableOpacity>
+              </View>
+              <View className="w-full h-[1.5px] bg-black mt-2" />
+              {error.confirmPassword ? (
+                <Text className="text-red-500 text-xs mt-2">
+                  {error.confirmPassword}
+                </Text>
+              ) : null}
+
+              <TouchableOpacity
+                className="flex-row items-center mb-5 mt-5"
+                onPress={() => setIsAgreed(!isAgreed)}
+                activeOpacity={0.8}
+              >
+                <View
+                  className={`w-5 h-5 mr-2 border rounded-sm ${
+                    isAgreed ? "bg-primary border-primary" : "border-gray-400"
+                  }`}
+                >
+                  {isAgreed && (
+                    <Ionicons
+                      name="checkmark"
+                      size={16}
+                      color="white"
+                      style={{ textAlign: "center" }}
+                    />
+                  )}
+                </View>
+                <Text className="text-sm text-[#959595]">
+                  Tôi đồng ý với điều khoản & bảo mật
+                </Text>
+              </TouchableOpacity>
+              {error.agreement ? (
+                <Text className="text-red-500 text-xs mt-2">
+                  {error.agreement}
+                </Text>
+              ) : null}
+
+              <TouchableOpacity
+                className={cn(
+                  "mt-5 max-w-full items-center justify-center bg-primary py-3 rounded-3xl",
+                  !isAgreed && "opacity-50"
+                )}
+                onPress={handleSignUp}
+                disabled={isLoadingStudent || isLoadingCitizen || !isAgreed}
+              >
+                <Text className="text-white text-lg font-pnormal">
+                  Hoàn tất đăng ký
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className="mt-5 mb-3 max-w-full items-center justify-center"
+                onPress={handleNavigationToSignIn}
+              >
+                <Text className="text-primary text-lg font-pnormal underline">
+                  Quay lại đăng nhập
+                </Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 

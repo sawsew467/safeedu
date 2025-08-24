@@ -137,7 +137,9 @@ const QuizResult = () => {
 
           {/* Score */}
           <View style={styles.scoreContainer}>
-            <Text style={styles.sectionTitle}>Điểm của bạn</Text>
+            <Text style={styles.sectionTitle} className="font-pmedium">
+              Điểm của bạn
+            </Text>
             <View style={styles.scoreCircleContainer}>
               <CircleResult percent={data?.score * 10} />
             </View>
@@ -149,14 +151,14 @@ const QuizResult = () => {
 
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Nộp bài vào lúc:</Text>
-              <Text style={styles.summaryValue}>
+              <Text style={styles.summaryValue} className="font-pregular">
                 {formatDate(data?.completedAt, "HH:mm:ss DD/MM/yyyy")}
               </Text>
             </View>
 
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Thời gian làm bài:</Text>
-              <Text style={styles.summaryValue}>
+              <Text style={styles.summaryValue} className="font-pregular">
                 {formatDurationToHHMMSS(data?.startAt, data?.completedAt)}
               </Text>
             </View>
@@ -178,7 +180,7 @@ const QuizResult = () => {
                 }}
                 style={styles.btn_outline}
               >
-                <Text style={styles.text_btn_outline}>
+                <Text style={styles.text_btn_outline} className="font-pmedium">
                   Xem các phần thi khác
                 </Text>
               </TouchableOpacity>
@@ -188,7 +190,9 @@ const QuizResult = () => {
                 }}
                 style={styles.btn}
               >
-                <Text style={styles.text_btn}>Trờ về trang chủ</Text>
+                <Text style={styles.text_btn} className="font-pmedium">
+                  Trờ về trang chủ
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

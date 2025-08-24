@@ -49,7 +49,7 @@ export default function ProgressScore({ percent = 20 }: { percent?: number }) {
       <View style={styles.textContainer}>
         <Text
           style={[styles.percentText, { color: getColor(percent) }]}
-          className="font-normal"
+          className="font-pmedium"
         >
           {score.toFixed(1)}
         </Text>

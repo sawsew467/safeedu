@@ -1,7 +1,7 @@
 import { authAPI } from "@/services/auth/auth.api";
 import constants from "@/settings/constants";
 import { createSlice } from "@reduxjs/toolkit";
-import * as SecureStore from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export interface AuthState {
   access_token: string;
   refresh_token: string;
@@ -15,24 +15,15 @@ const initialState: AuthState = {
 };
 
 (async () => {
-  const notifyca_update_profile = await SecureStore.getItemAsync(
+  const notifyca_update_profile = await AsyncStorage.getItem(
     constants.NOTIFYCA_UPDATE_PROFILE
   );
   initialState.notifyca_update_profile =
     notifyca_update_profile === "false" ? false : true;
 })();
 
-(async () => {
-  const token = await SecureStore.getItemAsync(constants.ACCESS_TOKEN);
-  initialState.access_token = token ?? "";
-})();
-(async () => {
-  const token = await SecureStore.getItemAsync(constants.REFRESH_TOKEN);
-  initialState.refresh_token = token ?? "";
-})();
-
 const save = async (key: string, value: string) => {
-  SecureStore.setItemAsync(key, value);
+  AsyncStorage.setItem(key, value);
 };
 
 export const authSlice = createSlice({

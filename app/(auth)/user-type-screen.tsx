@@ -44,7 +44,7 @@ const UserTypeScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex h-screen">
+    <SafeAreaView className="flex flex-1 h-screen">
       <ImageBackground
         source={require("../../assets/images/phone-verification-background.png")}
         className="absolute top-0 bottom-0 left-0 right-0"
@@ -66,7 +66,7 @@ const UserTypeScreen = () => {
               } rounded-3xl flex flex-col justify-center items-center`}
             >
               <Text
-                className={`m-4 font-semibold text-2xl ${
+                className={`m-4 font-psemibold text-2xl ${
                   isSelected("student") ? "text-white" : "text-[#6C7278]"
                 } `}
               >
@@ -85,7 +85,7 @@ const UserTypeScreen = () => {
               } rounded-3xl flex flex-col justify-center items-center`}
             >
               <Text
-                className={`m-4 font-semibold text-2xl ${
+                className={`m-4 font-psemibold text-2xl ${
                   isSelected("citizen") ? "text-white" : "text-[#6C7278]"
                 } `}
               >
@@ -107,7 +107,7 @@ const UserTypeScreen = () => {
             className="mt-10 max-w-full items-center justify-center bg-primary py-3 rounded-3xl shadow-md shadow-black/20"
             onPress={handleNavigationToSignUp}
           >
-            <Text className="text-white text-lg font-normal">Tiếp tục</Text>
+            <Text className="text-white text-lg font-pnormal">Tiếp tục</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity
                         className="mt-5 max-w-full items-center justify-center bg-white py-3 rounded-3xl shadow-md shadow-black/20"
@@ -119,7 +119,7 @@ const UserTypeScreen = () => {
             className="mt-5 mb-3 max-w-full items-center justify-center"
             onPress={handleNavigationToSignIn}
           >
-            <Text className="text-white text-lg font-normal underline">
+            <Text className="text-white text-lg font-pnormal underline">
               Quay lại đăng nhập
             </Text>
           </TouchableOpacity>

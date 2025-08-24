@@ -249,10 +249,6 @@ function DrawPictureContest() {
               variant="primary"
               onPress={() => {
                 if (status === "not-started") setOpenUploadNewPicture(true);
-                else if (status === undefined) {
-                  dispatch(setAccessToken(null));
-                  dispatch(setRefreshToken(null));
-                }
               }}
             >
               Nộp tranh

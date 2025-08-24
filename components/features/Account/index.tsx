@@ -32,10 +32,11 @@ import HeaderShown from "@/components/ui/HeaderShown";
 const ProfileScreen = () => {
   const router = useRouter();
 
-  const params = useLocalSearchParams();
   const background = require("@/assets/images/account/background.png");
 
-  const { notifyca_update_profile } = useAppSelector((state) => state.auth);
+  const { notifyca_update_profile, access_token } = useAppSelector(
+    (state) => state.auth
+  );
 
   const dispatch = useAppDispatch();
   const [isAgreed, setIsAgreed] = React.useState(false);
@@ -106,7 +107,7 @@ const ProfileScreen = () => {
     return `${day} tháng ${month} ${year}`;
   };
 
-  const isError = isGetProfileError || isGetProfileDetailError;
+  const isError = isGetProfileError || isGetProfileDetailError || !access_token;
   const isFetching = isFetchingProfile || isFetchingProfileDetail;
 
   // Tính điểm trung bình
@@ -170,9 +171,7 @@ const ProfileScreen = () => {
         onRefresh={() => refetch()}
         shouldHaveHeader={false}
       >
-        {isFetching ? (
-          <ProfileSkeleton />
-        ) : isError && !isFetching ? (
+        {isError ? (
           <>
             <View className="flex-1 flex items-center justify-center">
               <View className="h-auto flex items-center mb-4">
@@ -201,6 +200,8 @@ const ProfileScreen = () => {
               </View>
             </View>
           </>
+        ) : isFetching ? (
+          <ProfileSkeleton />
         ) : (
           <>
             <Modal
