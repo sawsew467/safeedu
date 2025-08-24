@@ -10,7 +10,6 @@ import {
 import trophy_image from "@/assets/images/game_images/trophy_image.png";
 import { router, useLocalSearchParams } from "expo-router";
 import ProgressScore from "./circleResult";
-
 const GameResult = () => {
   const params = useLocalSearchParams();
   const data = JSON.parse(params.item as string);

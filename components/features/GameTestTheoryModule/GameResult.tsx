@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Image,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableHighlight,

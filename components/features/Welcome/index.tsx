@@ -3,6 +3,7 @@ import { View, Text, Image, ScrollView, SafeAreaView } from "react-native";
 
 import logo from "@/assets/images/logo_new.png";
 import { Button } from "@/components/ui/Button";
+import { useAppSelector } from "@/hooks/redux";
 
 const Welcome = () => {
   const handleRedirect = () => {

@@ -28,6 +28,7 @@ import LogOut from "./logout";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setNotifycaUpdateProfile } from "../auth/slices";
 import HeaderShown from "@/components/ui/HeaderShown";
+import { name } from "moment";
 
 const ProfileScreen = () => {
   const router = useRouter();

@@ -20,7 +20,6 @@ import {
 } from "../queries/cozeQueries";
 // import { useExampleQuery, useGetAllCoursesQuery } from "../queries";
 import { Button } from "@/components/ui/Button";
-
 import avatar_chatbot from "@/assets/icons/avatar_chatbot.png";
 import { COMMON_QUESTIONS } from "@/healper/data/chatbot";
 import Input from "./input";
