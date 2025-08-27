@@ -6,6 +6,7 @@ import Providers from "@/providers";
 import { View } from "react-native";
 import React from "react";
 import { useAssets } from "expo-asset";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -65,6 +66,7 @@ const RootLayout = () => {
   }
   return (
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      <StatusBar style="dark" translucent backgroundColor="transparent" />
       <Providers>
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />

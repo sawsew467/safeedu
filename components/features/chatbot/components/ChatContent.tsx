@@ -498,7 +498,7 @@ function ChatContent() {
   //   } catch {}
   // };
   return (
-    <View className="flex-1 relative">
+    <View className="flex-1 relative mt-10">
       <KeyboardAvoidingView behavior="padding" style={[styles.container]}>
         <View style={styles.container}>
           <ScrollView style={{ flex: 1 }}>

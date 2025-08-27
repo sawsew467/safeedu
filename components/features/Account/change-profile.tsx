@@ -188,12 +188,22 @@ const ProfileFormScreen = () => {
   }, [profile]);
 
   const onSubmit = async (data: FormData) => {
+    if (!data?.email) delete data.email;
+    if (!data?.phone_number) delete data.phone_number;
     try {
       await updateProfile(data).unwrap();
       dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
       alert("Cập nhật hồ sơ thành công!");
     } catch (error) {
-      alert("Đã xảy ra lỗi khi cập nhật hồ sơ!");
+      if (error?.status === 413) {
+        alert(
+          "Ảnh tải lên quá lớn. Vui lòng chọn ảnh khác hoặc giảm dung lượng ảnh."
+        );
+        return;
+      }
+      if (error?.data?.error?.details?.at(0))
+        alert(error?.data?.error?.details?.at(0));
+      else alert("Đã xảy ra lỗi khi cập nhật hồ sơ!");
     } finally {
     }
   };

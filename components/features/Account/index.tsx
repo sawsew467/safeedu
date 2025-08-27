@@ -28,7 +28,6 @@ import LogOut from "./logout";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setNotifycaUpdateProfile } from "../auth/slices";
 import HeaderShown from "@/components/ui/HeaderShown";
-import { name } from "moment";
 
 const ProfileScreen = () => {
   const router = useRouter();
@@ -47,6 +46,7 @@ const ProfileScreen = () => {
     isError: isGetProfileError,
     isFetching: isFetchingProfile,
     isSuccess: isGetProfileSuccess,
+    refetch: refetchMe,
   } = useGetMeQuery(undefined, {
     selectFromResult: ({ data, isError, isFetching, isSuccess }) => ({
       profile: data?.data,
@@ -61,16 +61,24 @@ const ProfileScreen = () => {
     isFetching: isFetchingProfileDetail,
     isError: isGetProfileDetailError,
     isSuccess,
-    refetch,
+    refetch: refetchStudent,
+    isStudentUninitialized,
   } = useGetStudentByUsernameQuery(
     profile?.username ? { username: profile?.username } : skipToken,
     {
-      selectFromResult: ({ data, isFetching, isError, isSuccess }) => {
+      selectFromResult: ({
+        data,
+        isFetching,
+        isError,
+        isSuccess,
+        isUninitialized,
+      }) => {
         return {
           data: data?.data,
           isFetching,
           isError,
           isSuccess,
+          isStudentUninitialized: isUninitialized,
         };
       },
     }
@@ -169,7 +177,12 @@ const ProfileScreen = () => {
           <ImageBackground source={background} className="w-full h-full" />
         )}
         isRefreshing={isFetching}
-        onRefresh={() => refetch()}
+        onRefresh={() => {
+          refetchMe();
+          if (!isStudentUninitialized) {
+            refetchStudent();
+          }
+        }}
         shouldHaveHeader={false}
       >
         {isError ? (

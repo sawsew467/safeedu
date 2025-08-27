@@ -44,7 +44,7 @@ const UserTypeScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex flex-1 h-screen">
+    <SafeAreaView className="flex flex-1 h-screen pt-10">
       <ImageBackground
         source={require("../../assets/images/phone-verification-background.png")}
         className="absolute top-0 bottom-0 left-0 right-0"

@@ -131,8 +131,6 @@ const SignUpModule = () => {
     return Object.values(object) as OrganizationOptions[];
   }, [provinces?.length, organizations?.length]);
 
-  console.log("avaiableProvincesByOrg :>> ", avaiableProvincesByOrg);
-
   const router = useRouter();
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
   const toggleConfirmPasswordVisibility = () =>
@@ -250,7 +248,7 @@ const SignUpModule = () => {
   const [isAgreed, setIsAgreed] = useState(false);
 
   return (
-    <View className="flex-1 relative ">
+    <View className="flex-1 relative">
       <KeyboardAvoidingView
         keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
         behavior="padding"
