@@ -17,8 +17,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "package": "com.vn.safeedu",
-      "bundleIdentifier": "com.vn.safeedu",
+      "package": "com.safeedu.app",
+      "bundleIdentifier": "com.safeedu.app",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSPhotoLibraryUsageDescription": "SafeEdu cần quyền truy cập thư viện ảnh để bạn dễ dàng chọn và cập nhật ảnh đại diện cá nhân."
@@ -43,7 +43,7 @@
       "backgroundColor": "#ffffff",
       "image": "./assets/adaptive-icon.png",
       "imageWidth": 150,
-      "package": "com.vn.safeedu"
+      "package": "com.safeedu.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"

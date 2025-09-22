@@ -8,7 +8,11 @@ import {
   UserRoundX,
 } from "lucide-react-native";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { setAccessToken, setRefreshToken } from "../auth/slices";
+import {
+  setAccessToken,
+  setNotifycaUpdateProfile,
+  setRefreshToken,
+} from "../auth/slices";
 import { baseApi } from "@/store/baseQuery";
 
 const LogOutModule = () => {
@@ -21,6 +25,7 @@ const LogOutModule = () => {
     dispatch(setAccessToken(""));
     dispatch(setRefreshToken(""));
     dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
+    dispatch(setNotifycaUpdateProfile(true));
     router.replace("/account");
   };
 

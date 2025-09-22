@@ -1,5 +1,5 @@
 {
-  "name": "com.vn.safeedu",
+  "name": "com.safeedu.app",
   "version": "6.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -21,7 +21,7 @@
     "@reduxjs/toolkit": "^2.5.1",
     "class-variance-authority": "^0.7.0",
     "date-fns": "^4.1.0",
-    "expo": "53.0.22",
+    "expo": "^54.0.9",
     "expo-auth-session": "~6.2.1",
     "expo-av": "~15.1.7",
     "expo-blur": "~14.1.5",

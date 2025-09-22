@@ -39,7 +39,7 @@ const SignInModule = () => {
       setError({ username: "", password: "Mật khẩu không được để trống" });
     try {
       await signIn({ username, password }).unwrap();
-      dispatch(setNotifycaUpdateProfile("on"));
+      dispatch(setNotifycaUpdateProfile(true));
       dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
       router.push("/account");
     } catch (error) {

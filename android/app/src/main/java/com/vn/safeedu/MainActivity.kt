@@ -1,4 +1,4 @@
-package com.vn.safeedu
+package com.safeedu.app
 
 import android.os.Build
 import android.os.Bundle

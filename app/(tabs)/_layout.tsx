@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import constants from "@/settings/constants";
 import {
   setAccessToken,
+  setNotifycaUpdateProfile,
   setRefreshToken,
 } from "@/components/features/auth/slices";
 
@@ -29,6 +30,14 @@ const TabIcon = ({ IconComponent, color, name, focused }) => {
     (async () => {
       const token = await AsyncStorage.getItem(constants.REFRESH_TOKEN);
       dispatch(setRefreshToken(token));
+    })();
+    (async () => {
+      const notification = await AsyncStorage.getItem(
+        constants.NOTIFYCA_UPDATE_PROFILE
+      );
+      dispatch(
+        setNotifycaUpdateProfile(notification === "false" ? false : true)
+      );
     })();
   }, []);
 
