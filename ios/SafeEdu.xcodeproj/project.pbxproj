@@ -414,8 +414,13 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
+<<<<<<< HEAD
 				PRODUCT_BUNDLE_IDENTIFIER = com.vn.safeedu;
 				PRODUCT_NAME = SafeEdu;
+=======
+				PRODUCT_BUNDLE_IDENTIFIER = com.safeedu.app;
+				PRODUCT_NAME = "SafeEdu";
+>>>>>>> 701ed6a0b75c338c4a34fb567cb567f12fbf05a2
 				SWIFT_OBJC_BRIDGING_HEADER = "SafeEdu/SafeEdu-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -445,8 +450,13 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
+<<<<<<< HEAD
 				PRODUCT_BUNDLE_IDENTIFIER = com.vn.safeedu;
 				PRODUCT_NAME = SafeEdu;
+=======
+				PRODUCT_BUNDLE_IDENTIFIER = com.safeedu.app;
+				PRODUCT_NAME = "SafeEdu";
+>>>>>>> 701ed6a0b75c338c4a34fb567cb567f12fbf05a2
 				SWIFT_OBJC_BRIDGING_HEADER = "SafeEdu/SafeEdu-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

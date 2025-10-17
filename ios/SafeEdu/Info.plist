@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>SafeEdu</string>
-          <string>com.vn.safeedu</string>
+          <string>com.safeedu.app</string>
         </array>
       </dict>
       <dict>
