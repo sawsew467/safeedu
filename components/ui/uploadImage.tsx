@@ -141,6 +141,4 @@ const styles = StyleSheet.create({
 });
 
 export default UploadImage;
-function alert(arg0: string) {
-  throw new Error("Function not implemented.");
-}
+// Use the global alert provided by React Native / JS runtime.

@@ -18,7 +18,6 @@ import file_upload from "@/assets/icons/file_upload.png";
 import mic from "@/assets/icons/mic.png";
 import delete_icon from "@/assets/icons/delete_icon.png";
 import submit from "@/assets/icons/submit.png";
-// import * as ImagePicker from "expo-image-picker";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Ionicons from "@expo/vector-icons/Ionicons";
