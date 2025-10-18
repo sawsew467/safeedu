@@ -12,7 +12,6 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -23,6 +22,7 @@ import { formatDate } from "@/utils/format-date";
 import { StarRating } from "./start-rating";
 import Skeleton from "@/components/ui/skeleton";
 import androidStyles from "@/components/ui/SafeViewAndroid";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
 const maxRating = 10;
@@ -105,15 +105,16 @@ const DialogViewScore = ({
       visible={visible}
       animationType="slide"
       presentationStyle="fullScreen"
+      statusBarTranslucent={true}
     >
-      <SafeAreaView>
+      <SafeAreaView className="flex-1">
         <View style={styles.container}>
           <View style={styles.header}>
             <TouchableOpacity onPress={onClose}>
               <Entypo name="chevron-left" size={30} color="#0ea5e9" />
             </TouchableOpacity>
 
-            <View style={styles.userInfo}>
+            <TouchableOpacity style={styles.avatarTouchable} onPress={() => {}}>
               <Avatar
                 source={{
                   uri:
@@ -126,25 +127,20 @@ const DialogViewScore = ({
                 }
                 size={48}
               />
+            </TouchableOpacity>
 
-              <View style={styles.userTextInfo}>
-                <View style={styles.nameAndBadge}>
-                  <Text style={styles.userName}>
-                    {myPicture?.user_id?.first_name}{" "}
-                    {myPicture?.user_id?.last_name}
-                  </Text>
-                  {myPicture?.score !== undefined ? (
-                    <Badge text="Đã chấm" style={styles.badgeCompleted} />
-                  ) : (
-                    <Badge text="Đang được chấm" style={styles.badgePending} />
-                  )}
-                </View>
-                <Text style={styles.submissionTime}>
-                  {myPicture?.completedAt
-                    ? `Được chấm vào: ${formatDate(myPicture?.completedAt)}`
-                    : `Đã nộp vào: ${formatDate(myPicture?.startedAt)}`}
-                </Text>
-              </View>
+            <View style={styles.userHeaderText}>
+              <Text style={styles.userName}>
+                {myPicture?.user_id?.first_name} {myPicture?.user_id?.last_name}
+              </Text>
+              <Text style={styles.userHandle}>
+                @{myPicture?.user_id?.username}
+              </Text>
+              <Text style={styles.submissionTime}>
+                {myPicture?.completedAt
+                  ? `Được chấm vào: ${formatDate(myPicture?.completedAt)}`
+                  : `Đã nộp vào: ${formatDate(myPicture?.startedAt)}`}
+              </Text>
             </View>
           </View>
 
@@ -378,6 +374,18 @@ const styles = StyleSheet.create({
   },
   userTextInfo: {
     marginLeft: 12,
+  },
+  avatarTouchable: {
+    marginLeft: 8,
+  },
+  userHeaderText: {
+    marginLeft: 12,
+    justifyContent: "center",
+  },
+  userHandle: {
+    fontSize: 12,
+    color: "#0ea5e9",
+    marginTop: 2,
   },
   nameAndBadge: {
     flexDirection: "row",
