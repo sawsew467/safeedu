@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   ImageBackground,
+  RefreshControl,
 } from "react-native";
 import React from "react";
 import bg_leaderboard from "@/assets/images/contest/details/bg_leaderboard.png";
@@ -17,6 +18,8 @@ import bg_ranking from "@/assets/images/contest/bg_ranking.png";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useGetLeaderBoardQuery } from "@/services/competitions/competitions.api";
 import { skipToken } from "@reduxjs/toolkit/query";
+import { boolean } from "zod";
+import LeaderboardSkeleton from "./LeaderBoardSkeleton";
 
 interface User {
   _id: string;
@@ -85,18 +88,32 @@ const LeaderBoardModule = () => {
   const { contestID } = useLocalSearchParams();
   const router = useRouter();
 
-  const { leaderBoard }: { leaderBoard: UserScore[] } = useGetLeaderBoardQuery(
-    contestID ? { slug: contestID as string } : skipToken,
-    {
-      selectFromResult: ({ data }) => ({
-        leaderBoard: data?.data,
-      }),
+  const {
+    leaderBoard,
+    isFetching,
+    refetch,
+  }: { leaderBoard: UserScore[]; isFetching: boolean; refetch: () => void } =
+    useGetLeaderBoardQuery(
+      contestID ? { slug: contestID as string } : skipToken,
+      {
+        selectFromResult: ({ data, isFetching }) => ({
+          leaderBoard: data?.data?.filter(Boolean),
+          isFetching,
+        }),
+      }
+    );
+
+  const handleRefetch = () => {
+    if (refetch) {
+      refetch();
     }
-  );
+  };
 
   return (
     <HeaderShown
       title="Bảng xếp hạng"
+      isRefreshing={isFetching}
+      onRefresh={handleRefetch}
       backgroundImage={() => (
         <ImageBackground
           style={styles.bg_image}
@@ -105,116 +122,126 @@ const LeaderBoardModule = () => {
         />
       )}
     >
-      <View style={styles.content_container}>
-        <View style={styles.container_title}>
-          <Text style={styles.title} className="font-pbold">
-            {leaderBoard?.length} người tham gia
-          </Text>
-        </View>
-        <View style={styles.icon_ranking}>
-          <Image source={ranking} />
-        </View>
-        <View style={styles.top3_leaderboard}>
-          <View style={styles.top1_ranking}>
-            <TouchableOpacity
-              onPress={() => {
-                router.push(`/account/${leaderBoard?.[0]?.user?.username}`);
-              }}
-            >
-              <View
-                style={[styles.avatar_container_1, styles.container_ranking]}
+      {isFetching ? (
+        <LeaderboardSkeleton />
+      ) : (
+        <View style={styles.content_container}>
+          <View style={styles.container_title}>
+            <Text style={styles.title} className="font-pbold">
+              {leaderBoard?.length} người tham gia
+            </Text>
+          </View>
+          <View style={styles.icon_ranking}>
+            <Image source={ranking} />
+          </View>
+          <View style={styles.top3_leaderboard}>
+            <View style={styles.top1_ranking}>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push(`/account/${leaderBoard?.[0]?.user?.username}`);
+                }}
               >
-                <Image
-                  source={frame_ranking_1}
-                  style={styles.frame_avatar_1}
-                ></Image>
+                <View
+                  style={[styles.avatar_container_1, styles.container_ranking]}
+                >
+                  <Image
+                    source={frame_ranking_1}
+                    style={styles.frame_avatar_1}
+                  ></Image>
 
-                <Image
-                  source={{ uri: leaderBoard?.[0]?.user?.avatar }}
-                  style={[styles.avatar]}
-                />
+                  <Image
+                    source={{ uri: leaderBoard?.[0]?.user?.avatar }}
+                    style={[styles.avatar]}
+                  />
+                </View>
+              </TouchableOpacity>
+              <View style={styles.container_content}>
+                <Text style={styles.name}>
+                  {leaderBoard?.[0]?.user?.username}
+                </Text>
+                <Text style={styles.point}>
+                  {leaderBoard?.[0]?.score?.toFixed(1)}
+                </Text>
               </View>
-            </TouchableOpacity>
-            <View style={styles.container_content}>
-              <Text style={styles.name}>
-                {leaderBoard?.[0]?.user?.username}
-              </Text>
-              <Text style={styles.point}>
-                {leaderBoard?.[0]?.score?.toFixed(1)}
-              </Text>
             </View>
-          </View>
-          <View style={styles.top2_ranking}>
-            <TouchableOpacity
-              onPress={() => {
-                router.push(`/account/${leaderBoard?.[1]?.user?.username}`);
-              }}
-            >
-              <View
-                style={[styles.avatar_container_2, styles.container_ranking]}
+            <View style={styles.top2_ranking}>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push(`/account/${leaderBoard?.[1]?.user?.username}`);
+                }}
               >
-                <Image
-                  source={frame_ranking_2}
-                  style={styles.frame_avatar_2}
-                ></Image>
+                <View
+                  style={[styles.avatar_container_2, styles.container_ranking]}
+                >
+                  <Image
+                    source={frame_ranking_2}
+                    style={styles.frame_avatar_2}
+                  ></Image>
 
-                <Image
-                  source={{ uri: leaderBoard?.[1]?.user?.avatar }}
-                  style={styles.avatar}
-                />
+                  <Image
+                    source={{ uri: leaderBoard?.[1]?.user?.avatar }}
+                    style={styles.avatar}
+                  />
+                </View>
+              </TouchableOpacity>
+              <View style={styles.container_content}>
+                <Text style={styles.name}>
+                  {leaderBoard?.[1]?.user?.username}
+                </Text>
+                <Text style={styles.point}>
+                  {leaderBoard?.[1]?.score?.toFixed(1)}
+                </Text>
               </View>
-            </TouchableOpacity>
-            <View style={styles.container_content}>
-              <Text style={styles.name}>
-                {leaderBoard?.[1]?.user?.username}
-              </Text>
-              <Text style={styles.point}>
-                {leaderBoard?.[1]?.score?.toFixed(1)}
-              </Text>
             </View>
-          </View>
-          <View style={styles.top3_ranking}>
-            <TouchableOpacity
-              onPress={() => {
-                router.push(`/account/${leaderBoard?.[2]?.user?.username}`);
-              }}
-            >
-              <View
-                style={[styles.avatar_container_2, styles.container_ranking]}
+            <View style={styles.top3_ranking}>
+              <TouchableOpacity
+                onPress={() => {
+                  router.push(`/account/${leaderBoard?.[2]?.user?.username}`);
+                }}
               >
-                <Image
-                  source={frame_ranking_2}
-                  style={styles.frame_avatar_2}
-                ></Image>
-                <Image
-                  source={{ uri: leaderBoard?.[2]?.user?.avatar }}
-                  style={styles.avatar}
-                />
+                <View
+                  style={[styles.avatar_container_2, styles.container_ranking]}
+                >
+                  <Image
+                    source={frame_ranking_2}
+                    style={styles.frame_avatar_2}
+                  ></Image>
+                  <Image
+                    source={{ uri: leaderBoard?.[2]?.user?.avatar }}
+                    style={styles.avatar}
+                  />
+                </View>
+              </TouchableOpacity>
+              <View style={styles.container_content}>
+                <Text style={styles.name}>
+                  {leaderBoard?.[2]?.user?.username}
+                </Text>
+                <Text style={styles.point}>
+                  {leaderBoard?.[2]?.score?.toFixed(1)}
+                </Text>
               </View>
-            </TouchableOpacity>
-            <View style={styles.container_content}>
-              <Text style={styles.name}>
-                {leaderBoard?.[2]?.user?.username}
-              </Text>
-              <Text style={styles.point}>
-                {leaderBoard?.[2]?.score?.toFixed(1)}
-              </Text>
             </View>
           </View>
+          <View style={styles.container_image_ranking}>
+            <Image source={bg_ranking} style={styles.image_ranking} />
+          </View>
+          <FlatList
+            scrollEnabled={false}
+            contentContainerStyle={styles.list_leaderboard}
+            data={leaderBoard?.slice(3, leaderBoard?.length)}
+            keyExtractor={(item: UserScore) => item?.user?._id}
+            renderItem={({
+              item,
+              index,
+            }: {
+              item: UserScore;
+              index: number;
+            }) => (
+              <ListItem user={item?.user} score={item?.score} index={index} />
+            )}
+          />
         </View>
-        <View style={styles.container_image_ranking}>
-          <Image source={bg_ranking} style={styles.image_ranking} />
-        </View>
-        <FlatList
-          scrollEnabled={false}
-          contentContainerStyle={styles.list_leaderboard}
-          data={leaderBoard}
-          keyExtractor={(item: UserScore) => item?.user?._id}
-          renderItem={({ item, index }: { item: UserScore; index: number }) => (
-            <ListItem user={item?.user} score={item?.score} index={index} />
-          )}
-        />
-      </View>
+      )}
     </HeaderShown>
   );
 };

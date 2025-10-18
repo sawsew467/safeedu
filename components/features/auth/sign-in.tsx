@@ -11,14 +11,11 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router"; // Import router để chuyển trang
-import * as Google from "expo-auth-session/providers/google";
-import { useAuthRequest } from "expo-auth-session";
 import { useSignInMutation } from "@/services/auth/auth.api";
-import { set } from "react-hook-form";
 import { useAppDispatch } from "@/hooks/redux";
-import { setNotifycaUpdateProfile } from "./slices";
 import { baseApi } from "@/store/baseQuery";
 import { BlurView } from "expo-blur"; // Import BlurView để làm mờ nền
+import { setNotifycaUpdateProfile } from "./slices";
 const SignInModule = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -42,7 +39,7 @@ const SignInModule = () => {
       setError({ username: "", password: "Mật khẩu không được để trống" });
     try {
       await signIn({ username, password }).unwrap();
-      dispatch(setNotifycaUpdateProfile("on"));
+      dispatch(setNotifycaUpdateProfile(true));
       dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
       router.push("/account");
     } catch (error) {

@@ -44,7 +44,7 @@ const UserTypeScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex flex-1 h-screen">
+    <SafeAreaView className="flex flex-1 h-screen pt-10">
       <ImageBackground
         source={require("../../assets/images/phone-verification-background.png")}
         className="absolute top-0 bottom-0 left-0 right-0"
@@ -103,6 +103,13 @@ const UserTypeScreen = () => {
             className="absolute w-[132px] h-[132px] right-0 -top-[132px]"
           />
 
+          <TouchableOpacity
+            className="mt-10 max-w-full items-center justify-center bg-primary py-3 rounded-3xl shadow-md shadow-black/20"
+            onPress={handleNavigationToSignUp}
+          >
+            <Text className="text-white text-lg font-pnormal">Tiếp tục</Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity
           <TouchableOpacity
             className="mt-10 max-w-full items-center justify-center bg-primary py-3 rounded-3xl shadow-md shadow-black/20"
             onPress={handleNavigationToSignUp}

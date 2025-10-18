@@ -8,16 +8,15 @@ import {
   ScrollViewProps,
   StatusBar,
   Text,
-  SafeAreaView,
   Platform,
   RefreshControl,
-  Dimensions,
 } from "react-native";
 import { router, Stack } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import Entypo from "@expo/vector-icons/Entypo";
-import { LinearGradient } from "expo-linear-gradient";
-import * as Progress from "react-native-progress";
 interface AnimatedHeaderScreenProps extends ScrollViewProps {
   children: ReactNode;
   title?:
@@ -37,6 +36,9 @@ interface AnimatedHeaderScreenProps extends ScrollViewProps {
   isRefreshing?: boolean;
   onRefresh?: () => void;
   ref: React.MutableRefObject<ScrollView | null>;
+  classNames?: {
+    header?: string;
+  };
 }
 
 const colors = {
@@ -63,18 +65,18 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
       backgroundImage,
       isRefreshing = false,
       onRefresh = () => {},
+      classNames,
       ...props
     },
     ref
   ) => {
     const scrollY = useRef(new Animated.Value(0)).current;
-    const insets = useSafeAreaInsets();
     const [isOverTop, setIsOverTop] = React.useState(false);
     const statusBarHeight =
-      Platform.OS === "android"
-        ? StatusBar.currentHeight ?? insets.top
-        : insets.top;
+      Platform.OS === "android" ? StatusBar.currentHeight : 0;
     const headerHeight = 56;
+
+    const inset = useSafeAreaInsets().top;
 
     const handleClickLeft = () => {
       router.replace("..");
@@ -111,15 +113,6 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
               {backgroundImage()}
             </View>
           )}
-          <LinearGradient
-            colors={["#000000a5", "#00000000"]}
-            style={{
-              paddingTop: 40,
-            }}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            className="absolute top-0 left-0 right-0 z-50"
-          />
           <Stack.Screen options={{ headerShown: false }} />
           <View
             className="flex flex-1 absolute top-0 left-0 right-0 bottom-0 "
@@ -127,14 +120,14 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
               flex: Platform.OS === "android" && 1,
             }}
           >
-            <StatusBar barStyle="light-content" backgroundColor="transparent" />
             {shouldHaveHeader && (
               <View
+                className={classNames?.header}
                 style={[
                   styles.container,
                   {
                     paddingTop:
-                      Platform.OS === "android" ? statusBarHeight : insets.top,
+                      Platform.OS === "android" ? statusBarHeight : inset,
                   },
                 ]}
               >
@@ -218,8 +211,7 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
                   <View
                     className="w-full "
                     style={{
-                      height:
-                        Platform.OS === "ios" ? insets.top : statusBarHeight,
+                      height: Platform.OS === "ios" ? 0 : statusBarHeight,
                     }}
                   />
                   <View style={styles.content}>{children}</View>
@@ -296,6 +288,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
+    paddingBottom: 30,
   },
   content: {
     flex: 1,

@@ -26,10 +26,12 @@ interface QuizResultProps {
   data: {
     _id: string;
     score: number;
+    isActive?: boolean;
     startAt: string;
     completedAt: string;
     questions: Array<{
       _id: string;
+      isActive?: boolean;
       isCorrect: boolean;
       score: number;
       question_id: {
@@ -96,8 +98,10 @@ const QuizResult = () => {
   }
 
   // Count correct answers
-  const correctAnswers = data?.questions?.filter((q) => q?.isCorrect)?.length;
-  const totalQuestions = data?.questions?.length;
+  const correctAnswers = data?.questions?.filter(
+    (q) => q?.isCorrect && q?.isActive
+  )?.length;
+  const totalQuestions = data?.questions?.filter((q) => q?.isActive)?.length;
 
   const onRefresh = () => {
     refetch();
@@ -113,7 +117,6 @@ const QuizResult = () => {
       )}
       isRefreshing={isFetching}
       onRefresh={onRefresh}
-      scrollEnabled={false}
     >
       <View style={styles.scrollContainer}>
         <View style={styles.card}>
