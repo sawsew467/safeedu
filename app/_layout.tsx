@@ -29,13 +29,18 @@ const RootLayout = () => {
     require("../assets/images/contest/bg_1.png"),
     require("../assets/images/phone-verification-background.png"),
     require("../assets/images/contest/details/bg_leaderboard.png"),
+    require("../assets/images/phone-verification-background.png"),
+    require("../assets/images/contest/details/bg_leaderboard.png"),
   ]);
 
   useEffect(() => {
     if (error) return;
     if (errorAsset) return;
+    if (error) return;
+    if (errorAsset) return;
 
     if (fontsLoaded && assets) {
+      setAppReady(true);
       setAppReady(true);
     }
   }, [fontsLoaded, error, errorAsset, assets]);

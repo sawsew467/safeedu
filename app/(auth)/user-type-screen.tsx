@@ -110,6 +110,13 @@ const UserTypeScreen = () => {
             <Text className="text-white text-lg font-pnormal">Tiếp tục</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity
+          <TouchableOpacity
+            className="mt-10 max-w-full items-center justify-center bg-primary py-3 rounded-3xl shadow-md shadow-black/20"
+            onPress={handleNavigationToSignUp}
+          >
+            <Text className="text-white text-lg font-pnormal">Tiếp tục</Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity
                         className="mt-5 max-w-full items-center justify-center bg-white py-3 rounded-3xl shadow-md shadow-black/20"
                         onPress={handleNavigationToSignIn}
                     >

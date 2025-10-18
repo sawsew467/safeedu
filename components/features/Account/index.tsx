@@ -211,6 +211,8 @@ const ProfileScreen = () => {
           </>
         ) : isFetching ? (
           <ProfileSkeleton />
+        ) : isFetching ? (
+          <ProfileSkeleton />
         ) : (
           <>
             <View className="z-10 bg-none px-1">

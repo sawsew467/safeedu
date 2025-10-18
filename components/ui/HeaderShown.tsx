@@ -8,12 +8,14 @@ import {
   ScrollViewProps,
   StatusBar,
   Text,
-  SafeAreaView,
   Platform,
   RefreshControl,
 } from "react-native";
 import { router, Stack } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import Entypo from "@expo/vector-icons/Entypo";
 interface AnimatedHeaderScreenProps extends ScrollViewProps {
   children: ReactNode;
@@ -34,6 +36,9 @@ interface AnimatedHeaderScreenProps extends ScrollViewProps {
   isRefreshing?: boolean;
   onRefresh?: () => void;
   ref: React.MutableRefObject<ScrollView | null>;
+  classNames?: {
+    header?: string;
+  };
 }
 
 const colors = {
@@ -60,6 +65,7 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
       backgroundImage,
       isRefreshing = false,
       onRefresh = () => {},
+      classNames,
       ...props
     },
     ref
@@ -69,6 +75,8 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
     const statusBarHeight =
       Platform.OS === "android" ? StatusBar.currentHeight : 0;
     const headerHeight = 56;
+
+    const inset = useSafeAreaInsets().top;
 
     const handleClickLeft = () => {
       router.replace("..");
@@ -114,10 +122,12 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
           >
             {shouldHaveHeader && (
               <View
+                className={classNames?.header}
                 style={[
                   styles.container,
                   {
-                    paddingTop: Platform.OS === "android" ? statusBarHeight : 0,
+                    paddingTop:
+                      Platform.OS === "android" ? statusBarHeight : inset,
                   },
                 ]}
               >

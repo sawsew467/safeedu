@@ -388,38 +388,48 @@ function Contest() {
       }}
       isRefreshing={isFetching}
       onRefresh={onRefresh}
-    >
-      <View style={styles.imageContainer}>
-        <View style={styles.imageDarkOverlay} />
-        <Image
+      onScroll={Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        {
+          useNativeDriver: false,
+        }
+      )}
+      overScrollMode="never"
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+      classNames={{
+        header: "bg-white",
+      }}
+      backgroundImage={() => (
+        <ImageBackground
           source={{ uri: competition?.image_url }}
           resizeMode="cover"
-          style={styles.backgroundImage}
-        />
-        <View style={styles.contentContainer}>
-          <Text style={styles.contentTitle} className="font-pbold">
-            {competition?.title}
-          </Text>
-          <View style={styles.locationContainer}>
-            <Image source={location} style={styles.locationIcon} />
-            <Text style={styles.locationText}>
-              {competition?.isPublic === "public"
-                ? "Toàn quốc"
-                : competition?.organizationId?.name}
+          className="flex h-[450px] justify-center absolute right-0 left-0 w-full"
+        >
+          <View style={styles.imageDarkOverlay} />
+        </ImageBackground>
+      )}
+      HeaderComponent={() => (
+        <View className="flex absolute top-0 z-0 w-full">
+          <View style={styles.contentContainer}>
+            <Text style={styles.contentTitle} className="font-pbold">
+              {competition?.title}
             </Text>
+            <View style={styles.locationContainer}>
+              <Image source={location} style={styles.locationIcon} />
+              <Text style={styles.locationText}>
+                {competition?.isPublic === "public"
+                  ? "Toàn quốc"
+                  : competition?.organizationId?.name}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
+      )}
+    >
       <Animated.View
+        className="h-full overflow-hidden mt-[350px] z-10 rounded-[24px_24px_0_0] relative"
         style={[
-          {
-            height: "100%",
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-            position: "relative",
-            overflow: "hidden",
-            zIndex: 5,
-          },
           {
             top: stickyTopViewContent,
           },

@@ -446,6 +446,43 @@ function ChatContent() {
   //     handleAddBotMessage("", null);
   //     const conversationResponse = await createConversation().unwrap();
   //     const { id: conversationId } = conversationResponse.data;
+  // const handleAddBotMessage = (content: string, id_message: string | null) => {
+  //   if (content) {
+  //     setChatData((prevData) => {
+  //       const data = prevData;
+  //       data.splice(prevData.length - 1, 1);
+  //       return [
+  //         ...data,
+  //         {
+  //           content: content,
+  //           role: "assistant",
+  //           id_message,
+  //         },
+  //       ];
+  //     });
+  //     setStatusLike((prev) => ({
+  //       ...prev,
+  //       [id_message]: {
+  //         status: "none",
+  //       },
+  //     }));
+  //   } else {
+  //     setChatData((prevData) => [
+  //       ...prevData,
+  //       {
+  //         content: content,
+  //         role: "assistant",
+  //         id_message,
+  //       },
+  //     ]);
+  //   }
+  // };
+  // const handleSendMessage = async (content: string) => {
+  //   try {
+  //     handleAddUserMessage(content);
+  //     handleAddBotMessage("", null);
+  //     const conversationResponse = await createConversation().unwrap();
+  //     const { id: conversationId } = conversationResponse.data;
 
   //     const chatResponse = await createChat({
   //       params: {
@@ -487,7 +524,56 @@ function ChatContent() {
   //           clearInterval(intervalId);
   //           count = 0;
   //         }
+  //     const chatResponse = await createChat({
+  //       params: {
+  //         conversation_id: conversationId,
+  //       },
+  //       data: {
+  //         bot_id: "7430824648633745415",
+  //         user_id: "7361642627714876433",
+  //         auto_save_history: true,
+  //         additional_messages: [
+  //           {
+  //             role: "user",
+  //             content: content,
+  //             content_type: "text",
+  //           },
+  //         ],
+  //       },
+  //     }).unwrap();
+  //     if (chatResponse.code != 0) {
+  //       setError(true);
+  //       handleAddBotMessage("Đã có lỗi xảy ra", uuid.v4());
+  //       return;
+  //     }
+  //     const { id: chatId } = chatResponse?.data;
+  //     let count = 0;
+  //     const intervalId = setInterval(async () => {
+  //       try {
+  //         const messagesResponse = await getChatMessages({
+  //           params: {
+  //             chat_id: chatId,
+  //             conversation_id: conversationId,
+  //           },
+  //         });
+  //         const messages = messagesResponse.data.data;
+  //         count++;
+  //         if (count > 15) {
+  //           handleAddBotMessage("Đã có lỗi xảy ra", uuid.v4());
+  //           setError(true);
+  //           clearInterval(intervalId);
+  //           count = 0;
+  //         }
 
+  //         if (messages.length > 1) {
+  //           clearInterval(intervalId);
+  //           const [answer] = messages;
+  //           handleAddBotMessage(answer.content, answer.id);
+  //         }
+  //       } catch {}
+  //     }, 1000);
+  //   } catch {}
+  // };
   //         if (messages.length > 1) {
   //           clearInterval(intervalId);
   //           const [answer] = messages;
