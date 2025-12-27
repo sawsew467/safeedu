@@ -44,6 +44,8 @@ const SignUpModule = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [selectedSchool, setSelectedSchool] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
+  const [classSection, setClassSection] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -55,6 +57,7 @@ const SignUpModule = () => {
   const [typeModalProvinceVisible, setTypeModalProvinceVisible] =
     useState(false);
   const [typeModalOrgVisible, setTypeModalOrgVisible] = useState(false);
+  const [typeModalClassVisible, setTypeModalClassVisible] = useState(false);
   const [typeModalDobVisible, setTypeModalDobVisible] = useState(false);
   const [error, setError] = useState({
     firstName: "",
@@ -62,6 +65,7 @@ const SignUpModule = () => {
     dob: "",
     city: "",
     school: "",
+    class: "",
     userName: "",
     password: "",
     confirmPassword: "",
@@ -143,6 +147,7 @@ const SignUpModule = () => {
       dob: "",
       city: "",
       school: "",
+      class: "",
       userName: "",
       password: "",
       confirmPassword: "",
@@ -213,6 +218,10 @@ const SignUpModule = () => {
               phone_number: phone ?? undefined,
               email: email ?? undefined,
               organizationId: selectedSchool ?? "",
+              class_name:
+                selectedClass && classSection
+                  ? `${selectedClass}${classSection}`
+                  : undefined,
               username: userName,
               password,
             }).unwrap();
@@ -249,11 +258,7 @@ const SignUpModule = () => {
 
   return (
     <View className="flex-1 relative">
-      <KeyboardAvoidingView
-        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
-        behavior="padding"
-        style={[{ flex: 1 }]}
-      >
+      <KeyboardAvoidingView behavior="padding" style={[{ flex: 1 }]}>
         <ImageBackground
           source={background}
           className="absolute top-0 h-[110%] left-0 w-screen z-0"
@@ -450,6 +455,70 @@ const SignUpModule = () => {
                       Học sinh cần cung cấp thông tin về trường.
                     </Text>
                   )}
+
+                  <Text className="font-semibold text-base text-[#959595] mt-5">
+                    Lớp
+                  </Text>
+                  <View className="flex-row gap-3">
+                    <View className="flex-1">
+                      <TouchableOpacity
+                        onPress={() => {
+                          setTypeModalClassVisible(true);
+                        }}
+                        className="flex-row justify-between items-center"
+                      >
+                        <Text className="text-lg text-black pl-0 pb-0">
+                          {selectedClass ? `Lớp ${selectedClass}` : "Chọn lớp"}
+                        </Text>
+                        <Ionicons name="chevron-down" size={24} color="#888" />
+                      </TouchableOpacity>
+                      <ModalPicker
+                        visible={typeModalClassVisible}
+                        onClose={() => {
+                          setTypeModalClassVisible(false);
+                        }}
+                        title="Chọn lớp"
+                        options={[
+                          { label: "Lớp 1", value: "1" },
+                          { label: "Lớp 2", value: "2" },
+                          { label: "Lớp 3", value: "3" },
+                          { label: "Lớp 4", value: "4" },
+                          { label: "Lớp 5", value: "5" },
+                          { label: "Lớp 6", value: "6" },
+                          { label: "Lớp 7", value: "7" },
+                          { label: "Lớp 8", value: "8" },
+                          { label: "Lớp 9", value: "9" },
+                          { label: "Lớp 10", value: "10" },
+                          { label: "Lớp 11", value: "11" },
+                          { label: "Lớp 12", value: "12" },
+                        ]}
+                        selectedValue={selectedClass}
+                        onSelect={(value) => {
+                          setSelectedClass(value);
+                        }}
+                      />
+                      <View className="w-full h-[1.5px] bg-black mt-2" />
+                    </View>
+                    <View className="flex-1">
+                      <TextInput
+                        placeholder="A1, B2, ..."
+                        placeholderTextColor="#C4C4C4"
+                        value={classSection}
+                        onChangeText={setClassSection}
+                        className="text-lg text-black pl-0 pb-0"
+                      />
+                      <View className="w-full h-[1.5px] bg-black mt-2" />
+                    </View>
+                  </View>
+                  {error.class ? (
+                    <Text className="text-red-500 text-xs mt-2">
+                      {error.class}
+                    </Text>
+                  ) : (
+                    <Text className="text-gray-500 text-xs mt-2">
+                      Học sinh cần cung cấp thông tin về lớp (ví dụ: Lớp 10A1).
+                    </Text>
+                  )}
                 </>
               )}
 
@@ -484,7 +553,7 @@ const SignUpModule = () => {
                 />
                 <TouchableOpacity
                   onPress={togglePasswordVisibility}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  className="absolute right-2 transform -translate-y-1/2"
                 >
                   <Ionicons
                     name={passwordVisible ? "eye" : "eye-off"}
@@ -514,7 +583,7 @@ const SignUpModule = () => {
                 />
                 <TouchableOpacity
                   onPress={toggleConfirmPasswordVisibility}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  className="absolute right-2 transform -translate-y-1/2"
                 >
                   <Ionicons
                     name={confirmPasswordVisible ? "eye" : "eye-off"}

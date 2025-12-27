@@ -118,6 +118,7 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
             className="flex flex-1 absolute top-0 left-0 right-0 bottom-0 "
             style={{
               flex: Platform.OS === "android" && 1,
+              marginTop: shouldHaveHeader ? 0 : 40,
             }}
           >
             {shouldHaveHeader && (

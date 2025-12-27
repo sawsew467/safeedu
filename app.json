@@ -51,7 +51,6 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store",
       "expo-asset"
     ],
     "extra": {
@@ -63,7 +62,7 @@
       }
     },
     "owner": "safeedu",
-    "runtimeVersion": "1.0.0",
+    "runtimeVersion": "1.0.3",
     "updates": {
       "url": "https://u.expo.dev/630c8166-49d0-426b-9dbe-1391effb91db"
     }
