@@ -34,6 +34,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Toast from "react-native-toast-message";
 import ReportDialog from "./report-dialog";
+import { ThumbsDown, ThumbsUp } from "lucide-react-native";
 
 const markdownStyles = StyleSheet.create({
   heading1: {
@@ -258,9 +259,9 @@ function ChatContent() {
       name: "like",
       IconComponent: (id: string) =>
         statusLike?.[id]?.status !== "like" ? (
-          <AntDesign name="like2" size={16} />
+          <ThumbsUp size={16} />
         ) : (
-          <AntDesign name="like1" size={16} color="#75A815" />
+          <ThumbsUp size={16} color="#75A815" />
         ),
       actions: (_, id: string) => {
         setStatusLike((prev) => ({
@@ -275,9 +276,9 @@ function ChatContent() {
       name: "dislike",
       IconComponent: (id: string) =>
         statusLike?.[id]?.status !== "dislike" ? (
-          <AntDesign name="dislike2" size={16} />
+          <ThumbsDown size={16} />
         ) : (
-          <AntDesign name="dislike1" size={16} color="#DD2222" />
+          <ThumbsDown size={16} color="#DD2222" />
         ),
       color: "black",
       actions: (_, id: string) =>
@@ -584,8 +585,11 @@ function ChatContent() {
   //   } catch {}
   // };
   return (
-    <View className="flex-1 relative mt-10">
-      <KeyboardAvoidingView behavior="padding" style={[styles.container]}>
+    <View className="flex-1 relative pt-10">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={[styles.container]}
+      >
         <View style={styles.container}>
           <ScrollView style={{ flex: 1 }}>
             <View style={styles.container_content}>

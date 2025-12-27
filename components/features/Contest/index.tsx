@@ -232,7 +232,7 @@ function Contest() {
       )}
     >
       <Animated.View
-        className="h-full overflow-hidden mt-[400px] rounded-[24px_24px_0_0] relative"
+        className="h-full overflow-hidden mt-[350px] rounded-[24px_24px_0_0] relative"
         style={[
           {
             top: stickyTopViewContent,

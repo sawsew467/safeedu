@@ -76,12 +76,14 @@ export const ModalPicker: React.FC<ModalPickerProps> = ({
               <Picker
                 selectedValue={safeSelectedValue}
                 onValueChange={handleSlelect}
+                style={{ backgroundColor: "#ffffff" }}
               >
                 {options.map((option) => (
                   <Picker.Item
                     key={option.value}
                     label={option.label}
                     value={option.value}
+                    color="#000000"
                   />
                 ))}
               </Picker>
