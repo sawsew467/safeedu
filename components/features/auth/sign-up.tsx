@@ -171,14 +171,8 @@ const SignUpModule = () => {
         "Tên đăng nhập chỉ được chứa chữ cái không dấu, số, dấu gạch dưới và dấu gạch ngang";
       hasError = true;
     }
-    if (
-      password &&
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{1,}$/.test(
-        password
-      )
-    ) {
-      newErrors.password =
-        "Mật khẩu phải có ít nhất 1 chữ in hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt";
+    if (password && password.length < 8) {
+      newErrors.password = "Mật khẩu phải có ít nhất 8 ký tự (chữ hoặc số)";
       hasError = true;
     }
 
