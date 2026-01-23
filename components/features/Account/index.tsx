@@ -254,6 +254,14 @@ const ProfileScreen = () => {
                       </Text>
                     </View>
                   )}
+                  {data?.class_name && (
+                    <View style={styles.badge}>
+                      <Ionicons name="people-outline" size={14} color="#666" />
+                      <Text style={styles.badgeText}>
+                        Lớp {data?.class_name}
+                      </Text>
+                    </View>
+                  )}
                 </View>
 
                 <View className="flex flex-row justify-center w-full  gap-4 mb-2">
@@ -387,6 +395,9 @@ const styles = StyleSheet.create({
   badgeContainer: {
     flexDirection: "row",
     marginBottom: 15,
+    gap: 8,
+    flexWrap: "wrap",
+    justifyContent: "center",
   },
   badge: {
     flexDirection: "row",

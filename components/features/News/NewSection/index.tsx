@@ -60,6 +60,8 @@ const buttons = [
 export function NewSection() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [refetching, setRefetching] = useState(false);
   const { topicData, isSuccess } = useGetAllTopicsQuery(undefined, {
     selectFromResult: ({ data, isSuccess }) => {
       return {
@@ -111,6 +113,18 @@ export function NewSection() {
       },
     });
 
+  useEffect(() => {
+    if (isSuccess && isSuccessLibrary) {
+      setLoading(false);
+    }
+  }, [isSuccess, isSuccessLibrary]);
+
+  useEffect(() => {
+    if (refetching && !isFetching && !isFetchingLibrary) {
+      setRefetching(false);
+    }
+  }, [isFetching, isFetchingLibrary]);
+
   const header = React.useMemo(() => {
     return (
       <View className="pt-12">
@@ -122,12 +136,12 @@ export function NewSection() {
             resizeMode="cover"
           />
         </View>
-        <Slider isFetching={isFetching} data={newsSliderData} />
+        <Slider isFetching={loading || refetching} data={newsSliderData} />
         <View className="mt-6 mb-2">
           <View style={{ gap: 20 }}>
             {librarys.map((library: TypeLibrary, index: number) => (
               <LibraryCard
-                isFetching={isFetchingLibrary}
+                isFetching={loading || refetching}
                 item={library}
                 key={library?._id}
                 index={index}
@@ -178,6 +192,7 @@ export function NewSection() {
     if (isSuccessNews && isSuccessLibrary) {
       refetch();
       refetchLibrary();
+      setRefetching(true);
     }
   };
 
@@ -186,12 +201,15 @@ export function NewSection() {
       style={styles.sectionContainer}
       scrollEnabled={false}
       refreshControl={
-        <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
+        <RefreshControl
+          refreshing={loading || refetching}
+          onRefresh={onRefresh}
+        />
       }
       ListHeaderComponent={header}
       contentContainerStyle={styles.flatListContainer}
       data={
-        isFetching
+        loading || refetching
           ? Array.from({ length: 5 })
           : newsData?.filter(
               (item: TypeNews) => item?.topic_id?._id === activeTab
@@ -211,7 +229,7 @@ export function NewSection() {
             style={styles.listItem}
           >
             <Skeleton
-              show={isFetching}
+              show={loading || refetching}
               width={100}
               height={100}
               radius={8}
@@ -227,7 +245,7 @@ export function NewSection() {
             <View style={styles.listTextContainer}>
               <View>
                 <Skeleton
-                  show={isFetching}
+                  show={loading || refetching}
                   width={"100%"}
                   height={30}
                   radius={8}
@@ -240,7 +258,7 @@ export function NewSection() {
               </View>
               <View>
                 <Skeleton
-                  show={isFetching}
+                  show={loading || refetching}
                   width={"60%"}
                   height={20}
                   radius={8}
