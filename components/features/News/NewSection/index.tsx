@@ -184,6 +184,7 @@ export function NewSection() {
   return (
     <FlatList
       style={styles.sectionContainer}
+      scrollEnabled={false}
       refreshControl={
         <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
       }

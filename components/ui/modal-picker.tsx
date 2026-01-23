@@ -1,17 +1,24 @@
 import { cn } from "@/utils/cn";
 import { Picker } from "@react-native-picker/picker";
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Modal,
-  View,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Platform,
   Pressable,
   ScrollView,
-  Platform,
-  TouchableOpacity,
   Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
-type PickerOption = {
+export type PickerOption = {
   value: string;
   label: string;
 };
@@ -33,79 +40,161 @@ export const ModalPicker: React.FC<ModalPickerProps> = ({
   options,
   title,
 }) => {
-  //    useEffect(() => {
-  //         if (visible && options.length > 0 && !selectedValue) {
-  //             onSelect(options[0].value);
-  //         }
-  //     }, [visible, options, selectedValue]);
-
   const safeSelectedValue = selectedValue !== null ? String(selectedValue) : "";
+  const opacity = useSharedValue(0);
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [contentHeight, setContentHeight] = useState(0);
+
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }));
+
+  useEffect(() => {
+    if (visible) {
+      opacity.value = withTiming(1, { duration: 200 });
+
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    } else {
+      opacity.value = 0;
+    }
+  }, [visible, opacity]);
+
+  const closeModal = useCallback(() => {
+    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+    opacity.value = withTiming(0, { duration: 200 });
+  }, [opacity]);
+
   const handleSlelect = (value: string) => {
     if (onSelect) {
       onSelect(value);
     }
-    onClose();
+    closeModal();
+  };
+  const handleSlelectIOS = (value: string) => {
+    if (onSelect) {
+      onSelect(value);
+    }
   };
 
   const handleClose = () => {
-    if (selectedValue === null && options.length === 1) {
-      onSelect(options[0].value);
+    if (!selectedValue && options.length > 0) {
+      onSelect?.(options[0].value);
     }
-    onClose();
+    closeModal();
+  };
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+
+    if (scrollY === 0) {
+      onClose();
+    }
+  };
+
+  const handleScrollEndDrag = (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
+    const velocity = event.nativeEvent.velocity?.y || 0;
+    const scrollY = event.nativeEvent.contentOffset.y;
+
+    if (scrollY < contentHeight * 0.7) {
+      closeModal();
+    } else {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }
+
+    if (velocity < -0.5) {
+      closeModal();
+    }
   };
 
   return (
     <Modal
+      transparent
       visible={visible}
-      animationType="fade"
-      transparent={true}
+      animationType="none"
       onRequestClose={handleClose}
-      statusBarTranslucent={true}
+      statusBarTranslucent
+      presentationStyle="overFullScreen"
     >
-      <View className="flex-1 h-screen bg-slate-900/70 justify-end">
-        <View className="bg-white max-h-[80%] p-5 rounded-t-3xl">
-          <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-lg font-bold">{title}</Text>
-            <Pressable onPress={handleClose} className="px-4 py-2">
-              <Text className="text-primary font-pmedium">Xong</Text>
-            </Pressable>
-          </View>
+      <Animated.View
+        style={[
+          overlayStyle,
+          { flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)" },
+        ]}
+      >
+        <ScrollView
+          ref={scrollViewRef}
+          scrollEventThrottle={16}
+          onScroll={handleScroll}
+          onScrollEndDrag={handleScrollEndDrag}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+          overScrollMode="never"
+          keyboardShouldPersistTaps="handled"
+        >
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={closeModal}
+            className="h-screen"
+          />
 
-          <ScrollView className="max-h-[300px]">
-            {Platform.OS === "ios" ? (
-              <Picker
-                selectedValue={safeSelectedValue}
-                onValueChange={handleSlelect}
-              >
-                {options.map((option) => (
-                  <Picker.Item
-                    key={option.value}
-                    label={option.label}
-                    value={option.value}
-                  />
-                ))}
-              </Picker>
-            ) : (
-              <View>
-                {options.map((option) => (
-                  <TouchableOpacity
-                    key={option.value}
-                    className={cn(
-                      "py-3 border-b-[1px] border-[#EEEEEE]",
-                      safeSelectedValue === option.value && "bg-[#E8F4F9]"
-                    )}
-                    onPress={() => handleSlelect(option.value)}
-                  >
-                    <Text className="text-base text-center text-[#333333]">
-                      {option.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-          </ScrollView>
-        </View>
-      </View>
+          <View
+            className="bg-white rounded-t-3xl p-5"
+            onLayout={(event) => {
+              const { height } = event.nativeEvent.layout;
+              setContentHeight(height);
+            }}
+          >
+            <View className="items-center mb-4">
+              <View className="w-10 h-1 bg-gray-300 rounded-full" />
+            </View>
+            <View className="flex-row justify-between items-center mb-4">
+              <Text className="text-lg font-bold">{title}</Text>
+              <Pressable onPress={handleClose} className="px-4 py-2">
+                <Text className="text-primary font-pmedium">Done</Text>
+              </Pressable>
+            </View>
+
+            <ScrollView className="max-h-[300px]" nestedScrollEnabled={true}>
+              {Platform.OS === "ios" ? (
+                <Picker
+                  selectedValue={safeSelectedValue}
+                  onValueChange={handleSlelectIOS}
+                  itemStyle={{ color: "black" }}
+                >
+                  {options.map((option) => (
+                    <Picker.Item
+                      key={option.value}
+                      label={option.label}
+                      value={option.value}
+                    />
+                  ))}
+                </Picker>
+              ) : (
+                <View>
+                  {options.map((option) => (
+                    <TouchableOpacity
+                      key={option.value}
+                      className={cn(
+                        "py-3 border-b-[1px] border-[#EEEEEE]",
+                        safeSelectedValue === option.value && "bg-[#E8F4F9]"
+                      )}
+                      onPress={() => handleSlelect(option.value)}
+                    >
+                      <Text className="text-base text-center text-[#333333]">
+                        {option.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </ScrollView>
+          </View>
+        </ScrollView>
+      </Animated.View>
     </Modal>
   );
 };

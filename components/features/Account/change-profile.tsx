@@ -9,7 +9,6 @@ import {
   ImageBackground,
   Image,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 
@@ -42,6 +41,7 @@ import { Building2, School } from "lucide-react-native";
 import background from "@/assets/images/account/background.png";
 import { baseApi } from "@/store/baseQuery";
 import { useAppDispatch } from "@/hooks/redux";
+import { Alert } from "@/components/ui/alert";
 
 type FormData = {
   avatar: string;
@@ -193,17 +193,18 @@ const ProfileFormScreen = () => {
     try {
       await updateProfile(data).unwrap();
       dispatch(baseApi.util.invalidateTags(["citizens", "students"]));
-      alert("Cập nhật hồ sơ thành công!");
+      Alert.alert("Thông báo", "Cập nhật hồ sơ thành công!");
     } catch (error) {
       if (error?.status === 413) {
-        alert(
+        Alert.alert(
+          "Thông báo",
           "Ảnh tải lên quá lớn. Vui lòng chọn ảnh khác hoặc giảm dung lượng ảnh."
         );
         return;
       }
       if (error?.data?.error?.details?.at(0))
-        alert(error?.data?.error?.details?.at(0));
-      else alert("Đã xảy ra lỗi khi cập nhật hồ sơ!");
+        Alert.alert("Thông báo", error?.data?.error?.details?.at(0));
+      else Alert.alert("Thông báo", "Đã xảy ra lỗi khi cập nhật hồ sơ!");
     } finally {
     }
   };
@@ -259,7 +260,7 @@ const ProfileFormScreen = () => {
       if (!result?.canceled && result?.assets && result?.assets[0]) {
         const asset: any = result?.assets[0];
         if (asset?.uri === undefined) {
-          alert("Vui lòng chọn ảnh khác");
+          Alert.alert("Thông báo", "Vui lòng chọn ảnh khác");
         }
         let localUri = asset?.uri;
         let filename = localUri.split("/").pop();
@@ -279,7 +280,7 @@ const ProfileFormScreen = () => {
       }
     } catch (error) {
       console.error("Error picking image:", error);
-      alert(JSON.stringify(error));
+      Alert.alert("Thông báo", JSON.stringify(error));
     }
   };
 

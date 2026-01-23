@@ -3,12 +3,14 @@ const AI_TOKEN = process.env.EXPO_PUBLIC_AI_TOKEN;
 const ACCESS_TOKEN = "_access_token";
 const REFRESH_TOKEN = "_refresh_token";
 const NOTIFYCA_UPDATE_PROFILE = "_notifyca_update_profile";
+const LOGIN_PROMPT_SHOWN = "_login_prompt_shown";
 const constants = {
   API_SERVER,
   AI_TOKEN,
   ACCESS_TOKEN,
   REFRESH_TOKEN,
   NOTIFYCA_UPDATE_PROFILE,
+  LOGIN_PROMPT_SHOWN,
 };
 export default constants;
 

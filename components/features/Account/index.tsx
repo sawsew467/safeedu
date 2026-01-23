@@ -160,6 +160,8 @@ const ProfileScreen = () => {
   const averageScore = calculateAverageScore(data?.quizResults);
   const categories = categorizeResults(data?.quizResults);
 
+  console.log("data", data);
+
   return (
     <>
       <UpdateInformationModal
@@ -299,8 +301,8 @@ const ProfileScreen = () => {
                           averageScore >= 8
                             ? "#4CAF50"
                             : averageScore >= 5
-                            ? "#F59E0B"
-                            : "#EF4444",
+                              ? "#F59E0B"
+                              : "#EF4444",
                       },
                     ]}
                   />
