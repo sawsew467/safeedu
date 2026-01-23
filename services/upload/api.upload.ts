@@ -12,6 +12,7 @@ import constants from "@/settings/constants";
 const baseQuery = fetchBaseQuery({
   baseUrl: constants.API_SERVER,
   prepareHeaders: (headers) => {
+    headers.set("ngrok-skip-browser-warning", "100");
     return headers;
   },
 });

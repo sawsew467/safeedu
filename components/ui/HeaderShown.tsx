@@ -118,7 +118,6 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
             className="flex flex-1 absolute top-0 left-0 right-0 bottom-0 "
             style={{
               flex: Platform.OS === "android" && 1,
-              marginTop: shouldHaveHeader ? 0 : 40,
             }}
           >
             {shouldHaveHeader && (
@@ -210,9 +209,9 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
                   scrollEventThrottle={16}
                 >
                   <View
-                    className="w-full "
+                    className="w-full"
                     style={{
-                      height: Platform.OS === "ios" ? 0 : statusBarHeight,
+                      height: Platform.OS === "ios" ? 40 : statusBarHeight,
                     }}
                   />
                   <View style={styles.content}>{children}</View>

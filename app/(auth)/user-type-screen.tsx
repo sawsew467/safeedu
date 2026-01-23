@@ -18,17 +18,13 @@ const UserTypeScreen = () => {
   >(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handleUserTypeSelect = (type: "student" | "citizen") => {
-    setSelectedUserType(type);
-  };
-
   const isSelected = (type: "student" | "citizen") => selectedUserType === type;
 
-  const handleNavigationToSignUp = () => {
-    if (selectedUserType) {
+  const handleNavigationToSignUp = (type: "student" | "citizen") => {
+    if (type) {
       router.push({
         pathname: "/sign-up",
-        params: { userType: selectedUserType },
+        params: { userType: type },
       });
     } else {
       setIsModalVisible(true);
@@ -60,7 +56,7 @@ const UserTypeScreen = () => {
         <View className="mt-7">
           <View className="flex flex-row gap-3">
             <TouchableOpacity
-              onPress={() => handleUserTypeSelect("student")}
+              onPress={() => handleNavigationToSignUp("student")}
               className={`flex-1 ${
                 isSelected("student") ? "bg-primary/60" : "bg-white/90"
               } rounded-3xl flex flex-col justify-center items-center`}
@@ -79,7 +75,7 @@ const UserTypeScreen = () => {
               />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => handleUserTypeSelect("citizen")}
+              onPress={() => handleNavigationToSignUp("citizen")}
               className={`flex-1 ${
                 isSelected("citizen") ? "bg-primary/60" : "bg-white/90"
               } rounded-3xl flex flex-col justify-center items-center`}
@@ -105,7 +101,7 @@ const UserTypeScreen = () => {
 
           <TouchableOpacity
             className="mt-10 max-w-full items-center justify-center bg-primary py-3 rounded-3xl shadow-md shadow-black/20"
-            onPress={handleNavigationToSignUp}
+            onPress={() => handleNavigationToSignUp(selectedUserType)}
           >
             <Text className="text-white text-lg font-pnormal">Tiếp tục</Text>
           </TouchableOpacity>

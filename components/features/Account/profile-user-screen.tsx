@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   Image,
   RefreshControl,
-  SafeAreaView,
   ImageBackground,
   Platform,
   StatusBar,
@@ -24,8 +23,11 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetStudentByUsernameQuery } from "@/services/user/user.api";
 import ProfileSkeleton from "./profile-skeleton";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import stylesAdnroid from "@/components/ui/SafeViewAndroid";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import HeaderShown from "@/components/ui/HeaderShown";
 
 const ProfileUserScreen = () => {
   const router = useRouter();
@@ -114,14 +116,11 @@ const ProfileUserScreen = () => {
 
   if (isFetching || !data) {
     return (
-      <>
-        <View className="relative w-full h-full">
-          <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-            <ImageBackground source={background} className="w-full h-full" />
-          </View>
+      <View className="relative w-full h-full">
+        <ImageBackground source={background} className="w-full h-full">
           <ProfileSkeleton />
-        </View>
-      </>
+        </ImageBackground>
+      </View>
     );
   }
 
@@ -129,16 +128,9 @@ const ProfileUserScreen = () => {
   const categories = categorizeResults(data?.quizResults);
 
   return (
-    <>
-      <SafeAreaView className="bg-none h-full relative">
-        <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-        />
-        <View className="absolute top-0 bottom-0 left-0 right-0 z-0">
-          <ImageBackground source={background} className="w-full h-full" />
-        </View>
+    <HeaderShown
+      isRefreshing={isFetching}
+      headerLeft={() => (
         <View
           className="flex py-2 flex-row items-center justify-start gap-2"
           style={{
@@ -167,98 +159,89 @@ const ProfileUserScreen = () => {
             </View>
           </View>
         </View>
-
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={isFetching}
-              onRefresh={() => {
-                refetch();
-              }}
+      )}
+      onRefresh={() => {
+        refetch();
+      }}
+      backgroundImage={() => (
+        <ImageBackground source={background} className="w-full h-full" />
+      )}
+    >
+      <View className="flex justify-center items-center">
+        <View className="mb-4 border-4 border-white rounded-full w-[100px] h-[100px] overflow-hidden">
+          {data?.avatar ? (
+            <Image
+              source={{ uri: data?.avatar ?? "/placehodler.svg" }}
+              className="w-full h-full rounded-full"
             />
-          }
-          className="z-10 bg-none h-full"
-          contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.top * 3 }}
-        >
-          <View className="z-10 flex justify-center items-center mt-10">
-            <View className="mb-4 border-4 border-white rounded-full w-[100px] h-[100px] overflow-hidden">
-              {data?.avatar ? (
-                <Image
-                  source={{ uri: data?.avatar ?? "/placehodler.svg" }}
-                  className="w-full h-full rounded-full"
-                />
-              ) : (
-                <View style={styles.avatarPlaceholder}>
-                  <Text style={styles.avatarText}>
-                    {data?.first_name?.charAt(0)}
-                    {data?.last_name?.charAt(0)}
-                  </Text>
-                </View>
-              )}
-            </View>
-
-            <Text className="font-pbold text-xl text-center text-white">
-              {data?.first_name} {data?.last_name}
-            </Text>
-            <Text className="font-pmedium text-sm text-gray-300 mb-2">
-              @{data?.username}
-            </Text>
-            <Text className="font-plight text-lg text-gray-100 mb-4">
-              {formatDate(data?.date_of_birth, "DD/MM/YYYY")}
-            </Text>
-
-            {data?.organizationId?.name && (
-              <View style={styles.badgeContainer}>
-                <View style={styles.badge}>
-                  <Ionicons name="school-outline" size={14} color="#666" />
-                  <Text style={styles.badgeText} className="font-pregular">
-                    {data?.organizationId?.name}
-                  </Text>
-                </View>
-              </View>
-            )}
-          </View>
-
-          <View style={styles.scoreCard}>
-            <Text style={styles.cardTitle}>Điểm trung bình</Text>
-            <Text style={styles.cardSubtitle}>
-              Tổng hợp từ tất cả các bài kiểm tra
-            </Text>
-
-            <View style={styles.averageScoreContainer}>
-              <Text style={styles.averageScore}>
-                {averageScore?.toFixed(1)}
+          ) : (
+            <View style={styles.avatarPlaceholder}>
+              <Text style={styles.avatarText}>
+                {data?.first_name?.charAt(0)}
+                {data?.last_name?.charAt(0)}
               </Text>
-              <Text style={styles.maxScore}>/10</Text>
             </View>
+          )}
+        </View>
 
-            <View style={styles.progressBackground}>
-              <View
-                style={[
-                  styles.progressFill,
-                  {
-                    width: `${averageScore * 10}%`,
-                    backgroundColor:
-                      averageScore >= 8
-                        ? "#4CAF50"
-                        : averageScore >= 5
-                        ? "#F59E0B"
-                        : "#EF4444",
-                  },
-                ]}
-              />
+        <Text className="font-pbold text-xl text-center text-white">
+          {data?.first_name} {data?.last_name}
+        </Text>
+        <Text className="font-pmedium text-sm text-gray-300 mb-2">
+          @{data?.username}
+        </Text>
+        <Text className="font-plight text-lg text-gray-100 mb-4">
+          {formatDate(data?.date_of_birth, "DD/MM/YYYY")}
+        </Text>
+
+        {data?.organizationId?.name && (
+          <View style={styles.badgeContainer}>
+            <View style={styles.badge}>
+              <Ionicons name="school-outline" size={14} color="#666" />
+              <Text style={styles.badgeText} className="font-pregular">
+                {data?.organizationId?.name}
+              </Text>
             </View>
           </View>
+        )}
+      </View>
 
-          <ResultAnalysisCard categories={categories} />
+      <View style={styles.scoreCard}>
+        <Text style={styles.cardTitle}>Điểm trung bình</Text>
+        <Text style={styles.cardSubtitle}>
+          Tổng hợp từ tất cả các bài kiểm tra
+        </Text>
 
-          <QuizHistoryCard
-            quizResults={data?.quizResults}
-            formatDate={formatDate}
+        <View style={styles.averageScoreContainer}>
+          <Text style={styles.averageScore}>{averageScore?.toFixed(1)}</Text>
+          <Text style={styles.maxScore}>/10</Text>
+        </View>
+
+        <View style={styles.progressBackground}>
+          <View
+            style={[
+              styles.progressFill,
+              {
+                width: `${averageScore * 10}%`,
+                backgroundColor:
+                  averageScore >= 8
+                    ? "#4CAF50"
+                    : averageScore >= 5
+                    ? "#F59E0B"
+                    : "#EF4444",
+              },
+            ]}
           />
-        </ScrollView>
-      </SafeAreaView>
-    </>
+        </View>
+      </View>
+
+      <ResultAnalysisCard categories={categories} />
+
+      <QuizHistoryCard
+        quizResults={data?.quizResults}
+        formatDate={formatDate}
+      />
+    </HeaderShown>
   );
 };
 

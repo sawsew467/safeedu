@@ -5,6 +5,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { useUploadImageMutation } from "@/services/upload/api.upload";
+import { Alert } from "@/components/ui/alert";
 
 interface UploadImageProps {
   value: string;
@@ -23,7 +24,7 @@ const UploadImage = ({
     // Request permission
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      alert("Cần quyền truy cập thư viện ảnh để tiếp tục!");
+      Alert.alert("Thông báo", "Cần quyền truy cập thư viện ảnh để tiếp tục!");
       return;
     }
     try {
@@ -38,7 +39,7 @@ const UploadImage = ({
         const asset = result.assets[0];
         // Check if the image is a valid file
         if (!asset.uri) {
-          alert("Không tìm thấy ảnh");
+          Alert.alert("Thông báo", "Không tìm thấy ảnh");
           return;
         }
 
@@ -60,7 +61,7 @@ const UploadImage = ({
       }
     } catch (error) {
       console.error("Error picking image:", error);
-      alert("Có lỗi xảy ra khi chọn ảnh");
+      Alert.alert("Thông báo", "Có lỗi xảy ra khi chọn ảnh");
     }
   };
 
