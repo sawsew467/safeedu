@@ -3,41 +3,13 @@ import Skeleton from "@/components/ui/skeleton";
 import { Stack } from "expo-router";
 import React from "react";
 import { View, StyleSheet, ScrollView, SafeAreaView } from "react-native";
-import androidSettings from "@/components/ui/SafeViewAndroid";
 
 const ProfileSkeleton = () => {
   return (
     <>
       <Stack.Screen
         options={{
-          headerLeft: () => (
-            <View className="flex bg-white p-4 flex-row items-center justify-start gap-2">
-              <View className="flex flex-row items-center">
-                <Skeleton
-                  width={48}
-                  height={48}
-                  radius={50}
-                  style={styles.avatar}
-                />
-                <View className="ml-4">
-                  <Skeleton
-                    width={180}
-                    height={24}
-                    style={styles.nameSkeleton}
-                    delay={100}
-                  />
-                  <Skeleton
-                    width={120}
-                    height={16}
-                    style={styles.usernameSkeleton}
-                    delay={200}
-                  />
-                </View>
-              </View>
-            </View>
-          ),
-
-          headerTitle: () => <View className="hidden" />,
+          headerShown: false,
         }}
       />
       <SafeAreaView>

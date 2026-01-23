@@ -18,6 +18,7 @@ const baseQuery = fetchBaseQuery({
     if (accessToken) {
       headers.set("Authorization", `Bearer ${accessToken}`);
     }
+    headers.set("ngrok-skip-browser-warning", "100");
     return headers;
   },
 });
@@ -39,6 +40,7 @@ export const baseQueryWithReauth: typeof baseQuery = async (
         headers: {
           Authorization: `Bearer ${refresh_token}`,
           "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "100",
         },
       }
     ).then((res) => res.json());

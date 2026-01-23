@@ -210,9 +210,9 @@ const AnimatedHeaderScreen = forwardRef<ScrollView, AnimatedHeaderScreenProps>(
                   scrollEventThrottle={16}
                 >
                   <View
-                    className="w-full "
+                    className="w-full"
                     style={{
-                      height: Platform.OS === "ios" ? 0 : statusBarHeight,
+                      height: Platform.OS === "ios" ? 40 : statusBarHeight,
                     }}
                   />
                   <View style={styles.content}>{children}</View>

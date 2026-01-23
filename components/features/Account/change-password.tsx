@@ -14,6 +14,7 @@ import { useRouter } from "expo-router";
 import FormPasswordInput from "./form/form-password-input";
 
 import background from "@/assets/images/account/background.png";
+import { Alert } from "@/components/ui/alert";
 
 type FormData = {
   old_password: string;
@@ -44,7 +45,7 @@ const ChangPasswordScreen = () => {
     try {
       const { confirm_password, ...passwordData } = data;
       await changePassword(passwordData).unwrap();
-      alert("Thay đổi mật khẩu thành công!");
+      Alert.alert("Thông báo", "Thay đổi mật khẩu thành công!");
     } catch (error) {
       const { message, details } = error?.data;
 
