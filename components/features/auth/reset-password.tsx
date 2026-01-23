@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Alert,
   SafeAreaView,
 } from "react-native";
 import { useForm } from "react-hook-form";
@@ -15,6 +14,7 @@ import FormButton from "../../ui/form-button";
 import { useResetPasswordMutation } from "@/services/auth/auth.api";
 import HeaderShown from "@/components/ui/HeaderShown";
 import { router } from "expo-router";
+import { Alert } from "@/components/ui/alert";
 
 type FormData = {
   password: string;
@@ -49,12 +49,15 @@ const ResetPasswordScreen = () => {
         otp: otp,
         newPassword: data.password,
       }).unwrap();
-      alert("Đặt lại mật khẩu thành công, vui lòng đăng nhập lại!");
+      Alert.alert(
+        "Thông báo",
+        "Đặt lại mật khẩu thành công, vui lòng đăng nhập lại!"
+      );
       router.replace("/sign-in");
     } catch (error) {
       const message: string =
         (error as any)?.data?.error?.message || "Đã xảy ra lỗi!";
-      Alert.alert(message);
+      Alert.alert("Thông báo", message);
       console.error("Error resetting password:", error);
     }
   };

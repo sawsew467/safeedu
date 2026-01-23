@@ -48,7 +48,13 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      authAPI.endpoints.signIn.matchFulfilled,
+      (action) => {
+        return (
+          authAPI.endpoints.signIn.matchFulfilled(action) ||
+          authAPI.endpoints.createStudentAccount.matchFulfilled(action) ||
+          authAPI.endpoints.createCitizenAccount.matchFulfilled(action)
+        );
+      },
       (state, { payload }) => {
         state.access_token = payload.data.access_token;
         state.refresh_token = payload.data.refresh_token;

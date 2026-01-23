@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   ImageBackground,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   Image,
@@ -28,6 +27,7 @@ import { formatDate } from "@/utils/format-date";
 
 import stylesAndroid from "@/components/ui/SafeViewAndroid";
 import { cn } from "@/utils/cn";
+import { Alert } from "@/components/ui/alert";
 
 type OrganizationOptions = {
   label: string;
@@ -38,15 +38,11 @@ type OrganizationOptions = {
 const SignUpModule = () => {
   const { userType } = useLocalSearchParams();
 
-  const [lastName, setLastName] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [dob, setDob] = useState<Date | null>(null);
+  const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
   const [selectedSchool, setSelectedSchool] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [selectProvince, setSelectProvince] = useState("");
@@ -57,15 +53,11 @@ const SignUpModule = () => {
   const [typeModalOrgVisible, setTypeModalOrgVisible] = useState(false);
   const [typeModalDobVisible, setTypeModalDobVisible] = useState(false);
   const [error, setError] = useState({
-    firstName: "",
-    lastName: "",
-    dob: "",
+    fullName: "",
     city: "",
     school: "",
     userName: "",
     password: "",
-    confirmPassword: "",
-    email: "",
     phone: "",
     agreement: "",
   });
@@ -138,27 +130,20 @@ const SignUpModule = () => {
 
   const handleSignUp = async () => {
     const newErrors = {
-      firstName: "",
-      lastName: "",
+      fullName: "",
       dob: "",
       city: "",
       school: "",
       userName: "",
       password: "",
-      confirmPassword: "",
-      email: "",
       phone: "",
       agreement: "",
     };
     let hasError = false;
 
     // Required field validations
-    if (!lastName) {
-      newErrors.lastName = "Vui lòng nhập họ";
-      hasError = true;
-    }
-    if (!firstName) {
-      newErrors.firstName = "Vui lòng nhập tên";
+    if (!fullName) {
+      newErrors.fullName = "Vui lòng nhập họ tên";
       hasError = true;
     }
 
@@ -170,10 +155,7 @@ const SignUpModule = () => {
       newErrors.password = "Vui lòng nhập mật khẩu";
       hasError = true;
     }
-    if (!confirmPassword) {
-      newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu";
-      hasError = true;
-    }
+
     if (!isAgreed) {
       newErrors.agreement = "Bạn phải đồng ý với điều khoản và điều kiện";
       hasError = true;
@@ -194,24 +176,24 @@ const SignUpModule = () => {
         "Mật khẩu phải có ít nhất 1 chữ in hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt";
       hasError = true;
     }
-    if (confirmPassword && confirmPassword !== password) {
-      newErrors.confirmPassword = "Mật khẩu không khớp";
-      hasError = true;
-    }
 
     setError(newErrors);
 
     if (!hasError) {
-      // console.log("userType :>> ", userType);
+      const [last_name, ...first_name_parts] = fullName
+        .trim()
+        .split(" ")
+        .reverse();
+
+      const first_name = first_name_parts.reverse().join(" ");
+
       try {
         switch (userType) {
           case "student":
             await signUnStudent({
-              first_name: firstName,
-              last_name: lastName,
-              date_of_birth: dob ? dob.toISOString() : "",
+              first_name: first_name ?? "",
+              last_name: last_name ?? "",
               phone_number: phone ?? undefined,
-              email: email ?? undefined,
               organizationId: selectedSchool ?? "",
               username: userName,
               password,
@@ -219,24 +201,28 @@ const SignUpModule = () => {
             break;
           case "citizen":
             await signUnCitizen({
-              first_name: firstName,
-              last_name: lastName,
-              date_of_birth: dob ? dob.toISOString() : "",
+              first_name: first_name ?? "",
+              last_name: last_name ?? "",
               phone_number: phone ?? undefined,
-              email: email ?? undefined,
               username: userName,
               password,
             }).unwrap();
             break;
         }
-        alert("Đăng ký thành công, vui lòng đăng nhập tài khoản của bạn!");
-        router.push("/sign-in");
+        Alert.alert(
+          "Đăng ký thành công",
+          "Tài khoản của bạn đã được tạo thành công."
+        );
+        router.push("/home");
       } catch (error) {
-        const message: string =
-          (error as any)?.data?.error?.message || "Đã xảy ra lỗi!";
-        // console.log("error :>> ", error);
-        Alert.alert(message);
-        // console.log("error :>> ", error);
+        console.log("error", error);
+        // Extract error message and details
+        const apiError = (error as any)?.data?.error;
+        let message = apiError?.details || "Đã xảy ra lỗi!";
+        if (Array.isArray(apiError?.details) && apiError.details.length > 0) {
+          message += "\n" + apiError.details.join("\n");
+        }
+        Alert.alert("Đăng kí thất bại", message);
       }
     }
   };
@@ -264,76 +250,27 @@ const SignUpModule = () => {
               {userType === "student"
                 ? "Đăng ký Học sinh"
                 : userType === "citizen"
-                ? "Đăng ký Người dân"
-                : null}
+                  ? "Đăng ký Người dân"
+                  : null}
             </Text>
 
             <ScrollView showsVerticalScrollIndicator={false}>
               <Text className="font-semibold text-base text-[#959595]">
-                Họ <Text className="text-red-500">*</Text>
+                Họ và tên <Text className="text-red-500">*</Text>
               </Text>
               <TextInput
-                placeholder="Nguyễn"
+                placeholder="Nguyễn Văn A"
                 placeholderTextColor="#C4C4C4"
-                value={lastName}
-                onChangeText={setLastName}
+                value={fullName}
+                onChangeText={setFullName}
                 className="text-lg text-black pl-0 pb-0"
               />
               <View className="w-full h-[1.5px] bg-black mt-2" />
-              {error.lastName ? (
+              {error.fullName ? (
                 <Text className="text-red-500 text-xs mt-2">
-                  {error.lastName}
+                  {error.fullName}
                 </Text>
               ) : null}
-
-              <Text className="font-semibold text-base text-[#959595] mt-5">
-                Tên <Text className="text-red-500">*</Text>
-              </Text>
-              <TextInput
-                placeholder="Văn A"
-                placeholderTextColor="#C4C4C4"
-                value={firstName}
-                onChangeText={setFirstName}
-                className="text-lg text-black pl-0 pb-0"
-              />
-              <View className="w-full h-[1.5px] bg-black mt-2" />
-              {error.firstName ? (
-                <Text className="text-red-500 text-xs mt-2">
-                  {error.firstName}
-                </Text>
-              ) : null}
-
-              <Text className="font-semibold text-base text-[#959595] mt-5">
-                Ngày sinh
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setTypeModalDobVisible(true);
-                }}
-                className="flex-row justify-between items-center"
-              >
-                <Text className="text-lg text-black pl-0 pb-0">
-                  {dob
-                    ? formatDate(dob.toISOString(), "DD/MM/yyyy")
-                    : "Chọn ngày sinh"}
-                </Text>
-                <Ionicons name="chevron-down" size={24} color="#888" />
-              </TouchableOpacity>
-              <DateTimePicker
-                selectedValue={dob}
-                visible={typeModalDobVisible}
-                onSelect={(value) => setDob(value)}
-                onClose={() => setTypeModalDobVisible(false)}
-                title="Chọn ngày sinh"
-              />
-              <View className="w-full h-[1.5px] bg-black mt-2" />
-              {error.dob ? (
-                <Text className="text-red-500 text-xs mt-2">{error.dob}</Text>
-              ) : (
-                <Text className="text-gray-500 text-xs mt-2">
-                  Vui lòng nhập ngày sinh để xác minh độ tuổi của bạn.
-                </Text>
-              )}
 
               <Text className="font-semibold text-base text-[#959595] mt-5">
                 Số điện thoại
@@ -348,21 +285,6 @@ const SignUpModule = () => {
               <View className="w-full h-[1.5px] bg-black mt-2" />
               {error.phone ? (
                 <Text className="text-red-500 text-xs mt-2">{error.phone}</Text>
-              ) : null}
-
-              <Text className="font-semibold text-base text-[#959595] mt-5">
-                Email
-              </Text>
-              <TextInput
-                placeholder="Nhập email"
-                placeholderTextColor="#C4C4C4"
-                value={email}
-                onChangeText={setEmail}
-                className="text-lg text-black pl-0 pb-0"
-              />
-              <View className="w-full h-[1.5px] bg-black mt-2" />
-              {error.email ? (
-                <Text className="text-red-500 text-xs mt-2">{error.email}</Text>
               ) : null}
 
               {userType === "student" && (
@@ -497,36 +419,6 @@ const SignUpModule = () => {
               {error.password ? (
                 <Text className="text-red-500 text-xs mt-2">
                   {error.password}
-                </Text>
-              ) : null}
-
-              <Text className="font-semibold text-base text-[#959595] mt-5">
-                Xác nhận mật khẩu <Text className="text-red-500">*</Text>
-              </Text>
-              <View className="relative">
-                <TextInput
-                  placeholder="Xác nhận mật khẩu"
-                  placeholderTextColor="#C4C4C4"
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
-                  secureTextEntry={!confirmPasswordVisible}
-                  className="text-lg text-black pl-0 pb-0 pr-10"
-                />
-                <TouchableOpacity
-                  onPress={toggleConfirmPasswordVisibility}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
-                >
-                  <Ionicons
-                    name={confirmPasswordVisible ? "eye" : "eye-off"}
-                    size={24}
-                    color="#888"
-                  />
-                </TouchableOpacity>
-              </View>
-              <View className="w-full h-[1.5px] bg-black mt-2" />
-              {error.confirmPassword ? (
-                <Text className="text-red-500 text-xs mt-2">
-                  {error.confirmPassword}
                 </Text>
               ) : null}
 
